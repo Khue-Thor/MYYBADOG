@@ -120,5 +120,5 @@ module.exports = {
   // variants: {
   // 	display: ['children', 'children-not'],
   // },
-  plugins: [],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 }

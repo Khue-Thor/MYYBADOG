@@ -8,7 +8,7 @@ import Logo from "@/public/images/logo.png";
 // import WhiteLogo from "./../../public/images/logo_white.png";
 import WhiteLogo from "@/public/images/logo_white.png";
 import { v4 as uuidv4 } from "uuid";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import {
   isChildrenPageActive,
   isParentPageActive,
@@ -30,6 +30,7 @@ export default function Header01() {
   });
 
   const route = useRouter();
+  const pathname = usePathname();
   /* -------------------------------------------------------------------------- */
   /*                            daynamic navigations                            */
   /* -------------------------------------------------------------------------- */
@@ -399,7 +400,7 @@ export default function Header01() {
     ],
   };
 
-  const mobileCollapse = (id) => {
+  const mobileCollapse = (id:any) => {
     if (isCollapse === id) {
       return setCollapse(null);
     }
@@ -464,7 +465,7 @@ export default function Header01() {
                   <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
                     <span
                       className={
-                        isParentPageActive(home.pages, route.asPath)
+                        isParentPageActive(home.pages, pathname)
                           ? "text-accent  dark:text-accent"
                           : ""
                       }
@@ -490,7 +491,7 @@ export default function Header01() {
                         <Link href={page.path} className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between ">
                             <span
                               className={`font-display ${
-                                isChildrenPageActive(page.path, route.asPath)
+                                isChildrenPageActive(page.path, pathname)
                                   ? "text-accent dark:text-accent"
                                   : "text-jacarta-700"
                               } text-sm dark:text-white`}
@@ -513,7 +514,7 @@ export default function Header01() {
                   <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
                     <span
                       className={
-                        isParentPageActive(page.pages, route.asPath)
+                        isParentPageActive(page.pages, pathname)
                           ? "text-accent dark:text-accent"
                           : ""
                       }
@@ -539,7 +540,7 @@ export default function Header01() {
                         <Link href={page.path} className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between">
                             <span
                               className={`font-display ${
-                                isChildrenPageActive(page.path, route.asPath)
+                                isChildrenPageActive(page.path, pathname)
                                   ? "!text-accent !dark:text-accent"
                                   : "text-jacarta-700 dark:text-white"
                               } text-sm `}
@@ -562,7 +563,7 @@ export default function Header01() {
                   <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
                     <span
                       className={
-                        isParentPageActive(explore.pages, route.asPath)
+                        isParentPageActive(explore.pages, pathname)
                           ? "text-accent dark:text-accent"
                           : ""
                       }
@@ -606,7 +607,7 @@ export default function Header01() {
                   <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
                     <span
                       className={
-                        isParentPageActive(resource.pages, route.asPath)
+                        isParentPageActive(resource.pages, pathname)
                           ? "text-accent dark:text-accent"
                           : ""
                       }
@@ -635,7 +636,7 @@ export default function Header01() {
                         <Link href={page?.path} className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors">
                             <span
                               className={`font-display ${
-                                isChildrenPageActive(page.path, route.asPath)
+                                isChildrenPageActive(page.path, pathname)
                                   ? "text-accent dark:text-accent"
                                   : "text-jacarta-700"
                               } text-sm dark:text-white`}
@@ -654,7 +655,7 @@ export default function Header01() {
                       <button className="text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5">
                         <span
                           className={
-                            isChildrenPageActive(route.asPath, "/create")
+                            isChildrenPageActive(pathname, "/create")
                               ? "text-accent dark:text-accent"
                               : ""
                           }
@@ -881,7 +882,7 @@ export default function Header01() {
               >
                 <span
                   className={
-                    isParentPageActive(home.pages, route.asPath)
+                    isParentPageActive(home.pages, pathname)
                       ? "text-accent dark:text-accent"
                       : ""
                   }
@@ -912,7 +913,7 @@ export default function Header01() {
                     <Link href={page.path} className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between">
                         <span
                           className={`font-display ${
-                            isChildrenPageActive(route.asPath, page.path)
+                            isChildrenPageActive(pathname, page.path)
                               ? "text-accent dark:text-accent"
                               : "text-jacarta-700"
                           } text-sm dark:text-white`}
@@ -936,7 +937,7 @@ export default function Header01() {
               >
                 <span
                   className={
-                    isParentPageActive(page.pages, route.asPath)
+                    isParentPageActive(page.pages, pathname)
                       ? "text-accent dark:text-accent"
                       : ""
                   }
@@ -966,7 +967,7 @@ export default function Header01() {
                     <Link href={page.path} className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between">
                         <span
                           className={
-                            isChildrenPageActive(page.path, route.asPath)
+                            isChildrenPageActive(page.path, pathname)
                               ? "text-accent dark:text-accent"
                               : ""
                           }
@@ -990,7 +991,7 @@ export default function Header01() {
               >
                 <span
                   className={
-                    isParentPageActive(explore.pages, route.asPath)
+                    isParentPageActive(explore.pages, pathname)
                       ? "text-accent dark:text-accent"
                       : ""
                   }
@@ -1037,7 +1038,7 @@ export default function Header01() {
               >
                 <span
                   className={
-                    isParentPageActive(resource.pages, route.asPath)
+                    isParentPageActive(resource.pages, pathname)
                       ? "text-accent dark:text-accent"
                       : ""
                   }
@@ -1068,7 +1069,7 @@ export default function Header01() {
                     <Link href={page.path} className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors">
                         <span
                           className={`font-display text-jacarta-700 text-sm dark:text-white ${
-                            isChildrenPageActive(page.path, route.asPath)
+                            isChildrenPageActive(page.path, pathname)
                               ? "text-accent dark:text-accent"
                               : ""
                           }`}
@@ -1085,7 +1086,7 @@ export default function Header01() {
                   <button className="text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5">
                     <span
                       className={
-                        isChildrenPageActive("/create", route.asPath)
+                        isChildrenPageActive("/create", pathname)
                           ? "text-accent dark:text-accent"
                           : ""
                       }

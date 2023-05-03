@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import DarkMode from "../mode/DarkMode";
+import DarkMode from "../mode/dark-mode";
 // import Logo from "../../../public/images/logo.png";
 import Logo from "@/public/images/logo.png";
 // import WhiteLogo from "./../../public/images/logo_white.png";
@@ -418,7 +418,7 @@ export default function Header01() {
                   src={Logo}
                   height={28}
                   width={130}
-                  alt="Xhibiter | NFT Marketplace"
+                  alt="Bad Dogs Company | NFT Marketplace"
                   className="max-h-7 h-auto "
                 />
               </div>
@@ -427,7 +427,7 @@ export default function Header01() {
                   src={WhiteLogo}
                   height={28}
                   width={130}
-                  alt="Xhibiter | NFT Marketplace"
+                  alt="Bad Dogs Company | NFT Marketplace"
                 />
               </div>
           </Link>
@@ -820,7 +820,7 @@ export default function Header01() {
               src={Logo}
               height={28}
               width={130}
-              alt="Xhibiter | NFT Marketplace"
+              alt="Bad Dogs Company | NFT Marketplace"
               className="max-h-7 h-auto "
             />
           </div>
@@ -830,7 +830,7 @@ export default function Header01() {
               src={WhiteLogo}
               height={28}
               width={130}
-              alt="Xhibiter | NFT Marketplace"
+              alt="Bad Dogs Company | NFT Marketplace"
             />
           </div>
 

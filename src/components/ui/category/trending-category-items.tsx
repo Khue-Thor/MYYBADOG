@@ -2,20 +2,20 @@
 
 import React, { useEffect, useState } from "react";
 import { tranding_category_filter } from "@/data/categories_data";
-import CategoryItem from "./categoryItem";
+// import CategoryItem from "./category-item";
 import { trendingCategoryData } from "@/data/categories_data";
 import Tippy from "@tippyjs/react";
-import Recently_added_dropdown from "../dropdown/recently_added_dropdown";
-import { useSelector, useDispatch } from "react-redux";
-import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
+// import Recently_added_dropdown from "../dropdown/recently_added_dropdown";
+// import { useSelector, useDispatch } from "react-redux";
+// import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
 
 const TrendingCategoryItems = () => {
   const [itemdata, setItemdata] = useState(trendingCategoryData);
-  const dispatch = useDispatch();
-  const { trendingCategorySorText } = useSelector((state) => state.counter);
+  // const dispatch = useDispatch();
+  // const { trendingCategorySorText } = useSelector((state) => state.counter);
   const [filterVal, setFilterVal] = useState(0);
 
-  const handleFilter = (category) => {
+  const handleFilter = (category:any) => {
     if (category !== "all") {
       setItemdata(
         trendingCategoryData.filter((item) => item.category === category)
@@ -44,9 +44,9 @@ const TrendingCategoryItems = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(updateTrendingCategoryItemData(itemdata.slice(0, 8)));
-  }, [itemdata, dispatch]);
+  // useEffect(() => {
+  //   dispatch(updateTrendingCategoryItemData(itemdata.slice(0, 8)));
+  // }, [itemdata, dispatch]);
 
   return (
     <>
@@ -106,11 +106,11 @@ const TrendingCategoryItems = () => {
           })}
         </ul>
         {/* dropdown */}
-        <Recently_added_dropdown data={sortText} dropdownFor="recently_added" />
+        {/* <Recently_added_dropdown data={sortText} dropdownFor="recently_added" /> */}
       </div>
 
       {/* <!-- Grid --> */}
-      <CategoryItem />
+      {/* <CategoryItem /> */}
     </>
   );
 };

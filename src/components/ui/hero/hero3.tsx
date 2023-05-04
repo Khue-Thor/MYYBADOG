@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs, Autoplay } from "swiper";
+import { FreeMode, Navigation, Thumbs, Autoplay, EffectCoverflow, type Swiper as SwiperRef } from "swiper";
 import Image from "next/image";
 import {
   hero_3_swiper_data,
@@ -17,6 +17,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 const Hero_3 = () => {
+  const swiperRef = useRef<SwiperRef>()
   const [activeThumb, setActiveThumb] = useState(null);
 
   return (
@@ -29,7 +30,8 @@ const Hero_3 = () => {
           spaceBetween={10}
           navigation={true}
           thumbs={{
-            swiper: activeThumb && !activeThumb.destroyed ? activeThumb : null,
+            swiper: activeThumb,
+            // swiper: activeThumb && !activeThumb.destroyed ? activeThumb : null,
           }}
           autoplay={{
             delay: 5000,
@@ -71,7 +73,10 @@ const Hero_3 = () => {
             {/* <Thumbs_carousel /> */}
             <Swiper
               modules={[FreeMode, Navigation, Thumbs]}
-              onSwiper={setActiveThumb}
+              // onSwiper={setActiveThumb}
+              onSwiper={(swiper) => {
+                swiperRef.current = swiper
+              }}
               loop={true}
               spaceBetween={10}
               slidesPerView="auto"

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import HeadLine from "../headLine";
-import Auctions_category_data from "../../data/auctions_category_data";
+import HeadLine from "@/components/headline";
+import Auctions_category_data from "@/data/auctions_category_data";
 import Tippy from "@tippyjs/react";
-import Countdown_timer from "../Countdown_timer";
-import Auctions_dropdown from "../dropdown/Auctions_dropdown";
+// import Countdown_timer from "../Countdown_timer";
+// import Auctions_dropdown from "../dropdown/Auctions_dropdown";
 import Link from "next/link";
-import { bidsModalShow } from "../../redux/counterSlice";
-import { useDispatch } from "react-redux";
+// import { bidsModalShow } from "../../redux/counterSlice";
+// import { useDispatch } from "react-redux";
 import "tippy.js/themes/light.css";
 import Image from "next/image";
-import auctions_category_data from "../../data/auctions_category_data";
-import Likes from "../likes";
+import auctions_category_data from "@/data/auctions_category_data";
+import Likes from "@/components/likes";
 
-const Auctions_categories = () => {
-  const dispatch = useDispatch();
+const AuctionsCategories = () => {
+  // const dispatch = useDispatch();
   const [data, setData] = useState(Auctions_category_data.slice(0, 8));
   const [loadMoreBtn, setLoadMoreBtn] = useState(true);
 
@@ -95,7 +95,7 @@ const Auctions_categories = () => {
                       </div>
 
                       {/* auction dropdown */}
-                      <Auctions_dropdown classes="dark:hover:bg-jacarta-600 dropdown hover:bg-jacarta-100 rounded-full " />
+                      {/* <Auctions_dropdown classes="dark:hover:bg-jacarta-600 dropdown hover:bg-jacarta-100 rounded-full " /> */}
                     </div>
                     <figure className="relative">
                       <Link href={/item/ + itemLink}>
@@ -105,14 +105,14 @@ const Auctions_categories = () => {
                             alt="item 8"
                             className="w-full rounded-[0.625rem]"
                             loading="lazy"
-                            height="100%"
-                            width="100%"
+                            // height="100%"
+                            // width="100%"
                             layout="responsive"
                             objectFit="cover"
                           />
                         </a>
                       </Link>
-                      <Countdown_timer time={+auction_timer} />
+                      {/* <Countdown_timer time={+auction_timer} /> */}
                     </figure>
                     <div className="mt-7 flex items-center justify-between">
                       <Link href={/item/ + itemLink}>
@@ -146,7 +146,7 @@ const Auctions_categories = () => {
                     <div className="mt-8 flex items-center justify-between">
                       <button
                         className="text-accent font-display text-sm font-semibold"
-                        onClick={() => dispatch(bidsModalShow())}
+                        // onClick={() => dispatch(bidsModalShow())}
                       >
                         Place bid
                       </button>
@@ -178,4 +178,4 @@ const Auctions_categories = () => {
   );
 };
 
-export default Auctions_categories;
+export default AuctionsCategories;

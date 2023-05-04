@@ -1,6 +1,6 @@
 import React from "react";
 import { HeadLine } from "@/components/component";
-import Browse_category_carousel from "../carousel/Browse_category_carousel";
+// import Browse_category_carousel from "../carousel/Browse_category_carousel";
 import Image from "next/image";
 
 interface BrowseCategoryProps {
@@ -29,7 +29,7 @@ const BrowseCategory: React.FC<BrowseCategoryProps> = ({ bgWhite }) => {
 
         <div className="relative">
           {/* <!-- Slider --> */}
-          <Browse_category_carousel />
+          {/* <Browse_category_carousel /> */}
         </div>
       </section>
     </div>

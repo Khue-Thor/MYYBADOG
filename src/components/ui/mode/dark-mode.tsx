@@ -3,22 +3,23 @@
 import { useTheme } from "next-themes";
 
 export default function DarkMode() {
-  const { theme, setTheme } = useTheme();
+  const { systemTheme, theme, setTheme } = useTheme();
+  const currentTheme = theme === 'system' ? systemTheme : theme;
 
   // toggle of dark & light mode
-  const toggle = () => {
-    if (theme === "light") 
-      setTheme("dark");
-    else 
-      setTheme("light");
-  };
+  // const toggle = () => {
+  //   if (theme === "light") 
+  //     setTheme("dark");
+  //   else 
+  //     setTheme("light");
+  // };
 
   return (
     <>
       <button
         className="js-dark-mode-trigger dark:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
         aria-label="light"
-        onClick={toggle}
+        onClick={() => theme == "dark" ? setTheme("light") : setTheme("dark")}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

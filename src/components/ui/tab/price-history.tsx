@@ -42,7 +42,7 @@ const PriceHistory: React.FC<{ classes: string }> = ({ classes }) => {
 								labels: ['January', 'February', 'March', 'April', 'May', 'June'],
 								datasets: [
 									{
-										type: 'line',
+										// type: 'line',
 										label: 'Avg. price',
 										backgroundColor: '#10B981',
 										borderColor: '#10B981',

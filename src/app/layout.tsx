@@ -1,4 +1,4 @@
-import './globals.css'
+import '@/styles/globals.css'
 import { Inter } from 'next/font/google'
 
 import { ThemeProvider } from '../components/theme-provider'
@@ -40,6 +40,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head />
       <body className={inter.className}>
         <Header01 />
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>

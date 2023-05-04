@@ -17,7 +17,7 @@ const TrendingCategory = () => {
         />
 
         {/* trending categories */}
-        <Trending_categories_items />
+        <TrendingCategoryItems />
       </div>
     </section>
   );

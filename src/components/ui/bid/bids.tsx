@@ -4,7 +4,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { HeadLine } from "@/components/component";
 import "tippy.js/dist/tippy.css";
-import BidsCarousel from "../carousel/bidsCarousel";
+import BidsCarousel from "@/ui/carousel/bids-carousel";
 
 interface BidsProps {
   classes?: string;

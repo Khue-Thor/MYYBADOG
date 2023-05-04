@@ -15,7 +15,8 @@ const Footer = () => {
               <Link href="#" className="mb-6 inline-block">
                 <img
                   src="/images/logo.png"
-                  className="max-h-7 dark:hidden"
+                  // className="max-h-7 dark:hidden"
+                  className="dark:hidden"
                   alt="Bad Dogs Company | NFT Marketplace"
                 />
               </Link>
@@ -23,7 +24,8 @@ const Footer = () => {
               <Link href="#" className=" mb-6 inline-block">
                 <img
                   src="/images/logo_white.png"
-                  className="hidden max-h-7 dark:block mb-6"
+                  // className="hidden max-h-7 dark:block mb-6"
+                  className="hidden dark:block mb-6"
                   alt="Bad Dogs Company | NFT Marketplace"
                 />
               </Link>

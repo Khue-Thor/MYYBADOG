@@ -45,8 +45,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <Providers>
             {/* {header} */}
             {children}
-            <Footer />
           </Providers>
+          <Footer />
         </body>
       </html>
     </ServerThemeProvider>

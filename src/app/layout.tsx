@@ -1,9 +1,8 @@
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 
-import { ThemeProvider } from "../components/theme-provider";
 import { ServerThemeProvider } from "next-themes";
-import { Providers } from "./providers";
+import { Providers } from "../components/providers";
 import Header01 from "@/components/ui/header/header01";
 import Footer from "../components/ui/footer";
 

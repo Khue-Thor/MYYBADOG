@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import BdcoSkull from "./logo/bdco-skull";
 import { footerMenuList, socialIcons } from "../../data/footer_data";
 
 const Footer = () => {
@@ -12,13 +13,14 @@ const Footer = () => {
           <div className="grid grid-cols-6 gap-x-7 gap-y-14 pt-24 pb-12 md:grid-cols-12">
             <div className="col-span-3 md:col-span-4">
               {/* <!-- Logo --> */}
-              <Link href="#" className="mb-6 inline-block">
-                <img
+              <Link href="#" className="mb-6 inline-block dark:hidden">
+                <BdcoSkull />
+                {/* <img
                   src="/images/logo.png"
                   // className="max-h-7 dark:hidden"
                   className="dark:hidden"
                   alt="Bad Dogs Company | NFT Marketplace"
-                />
+                /> */}
               </Link>
 
               <Link href="#" className=" mb-6 inline-block">

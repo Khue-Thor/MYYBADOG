@@ -819,7 +819,7 @@ export default function Header01() {
             <Image
               src={Logo}
               height={28}
-              width={130}
+              width={84}
               alt="Bad Dogs Company | NFT Marketplace"
               className="max-h-7 h-auto "
             />
@@ -829,7 +829,7 @@ export default function Header01() {
             <Image
               src={WhiteLogo}
               height={28}
-              width={130}
+              width={84}
               alt="Bad Dogs Company | NFT Marketplace"
             />
           </div>

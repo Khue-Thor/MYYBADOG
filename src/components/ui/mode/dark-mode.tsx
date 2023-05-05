@@ -1,16 +1,24 @@
-"use client"
-
+"use client";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
 export default function DarkMode() {
+  const [mounted, setMounted] = useState(false);
   const { systemTheme, theme, setTheme } = useTheme();
-  const currentTheme = theme === 'system' ? systemTheme : theme;
+  const currentTheme = theme === "system" ? systemTheme : theme;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   // toggle of dark & light mode
   // const toggle = () => {
-  //   if (theme === "light") 
+  //   if (theme === "light")
   //     setTheme("dark");
-  //   else 
+  //   else
   //     setTheme("light");
   // };
 
@@ -19,9 +27,10 @@ export default function DarkMode() {
       <button
         className="js-dark-mode-trigger dark:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
         aria-label="light"
-        onClick={() => theme == "dark" ? setTheme("light") : setTheme("dark")}
+        onClick={() => (theme == "dark" ? setTheme("light") : setTheme("dark"))}
       >
-        <svg
+        Test
+        {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           width={24}
@@ -40,7 +49,7 @@ export default function DarkMode() {
         >
           <path fill="none" d="M0 0h24v24H0z" />
           <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z" />
-        </svg>
+        </svg> */}
       </button>
     </>
   );

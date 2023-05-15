@@ -685,11 +685,7 @@ export default function Header01() {
             <div className="hidden items-center lg:flex xl:ml-12">
               <p className="pt-2 pl-4 text-xs w-24 text-jacarta-900 inline dark:text-white font-bold">
                 Next: <span>40 EXP</span>{" "}
-                <progress
-                  className="pt-"
-                  max="100"
-                  value="70"
-                ></progress>
+                <progress className="pt-2" max="100" value="70"></progress>
               </p>
               {/* <WalletButton /> */}
 

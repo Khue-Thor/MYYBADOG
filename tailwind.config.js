@@ -1,9 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {
@@ -31,21 +31,25 @@ module.exports = {
       "accent-light": "#9E7CFF",
       "accent-lighter": "#B9A0FF",
       "light-base": "#F5F8FA",
-      green: "#10b981",
+      green: "#4ff461",
+      "green-background": "#40d04f",
+      "green-dark": "#4ff461",
+      "green-light": "#4ff46",
+      "green-hover": "#4ae95b",
       orange: "#FEB240",
       red: "#EF4444",
       blue: "#428AF8",
       gray: {
-        50: '#fefefe',
-        100: '#f9f9f9',
-        200: '#f3f3f3',
-        300: '#ededed',
-        400: '#e3e3e3',
-        500: '#d9d9d9',
-        600: '#b9b9b9',
-        700: '#8e8e8e',
-        800: '#5f5f5f',
-        900: '#222222',
+        50: "#fefefe",
+        100: "#f9f9f9",
+        200: "#f3f3f3",
+        300: "#ededed",
+        400: "#e3e3e3",
+        500: "#d9d9d9",
+        600: "#b9b9b9",
+        700: "#8e8e8e",
+        800: "#5f5f5f",
+        900: "#222222",
       },
       jacarta: {
         base: "#5A5D79",
@@ -59,6 +63,12 @@ module.exports = {
         700: "#131740",
         800: "#101436",
         900: "#0D102D",
+      },
+      purple: {
+        base: "#7750f8",
+        100: "#5538b5",
+        200: "#7750f8",
+        300: "#9668ff",
       },
     },
     boxShadow: {
@@ -104,6 +114,9 @@ module.exports = {
       borderRadius: {
         "2lg": "0.625rem",
       },
+      height: {
+        "h-25": "25vh",
+      },
       transitionProperty: {
         height: "height",
         width: "width",
@@ -134,4 +147,4 @@ module.exports = {
   // 	display: ['children', 'children-not'],
   // },
   plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
-}
+};

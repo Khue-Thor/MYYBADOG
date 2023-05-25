@@ -292,8 +292,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Collectibles",
-        path: "/collectibles",
+        name: "Raffles",
+        path: "/raffles",
         icon: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -597,7 +597,7 @@ export default function Header01() {
                     {explore?.pages?.map((page) => (
                       <li key={page.id}>
                         <Link
-                          href="/"
+                          href={page.path}
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                         >
                           <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
@@ -613,7 +613,7 @@ export default function Header01() {
                 </li>
 
                 {/* resource */}
-                <li className="js-nav-dropdown group relative">
+                {/* <li className="js-nav-dropdown group relative">
                   <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
                     <span
                       className={
@@ -660,7 +660,7 @@ export default function Header01() {
                       </li>
                     ))}
                   </ul>
-                </li>
+                </li> */}
 
                 {/* create */}
                 <li className="group">

@@ -7,6 +7,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "placehold.co",
       },
+      {
+        protocol: "https",
+        hostname: "static.nftgo.io",
+      },
     ],
   },
   reactStrictMode: true,

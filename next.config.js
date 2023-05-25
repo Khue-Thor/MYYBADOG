@@ -2,6 +2,12 @@
 const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
+    domains:[
+      'static.nftgo.io', 
+      'images.wrappedpunks.com',
+      'api.mpunks.org',
+      'metadata.degods.com',
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -13,6 +19,7 @@ const nextConfig = {
   // productionBrowserSourceMaps: true,
   experimental: {
     appDir: true,
+    serverActions: true,
   },
 };
 

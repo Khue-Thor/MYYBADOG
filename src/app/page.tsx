@@ -14,71 +14,11 @@ import Testimonial from "@/components/blog/testimonial";
 
 const inter = Inter({ subsets: ["latin"] });
 
-async function getTopMintData() {
-  const options: RequestInit = {
-    method: "GET",
-    headers: new Headers({
-      accept: "application/json",
-      "X-API-KEY": process.env.NFT_GO_API_KEY as string,
-    }),
-    next: {
-      revalidate: 3600,
-    },
-  };
 
-  const res = await fetch(
-    "https://data-api.nftgo.io/eth/v1/market/rank/top-mints/6h?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=10",
-    options
-  );
-  // .then(response => response.json())
-  // .then(response => console.log(response))
-  // .catch(err => console.error(err));
 
-  console.log(res);
 
-  // TODO: Handle the error
-  if (Number(res.status) != 200) {
-    // This will activate the closest 'error.js' Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-
-  return res.json();
-}
-
-async function getTopDogData() {
-  const options: RequestInit = {
-    method: "GET",
-    headers: new Headers({
-      accept: "application/json",
-      "X-API-KEY": process.env.NFT_GO_API_KEY as string,
-    }),
-    next: {
-      revalidate: 3600,
-    },
-  };
-
-  const res = await fetch(
-    "https://data-api.nftgo.io/eth/v1/collection/0x934910077f5185f1e62f821c167b38a864156688/nfts?offset=0&limit=5",
-    options
-  );
-  // .then(response => response.json())
-  // .then(response => console.log(response))
-  // .catch(err => console.error(err));
-
-  console.log(res);
-
-  // TODO: Handle the error
-  if (Number(res.status) != 200) {
-    // This will activate the closest 'error.js' Error Boundary
-    throw new Error("Failed to fetch data");
-  }
-
-  return res.json();
-}
 
 export default async function Home() {
-  const data = await getTopDogData();
-  // console.log(data);
 
   return (
     <>
@@ -87,7 +27,9 @@ export default async function Home() {
         keyword="baddogs, baddogs nft, nft marketplace"
         desc=""
       />
-      <Hero_6 data={data.nfts} />
+      {/* @ts-expect-error Async Server Component */}
+      <Hero_6 />
+      {/* <Hero_6 data={data.nfts} /> */}
       {/* <Bids /> */}
       <Collection_category bgWhite={true} />
       {/* <Auctions_categories /> */}

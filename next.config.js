@@ -17,6 +17,7 @@ const nextConfig = {
   // productionBrowserSourceMaps: true,
   experimental: {
     appDir: true,
+    serverActions: true,
   },
 };
 

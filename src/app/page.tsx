@@ -14,10 +14,6 @@ import Testimonial from "@/components/blog/testimonial";
 
 const inter = Inter({ subsets: ["latin"] });
 
-
-
-
-
 export default async function Home() {
 
   return (
@@ -27,7 +23,7 @@ export default async function Home() {
         keyword="baddogs, baddogs nft, nft marketplace"
         desc=""
       />
-      {/* @ts-expect-error Async Server Component */}
+      {/* @ts-expect-error Server Component */}
       <Hero_6 />
       {/* <Hero_6 data={data.nfts} /> */}
       {/* <Bids /> */}

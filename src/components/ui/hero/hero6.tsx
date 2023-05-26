@@ -83,13 +83,12 @@ const Hero_6 = async () => {
 								// 	.replace('_square.jpg', '')
 								// 	.replace('.gif', '');
 								return (
-									<Suspense fallback={<p>loading...</p>}>
-										{/* @ts-expect-error Async Server Component */}
-										<article key={token_id}>
+									<Suspense fallback={<p>loading...</p>} key={`left-${token_id}`}>
+										<article>
 											<div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
 												<figure className="relative">
 													<Link href={`/${contract_address}/item/${token_id}`} className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20">
-														<img
+														<Image
 															src={image}
 															alt={name}
 															className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"
@@ -123,9 +122,8 @@ const Hero_6 = async () => {
 							// 	.replace('_square', '')
 							// 	.replace('.gif', '');
 							return (
-								<Suspense fallback={<p>loading...</p>}>
-									{/* @ts-expect-error Async Server Component */}
-									<article key={token_id}>
+								<Suspense fallback={<p>loading...</p>} key={`center-${token_id}`}>
+									<article>
 										<div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
 											<figure className="relative">
 												<Link href={`/${contract_address}/item/${token_id}`} className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20">
@@ -164,13 +162,12 @@ const Hero_6 = async () => {
 								// 	.replace('_square', '')
 								// 	.replace('.gif', '');
 								return (
-									<Suspense fallback={<p>loading...</p>}>
-										{/* @ts-expect-error Async Server Component */}
-										<article key={token_id}>
+									<Suspense fallback={<p>loading...</p>} key={`right-${token_id}`}>
+										<article>
 											<div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
 												<figure className="relative">
 													<Link href={`/${contract_address}/item/${token_id}`} className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20">
-														<img
+														<Image
 															src={image}
 															alt={name}
 															className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"

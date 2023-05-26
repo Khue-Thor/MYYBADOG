@@ -1,4 +1,4 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
 
 type MintVolumeType = {
@@ -70,7 +70,7 @@ const TopMint = async () => {
 				</h2>
 
 				<div className="flex flex-col space-y-5">
-					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index) => {
+					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
 						// const { id, image, title, icon, amount, postTime } = item;
 						const { collection_name, contract_address, blockchain, mint_num, minter_num, first_mint_time, fomo, mint_volume } = item;
 						const icon = false; // TODO: Turn off all verification checkmark icon for now

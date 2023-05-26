@@ -26,12 +26,10 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
-import { ChatItem, MessageList } from "react-chat-elements";
 
 // import WalletButton from "../wallet-btn/WalletButton";
 
 export default function Header01() {
-  const messageListReference = React.createRef();
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
 
@@ -851,17 +849,7 @@ export default function Header01() {
                         console.log(e);
                       }}
                     >
-                      <div>
-                        <ChatItem
-                          id={1}
-                          avatar="https://avatars.githubusercontent.com/u/80540635?v=4"
-                          alt="kursat_avatar"
-                          title="Ethlon Husk"
-                          subtitle="Ok. See you !"
-                          date={new Date()}
-                          unread={0}
-                        />{" "}
-                      </div>
+                      <div></div>
                       {/* <div className="w-full bg-purple">Hello</div> */}
                     </SheetTrigger>
 
@@ -889,20 +877,6 @@ export default function Header01() {
                         <p className="pl-3">ETHLON HUSK</p>
                       </SheetHeader>
                       <ChatUI />
-                      {/* <MessageList
-                        referance={messageListReference}
-                        className="message-list"
-                        lockable={true}
-                        toBottomHeight={"50%"}
-                        dataSource={[
-                          {
-                            position: "right",
-                            type: "text",
-                            text: "Lorem ipsum dolor sit amet, consectetur adipisicing elit",
-                            date: new Date(),
-                          },
-                        ]}
-                      /> */}
                     </SheetContent>
                   </Sheet>
                 </div>

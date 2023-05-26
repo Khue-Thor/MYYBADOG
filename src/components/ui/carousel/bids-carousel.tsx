@@ -1,3 +1,4 @@
+"use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css";
@@ -11,12 +12,26 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 // import { bidsModalShow } from "../../redux/counterSlice";
 // import { useDispatch } from "react-redux";
 import Likes from "@/components/likes";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/client";
 
-const BidsCarousel = () => {
-  // const dispatch = useDispatch();
-  const handleclick = () => {
-    console.log("clicked on ");
-  };
+async function getData() {
+  const { data, error } = await supabase
+    .from("raffles") // the table is not empty
+    .select();
+
+  if (error) {
+    console.log("error", error);
+    return { error: true };
+  }
+
+  console.log("data:", data); // data: []
+  return data; // The data is always an empty array
+}
+
+const BidsCarousel = async (data: any) => {
+  const supaData = await getData();
+
   return (
     <>
       <Swiper
@@ -35,7 +50,7 @@ const BidsCarousel = () => {
             slidesPerView: 3,
           },
           1100: {
-            slidesPerView: 4,
+            slidesPerView: 3,
           },
         }}
         navigation={{
@@ -44,44 +59,49 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {bidsData.map((item) => {
-          const { id, image, title, bid_number, eth_number, react_number } =
-            item;
-          const itemLink = image
-            .split("/")
-            .slice(-1)
-            .toString()
-            .replace(".jpg", "");
+        {data.data.map((item: any) => {
+          const {
+            token_id,
+            name,
+            image,
+            collection_opensea_slug,
+            owner_addresses,
+          } = item;
+          // const { id, image, title, bid_number, eth_number, react_number } =
+          //   item;
+          // const itemLink = image
+          //   .split("/")
+          //   .slice(-1)
+          //   .toString()
+          //   .replace(".jpg", "");
           return (
-            <SwiperSlide className="text-white" key={id}>
+            <SwiperSlide className="text-white" key={token_id}>
               <article>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg text-jacarta-500">
                   <figure>
                     {/* {`item/${itemLink}`} */}
-                    <Link href={"/item/" + itemLink}>
-                      <a>
-                        <div className="w-full">
-                          <Image
-                            src={image}
-                            alt={title}
-                            height={230}
-                            width={230}
-                            layout="responsive"
-                            objectFit="cover"
-                            className="rounded-[0.625rem] w-full"
-                            loading="lazy"
-                          />
-                        </div>
-                      </a>
+                    <Link href={image}>
+                      <div className="w-full">
+                        <Likes
+                          like={888}
+                          classes="flex items-center space-x-1 absolute right-6 bg-purple-100 rounded p-2 mt-1 transition-shadow hover:bg-purple-300"
+                        />
+                        <Image
+                          src={image}
+                          alt={name}
+                          height={370}
+                          width={460}
+                          className="rounded-[0.625rem] w-full"
+                          loading="lazy"
+                        />
+                      </div>
                     </Link>
                   </figure>
                   <div className="mt-4 flex items-center justify-between">
-                    <Link href={"/item/" + itemLink}>
-                      <a>
-                        <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
-                          {title}
-                        </span>
-                      </a>
+                    <Link href={"/item/" + image}>
+                      <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
+                        {collection_opensea_slug}
+                      </span>
                     </Link>
                     <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                       <Tippy content={<span>ETH</span>}>
@@ -93,32 +113,36 @@ const BidsCarousel = () => {
                       </Tippy>
 
                       <span className="text-green text-sm font-medium tracking-tight">
-                        {eth_number} ETH
+                        {3} ETH
                       </span>
                     </span>
                   </div>
                   <div className="mt-2 text-sm">
-                    <span className="dark:text-jacarta-300 text-jacarta-500">
-                      Current Bid
+                    <Link href={`opensea.io/${owner_addresses[0]}`}>
+                      <span className="dark:text-jacarta-300 text-jacarta-500">
+                        {owner_addresses[0]
+                          .slice(0, 6)
+                          .concat("...", owner_addresses[0].slice(-4))}{" "}
+                      </span>
+                    </Link>
+                  </div>
+                  <div className="mt-2">
+                    <span className="dark:text-jacarta-300 text-jacarta-500 text-sm">
+                      Tickets Remaining
                     </span>
-                    <span className="dark:text-jacarta-100 text-jacarta-700">
-                      {bid_number} ETH
-                    </span>
+                    <div className="text-green text-lg font-extrabold">
+                      &nbsp;{5}/{50}
+                    </div>
                   </div>
 
                   <div className="mt-8 flex items-center justify-between">
-                    <button
-                      type="button"
-                      className="text-accent font-display text-sm font-semibold"
+                    <Link
+                      href={`/raffles/${token_id}`}
+                      className="text-purple-base hover:text-white font-display text-lg font-semibold w-full text-center border-purple border-2 rounded py-2 hover:bg-accent-dark hover:opacity-50 transition ease-in-out delay-150"
                       // onClick={() => dispatch(bidsModalShow())}
                     >
-                      Place bid
-                    </button>
-
-                    <Likes
-                      like={react_number}
-                      classes="flex items-center space-x-1"
-                    />
+                      View Raffle
+                    </Link>
                   </div>
                 </div>
               </article>

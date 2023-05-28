@@ -5,7 +5,6 @@ import { ServerThemeProvider } from "next-themes";
 import { Providers } from "../components/providers";
 import Header01 from "@/components/ui/header/header01";
 import Footer from "../components/ui/footer";
-import "react-chat-elements/dist/main.css";
 import "@/styles/custom.css";
 
 const inter = Inter({ subsets: ["latin"] });

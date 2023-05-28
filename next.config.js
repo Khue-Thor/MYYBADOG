@@ -7,6 +7,9 @@ const nextConfig = {
       'images.wrappedpunks.com',
       'api.mpunks.org',
       'metadata.degods.com',
+      '*.alchemy.com',
+      'res.cloudinary.com',
+      '*.ipfs.io'
     ],
     remotePatterns: [
       {

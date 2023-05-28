@@ -78,7 +78,7 @@ const TopMint2 = async () => {
 						// console.log(index);
 						return (
 							// @ts-expect-error Server Component
-							<TopMintItem index={index} data={item} />
+							<TopMintItem key={index} index={index} data={item} />
 						)
 					})}
 				</div>

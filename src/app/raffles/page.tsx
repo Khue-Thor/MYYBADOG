@@ -16,8 +16,6 @@ import HeadLine from "@/components/headline";
 
 const inter = Inter({ subsets: ["latin"] });
 
-
-
 export default async function Page() {
   // const data = await getTopDogData();
   // console.log(data);
@@ -39,7 +37,7 @@ export default async function Page() {
           classes="font-display text-jacarta-700 mb-8 text-center text-3xl dark:text-white"
         />
         {/* @ts-expect-error Server Component */}
-        <BidsCarousel />
+        {/* <BidsCarousel /> */}
         {/* <BidsCarousel data={data.nfts} /> */}
       </section>
       {/* <Partners /> */}

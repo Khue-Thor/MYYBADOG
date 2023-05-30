@@ -18,20 +18,20 @@ import Countdown from "react-countdown";
 
 export const revalidate = 60;
 
-async function getData() {
-  const { data, error } = await supabase
-    .from("raffles") // the table is not empty
-    .select();
+// async function getData() {
+//   const { data, error } = await supabase
+//     .from("raffles") // the table is not empty
+//     .select();
 
-  if (error) {
-    console.log("error", error);
-    return { error: true };
-  }
-  return data;
-}
+//   if (error) {
+//     console.log("error", error);
+//     return { error: true };
+//   }
+//   return data;
+// }
 
-const BidsCarousel = async () => {
-  const supaData: any = await getData();
+// const BidsCarousel = async () => {
+//   const supaData: any = await getData();
   return (
     <>
       <Swiper

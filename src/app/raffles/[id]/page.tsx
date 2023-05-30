@@ -1,5 +1,3 @@
-"use client";
-
 import Meta from "@/components/meta";
 import Download from "@/components/blog/download";
 
@@ -19,36 +17,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/shadcn/table";
-import { useRouter, usePathname } from "next/navigation";
-import { supabase } from "@/lib/client";
+// import { useRouter, usePathname } from "next/navigation";
+// import { supabase } from "@/lib/client";
+import { PrismaClient, Prisma } from "@prisma/client";
+import Link from "next/link";
+
+const prisma = new PrismaClient();
 
 // import { usePathname } from "next/navigation";
 // import { useEffect } from "react";
 
-async function getData(id: number) {
-  const { data, error } = await supabase
-    .from("raffles") // the table is not empty
-    .select()
-    .eq("id", id);
+// async function getData(id: number) {
+//   const { data, error } = await supabase
+//     .from("raffles") // the table is not empty
+//     .select()
+//     .eq("id", id);
 
-  if (error) {
-    console.log("error", error);
-    return { error: true };
-  }
-  return data;
-}
+//   if (error) {
+//     console.log("error", error);
+//     return { error: true };
+//   }
+//   return data;
+// }
 
 export default async function Page() {
-  const router = useRouter();
-  const raffleId = parseInt(
-    usePathname().substring(usePathname().lastIndexOf("/") + 1)
-  );
-  const supaData: any = await getData(raffleId);
+  // const router = useRouter() || { query: { text: "" } };
+  // const raffleId = parseInt(
+  //   usePathname().substring(usePathname().lastIndexOf("/") + 1)
+  // );
+  const supaData = await prisma.raffles.findUnique({ where: { id: 2 } });
+  console.log("data:", supaData);
+  // const supaData: any = await getData(raffleId);
   const {
     id,
-    created_at,
-    created_buy,
-    end_date,
+    created_by,
     favourite_count,
     max_tickets,
     name,
@@ -61,7 +63,7 @@ export default async function Page() {
     token_id,
     transaction_list,
     raffler,
-  } = supaData[0];
+  } = supaData;
 
   return (
     <>
@@ -120,9 +122,10 @@ export default async function Page() {
                   </div>
                 </div>
                 <div className="flex justify-between md:justify-start md:flex-col mt-3 md:mt-0 gap-x-8 md:gap-x-0 text-sm">
-                  <button
+                  <Link
+                    prefetch={false}
+                    href="/raffles"
                     className="flex items-center text-purple-600 hover:opacity-80 font-bold ml-1"
-                    onClick={() => router.push("/raffles")}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +135,7 @@ export default async function Page() {
                       <path d="M4.2 247.5L151 99.5c4.7-4.7 12.3-4.7 17 0l19.8 19.8c4.7 4.7 4.7 12.3 0 17L69.3 256l118.5 119.7c4.7 4.7 4.7 12.3 0 17L168 412.5c-4.7 4.7-12.3 4.7-17 0L4.2 264.5c-4.7-4.7-4.7-12.3 0-17z"></path>
                     </svg>
                     <span className="ml-1">Back</span>
-                  </button>
+                  </Link>
                   <button className="flex items-center text-purple-600 hover:opacity-80 font-bold my-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +180,7 @@ export default async function Page() {
                           </strong>
                           <div className="text-xl relative dark:text-white">
                             <div className="flex items-center gap-2">
-                              {end_date}
+                              Tomorrow
                             </div>
                           </div>
                         </div>

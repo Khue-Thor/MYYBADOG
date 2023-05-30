@@ -13,14 +13,24 @@ import Hero_6 from "@/ui/hero/hero6";
 import Testimonial from "@/components/blog/testimonial";
 import BidsCarousel from "@/components/ui/carousel/bids-carousel";
 import HeadLine from "@/components/headline";
-
+import { supabase } from "@/lib/client";
 const inter = Inter({ subsets: ["latin"] });
 
+async function getData() {
+  const { data, error } = await supabase
+    .from("raffles") // the table is not empty
+    .select();
 
+  if (error) {
+    console.log("error", error);
+    return { error: true };
+  }
+  return data;
+}
 
 export default async function Page() {
-  // const data = await getTopDogData();
-  // console.log(data);
+  const supaData: any = await getData();
+  console.log(supaData);
 
   return (
     <>
@@ -39,7 +49,7 @@ export default async function Page() {
           classes="font-display text-jacarta-700 mb-8 text-center text-3xl dark:text-white"
         />
         {/* @ts-expect-error Server Component */}
-        <BidsCarousel />
+        <BidsCarousel data={supaData} />
         {/* <BidsCarousel data={data.nfts} /> */}
       </section>
       {/* <Partners /> */}

@@ -2,11 +2,12 @@
 const nextConfig = {
   images: {
     dangerouslyAllowSVG: true,
-    domains:[
-      'static.nftgo.io', 
-      'images.wrappedpunks.com',
-      'api.mpunks.org',
-      'metadata.degods.com',
+    domains: [
+      "static.nftgo.io",
+      "images.wrappedpunks.com",
+      "api.mpunks.org",
+      "metadata.degods.com",
+      "ipfs.io",
     ],
     remotePatterns: [
       {

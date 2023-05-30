@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { collectionCategoryData } from '@/data/collection_data';
 import TopMint from './top-mint';
+import TopMint2 from './top-mint2';
 
 interface CollectionCategoryProps {
     bgWhite: boolean
@@ -26,7 +27,7 @@ const CollectionCategory = ({ bgWhite }: CollectionCategoryProps) => {
 				<div className="container">
 					<div className="flex flex-col space-y-5 lg:flex-row lg:space-y-0 lg:space-x-7">
 						{/* @ts-expect-error Server Component */}
-						<TopMint />
+						<TopMint2 />
 						{/* @ts-expect-error Server Component */}
 						<TopMint />
 						{/* @ts-expect-error Server Component */}

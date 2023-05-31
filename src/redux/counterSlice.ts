@@ -4,13 +4,13 @@ import TypeItem from '@/interfaces/TypeItem';
 const initialState = {
   mblMenu: false,
   dropdown: false,
-  collection_activity_item_data: [],
-  trendingCategoryItemData: [],
-  sortedtrendingCategoryItemData: [],
-  collectiondata: [],
-  sortedCollectionData: [],
-  renkingData: [],
-  filteredRenkingData: [],
+  collection_activity_item_data: [] as TypeItem[],
+  trendingCategoryItemData: [] as TypeItem[],
+  sortedtrendingCategoryItemData: [] as TypeItem[],
+  collectiondata: [] as TypeItem[],
+  sortedCollectionData: [] as TypeItem[],
+  renkingData: [] as TypeItem[],
+  filteredRenkingData: [] as TypeItem[],
   walletModal: false,
   bidsModal: false,
   buyModal: false,
@@ -36,6 +36,7 @@ export const counterSlice = createSlice({
       state.dropdown = false;
     },
     handle_collection_activity_item_data: (state, action) => {
+      // was payload.data before, payload on param
       state.collection_activity_item_data = action.payload.data;
     },
     walletModalShow: (state) => {
@@ -70,44 +71,44 @@ export const counterSlice = createSlice({
       const sortText = action.payload;
       if (sortText === 'Price: Low to High') {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort(
-            (a, b) => a.sortPrice - b.sortPrice
-          ) as TypeItem[];
+          state.trendingCategoryItemData.sort((a, b) => a.price - b.price);
       } else if (sortText === 'Price: high to low') {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort(
-            (a, b) => b.sortPrice - a.sortPrice
-          );
+          state.trendingCategoryItemData.sort((a, b) => b.price - a.price);
       } else if (sortText === 'Recently Added') {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => a.addDate - b.addDate);
+          state.trendingCategoryItemData.sort(
+            (a, b) => +a.auction_timer - +b.auction_timer
+          );
       } else if (sortText === 'Auction Ending Soon') {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => b.addDate - a.addDate);
+          state.trendingCategoryItemData.sort(
+            (a, b) => +b.auction_timer - +a.auction_timer
+          );
       } else {
         state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
       }
     },
     updateTrendingCategoryItemByInput: (state, action) => {
       const text = action.payload;
-      if (text === 'Verified Only') {
-        state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.filter((item) => {
-            return item.verified;
-          });
-      } else if (text === 'NFSW Only') {
-        state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.filter((item) => {
-            return item.nfsw;
-          });
-      } else if (text === 'Show Lazy Minted') {
-        state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.filter((item) => {
-            return item.lazyMinted;
-          });
-      } else {
-        state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
-      }
+      // if (text === 'Verified Only') {
+      //   state.sortedtrendingCategoryItemData =
+      //     state.trendingCategoryItemData.filter((item) => {
+      //       return item.verified;
+      //     });
+      // } else if (text === 'NFSW Only') {
+      //   state.sortedtrendingCategoryItemData =
+      //     state.trendingCategoryItemData.filter((item) => {
+      //       return item.nfsw;
+      //     });
+      // } else if (text === 'Show Lazy Minted') {
+      //   state.sortedtrendingCategoryItemData =
+      //     state.trendingCategoryItemData.filter((item) => {
+      //       return item.lazyMinted;
+      //     });
+      // } else {
+      //   state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
+      // }
     },
     collectCollectionData: (state, action) => {
       const data = action.payload;
@@ -116,19 +117,18 @@ export const counterSlice = createSlice({
     },
     updateCollectionData: (state, action) => {
       const text = action.payload;
-      console.log(text);
-      if (text === 'trending') {
-        const tampItem = state.collectiondata.filter((item) => item.trending);
-        state.sortedCollectionData = tampItem;
-      }
-      if (text === 'top') {
-        const tampItem = state.collectiondata.filter((item) => item.top);
-        state.sortedCollectionData = tampItem;
-      }
-      if (text === 'recent') {
-        const tampItem = state.collectiondata.filter((item) => item.recent);
-        state.sortedCollectionData = tampItem;
-      }
+      // if (text === 'trending') {
+      //   const tampItem = state.collectiondata.filter((item) => item.trending);
+      //   state.sortedCollectionData = tampItem;
+      // }
+      // if (text === 'top') {
+      //   const tampItem = state.collectiondata.filter((item) => item.top);
+      //   state.sortedCollectionData = tampItem;
+      // }
+      // if (text === 'recent') {
+      //   const tampItem = state.collectiondata.filter((item) => item.recent);
+      //   state.sortedCollectionData = tampItem;
+      // }
       // state.sortedCollectionData = state.collectiondata;
     },
     collectRenkingData: (state, action) => {
@@ -137,29 +137,29 @@ export const counterSlice = createSlice({
     },
     updateRenkingData: (state, action) => {
       const text = action.payload;
-      let tempItem = state.renkingData.filter((item) => item.category === text);
-      if (text === 'All') {
-        tempItem = state.renkingData;
-      }
-      state.filteredRenkingData = tempItem;
+      // let tempItem = state.renkingData.filter((item) => item.category === text);
+      // if (text === 'All') {
+      //   tempItem = state.renkingData;
+      // }
+      // state.filteredRenkingData = tempItem;
     },
     updateRenkingDataByBlockchain: (state, action) => {
       const text = action.payload;
-      let tempItem = state.renkingData.filter(
-        (item) => item.blockchain === text
-      );
-      if (text === 'All') {
-        tempItem = state.renkingData;
-      }
-      state.filteredRenkingData = tempItem;
+      // let tempItem = state.renkingData.filter(
+      //   (item) => item.blockchain === text
+      // );
+      // if (text === 'All') {
+      //   tempItem = state.renkingData;
+      // }
+      // state.filteredRenkingData = tempItem;
     },
     updateRenkingDataByPostdate: (state, action) => {
       const text = action.payload;
-      let tempItem = state.renkingData.filter((item) => item.postDate === text);
-      if (text === 'All Time' || text === 'Last Year') {
-        tempItem = state.renkingData;
-      }
-      state.filteredRenkingData = tempItem;
+      // let tempItem = state.renkingData.filter((item) => item.postDate === text);
+      // if (text === 'All Time' || text === 'Last Year') {
+      //   tempItem = state.renkingData;
+      // }
+      // state.filteredRenkingData = tempItem;
     },
   },
 });

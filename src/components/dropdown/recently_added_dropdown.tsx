@@ -697,7 +697,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
 				</div>
 			</div>
 		);
-	}
+	} return null;
 };
 
 export default Recently_added_dropdown;

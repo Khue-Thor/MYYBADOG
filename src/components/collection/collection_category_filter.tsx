@@ -12,11 +12,11 @@ const Collection_category_filter = () => {
 	const [propertiesModal, setPropertiesModal] = useState(false);
 	const [propetiesAccordionValue, setPropetiesAccordionValue] = useState(null);
 
-	const handlePropartiesAccordion = (parentId, e) => {
-		setPropetiesAccordionValue(parentId);
-		const target = e.target.closest('.accordion-item');
-		target.classList.toggle('show-accordion');
-	};
+	// const handlePropartiesAccordion = (parentId: number, e) => {
+	// 	setPropetiesAccordionValue(parentId);
+	// 	const target = e.target.closest('.accordion-item');
+	// 	target.classList.toggle('show-accordion');
+	// };
 
 	const sortText = [
 		{

@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { collection_item_data } from '../../../data/collection_data';
 import Auctions_dropdown from '../../../components/dropdown/Auctions_dropdown';
 import Social_dropdown from '../../../components/dropdown/Social_dropdown';
-// import Collection_items from '../../components/collectrions/Collection_items';
+import Collection_items from '../../../components/collection/Collection_items';
 import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -144,7 +144,7 @@ const Collection = () => {
 
         {/* <!-- end profile --> */}
       </div>
-      {/* <Collection_items /> */}
+      <Collection_items />
     </>
   );
 };

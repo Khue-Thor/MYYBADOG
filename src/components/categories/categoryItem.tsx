@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,16 +8,17 @@ import Likes from "../likes";
 import Auctions_dropdown from "../dropdown/Auctions_dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { buyModalShow } from "../../redux/counterSlice";
+import { RootState } from '@/redux/store';
 
 const CategoryItem = () => {
-  const { sortedtrendingCategoryItemData } = useSelector(
+  const { sortedtrendingCategoryItemData } = useSelector<RootState, RootState['counter']>(
     (state) => state.counter
   );
   const dispatch = useDispatch();
 
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
-      {sortedtrendingCategoryItemData.map((item) => {
+      {sortedtrendingCategoryItemData.map((item: any) => {
         const {
           id,
           image,
@@ -69,7 +71,7 @@ const CategoryItem = () => {
                           <img
                             src={owner.image}
                             alt="owner"
-                            layout="fill"
+                            // layout="fill"
                             className="dark:border-jacarta-600 hover:border-accent dark:hover:border-accent h-6 w-6 rounded-full border-2 border-white"
                           />
                         </Tippy>

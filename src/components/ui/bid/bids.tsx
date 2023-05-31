@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -34,6 +34,7 @@ const Bids: React.FC<BidsProps> = ({ classes = "pt-10 pb-24", bgWhite }) => {
 
         <div className="relative">
           {/* <!-- Slider --> */}
+          {/* @ts-expect-error Server Component */}
           <BidsCarousel />
         </div>
       </div>

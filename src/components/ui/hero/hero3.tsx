@@ -97,7 +97,7 @@ const Hero_3 = () => {
                     className="swiper-slide cursor-pointer rounded p-5 swiper-slide-duplicate swiper-slide-duplicate-next "
                     key={id}
                   >
-                    <img
+                    <Image
                       src={image}
                       className="w-full rounded-lg"
                       alt="thumb 1"

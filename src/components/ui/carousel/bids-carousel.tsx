@@ -1,3 +1,4 @@
+"use client";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar } from "swiper";
 import "swiper/css";
@@ -11,12 +12,15 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 // import { bidsModalShow } from "../../redux/counterSlice";
 // import { useDispatch } from "react-redux";
 import Likes from "@/components/likes";
+import { use, useState, useEffect } from "react";
 
-const BidsCarousel = () => {
-  // const dispatch = useDispatch();
-  const handleclick = () => {
-    console.log("clicked on ");
-  };
+import Countdown from "react-countdown";
+
+export const revalidate = 60;
+
+const BidsCarousel = async (data: any) => {
+  const supaData = data.data;
+
   return (
     <>
       <Swiper
@@ -35,7 +39,7 @@ const BidsCarousel = () => {
             slidesPerView: 3,
           },
           1100: {
-            slidesPerView: 4,
+            slidesPerView: 3,
           },
         }}
         navigation={{
@@ -44,44 +48,54 @@ const BidsCarousel = () => {
         }}
         className=" card-slider-4-columns !py-5"
       >
-        {bidsData.map((item) => {
-          const { id, image, title, bid_number, eth_number, react_number } =
-            item;
-          const itemLink = image
-            .split("/")
-            .slice(-1)
-            .toString()
-            .replace(".jpg", "");
+        {supaData.map((item: any) => {
+          const {
+            id,
+            created_at,
+            created_buy,
+            end_date,
+            favourite_count,
+            max_tickets,
+            name,
+            nft_address,
+            nft_image,
+            participant_list,
+            raffle_cost,
+            sold_tickets,
+            start_date,
+            token_id,
+            transaction_list,
+            raffler,
+          } = item;
+
           return (
             <SwiperSlide className="text-white" key={id}>
               <article>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg text-jacarta-500">
                   <figure>
                     {/* {`item/${itemLink}`} */}
-                    <Link href={"/item/" + itemLink}>
-                      <a>
-                        <div className="w-full">
-                          <Image
-                            src={image}
-                            alt={title}
-                            height={230}
-                            width={230}
-                            layout="responsive"
-                            objectFit="cover"
-                            className="rounded-[0.625rem] w-full"
-                            loading="lazy"
-                          />
-                        </div>
-                      </a>
+                    <Link href={nft_image}>
+                      <div className="w-full">
+                        <Likes
+                          like={favourite_count}
+                          classes="flex items-center space-x-1 absolute right-6 bg-purple-100 rounded p-2 mt-1 transition-shadow hover:bg-purple-300"
+                        />
+                        <Image
+                          src={nft_image}
+                          alt={name}
+                          height={370}
+                          width={460}
+                          className="rounded-[0.625rem] w-full"
+                          loading="lazy"
+                        />
+                      </div>
                     </Link>
                   </figure>
                   <div className="mt-4 flex items-center justify-between">
-                    <Link href={"/item/" + itemLink}>
-                      <a>
-                        <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
-                          {title}
-                        </span>
-                      </a>
+                    <Link href={"/item/" + nft_address}>
+                      <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
+                        {name}
+                      </span>
                     </Link>
                     <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                       <Tippy content={<span>ETH</span>}>
@@ -93,32 +107,38 @@ const BidsCarousel = () => {
                       </Tippy>
 
                       <span className="text-green text-sm font-medium tracking-tight">
-                        {eth_number} ETH
+                        {raffle_cost} ETH
                       </span>
                     </span>
                   </div>
                   <div className="mt-2 text-sm">
-                    <span className="dark:text-jacarta-300 text-jacarta-500">
-                      Current Bid
+                    <Link href={`opensea.io/${raffler}`}>
+                      <span className="dark:text-jacarta-300 text-jacarta-500">
+                        {raffler.slice(0, 6).concat("...", raffler.slice(-4))}{" "}
+                      </span>
+                    </Link>
+                  </div>
+                  <div className="mt-2">
+                    <span className="dark:text-jacarta-300 text-jacarta-500 text-sm">
+                      Tickets Remaining
                     </span>
-                    <span className="dark:text-jacarta-100 text-jacarta-700">
-                      {bid_number} ETH
-                    </span>
+                    <div className="text-green text-lg font-extrabold">
+                      &nbsp;{max_tickets - sold_tickets}/{max_tickets}
+                    </div>
                   </div>
 
                   <div className="mt-8 flex items-center justify-between">
-                    <button
-                      type="button"
-                      className="text-accent font-display text-sm font-semibold"
+                    <Link
+                      prefetch={false}
+                      href={`/raffles/${id}`}
+                      className="text-purple-base hover:text-white font-display text-lg font-semibold w-full text-center border-purple border-2 rounded py-2 hover:bg-accent-dark hover:opacity-50 transition ease-in-out delay-150"
                       // onClick={() => dispatch(bidsModalShow())}
                     >
-                      Place bid
-                    </button>
-
-                    <Likes
-                      like={react_number}
-                      classes="flex items-center space-x-1"
-                    />
+                      <div className="block">View Raffle</div>
+                      <Countdown date={Date.now() + 500000}>
+                        <p className="text-sm">Raffle has Ended</p>
+                      </Countdown>
+                    </Link>
                   </div>
                 </div>
               </article>

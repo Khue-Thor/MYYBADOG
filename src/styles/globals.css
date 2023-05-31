@@ -6005,3 +6005,30 @@ body {
 		width: auto;
 	}
 }
+
+progress[value] {
+	-webkit-appearance: none;
+	appearance: none;
+  }
+  
+/* progress[value]{
+	height:4px;
+	width:5rem;
+	border-radius: 50%;
+	background: #40D04F;
+} */
+progress[value]::-webkit-progress-bar {
+	height:.25rem;
+	width:5rem;
+	border-radius: 4px 4px;
+	background: #5338B5;
+	@apply mt-2
+}  
+progress::-webkit-progress-value{
+	@apply bg-green
+}
+
+.rce-citem{
+	background:#007aff;
+	@apply bg-accent-light
+}

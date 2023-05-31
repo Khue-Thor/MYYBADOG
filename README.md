@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+We need to run the following install due to react-chat-element@12.0.8 for now. (might use another library later)
+npm install --legacy-peer-deps
 
 ```bash
 npm run dev
 # or
-yarn dev
-# or
-pnpm dev
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Prisma Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Setup Policy for your database
 
-[http://localhost:3000/api/hello](http://localhost:3000/api/hello) is an endpoint that uses [Route Handlers](https://beta.nextjs.org/docs/routing/route-handlers). This endpoint can be edited in `app/api/hello/route.ts`.
+_RLS is enabled by default, so a policy needs to be set to allow read permissions_
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Authentication -> Policies -> New Policy on the respective table
 
-## Learn More
+### Obtain Postgres URI from SupaBase
 
-To learn more about Next.js, take a look at the following resources:
+- Settings -> Database -> Connection String(URI) -> Copy string and replace '[YOUR-PASSWORD]' with your supabase password.
+- Add the Connection string updated with your password to .env as 'DATABASE_URL'
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install @prisma/client
+## Initialize prisma folder structure
+npx prisma init
+## If you have tables in your database.
+npx prisma db pull
+## You have tables. But you want to update them by Prisma file.
+npx prisma db push
+## Investigate the delta using different flags to see difference between local and production
+npx prisma migration diff
+## Deploy migration to production
+npx prisma migrate deploy
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Refer to [Prisma Docs](https://www.prisma.io/docs/concepts/components/prisma-client/crud) for usage operations.
+_Note: While implementing data fetching import the data model directly from **"@prisma/client"** instead of using interface._
 
-## Deploy on Vercel
+**_Example usage:_**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```ts
+import { PrismaClient, Prisma, raffles } from "@prisma/client";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+const supaData: raffles | null = await prisma.raffles.findUnique({
+  where: { id: 1 },
+});
+```

@@ -768,7 +768,7 @@ const collectionCategoryData = [
 				title: 'NFT Funny Cat',
 				image: '/images/avatars/avatar_1.jpg',
 				icon: true,
-				amount: '7,080.95',
+				amount: '7,080',
 				postTime: '2022-07-20',
 			},
 			{
@@ -776,7 +776,7 @@ const collectionCategoryData = [
 				title: 'Cryptopank',
 				image: '/images/avatars/avatar_2.jpg',
 				icon: true,
-				amount: '6,548,133',
+				amount: '6,548',
 				postTime: '2022-07-10',
 			},
 			{
@@ -784,7 +784,7 @@ const collectionCategoryData = [
 				title: 'Prince Ape Planet',
 				image: '/images/avatars/avatar_3.jpg',
 				icon: false,
-				amount: '4,823,927',
+				amount: '4,823',
 				postTime: '2022-07-08',
 			},
 			{

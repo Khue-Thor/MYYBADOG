@@ -30,8 +30,8 @@ export const revalidate = 60;
 //   return data;
 // }
 
-// const BidsCarousel = async () => {
-//   const supaData: any = await getData();
+const BidsCarousel = async () => {
+  //   const supaData: any = await getData();
   return (
     <>
       <Swiper

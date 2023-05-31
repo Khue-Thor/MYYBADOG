@@ -24,27 +24,8 @@ import Link from "next/link";
 
 const prisma = new PrismaClient();
 
-// import { usePathname } from "next/navigation";
-// import { useEffect } from "react";
-
-// async function getData(id: number) {
-//   const { data, error } = await supabase
-//     .from("raffles") // the table is not empty
-//     .select()
-//     .eq("id", id);
-
-//   if (error) {
-//     console.log("error", error);
-//     return { error: true };
-//   }
-//   return data;
-// }
-
 export default async function Page() {
-  // const router = useRouter() || { query: { text: "" } };
-  // const raffleId = parseInt(
-  //   usePathname().substring(usePathname().lastIndexOf("/") + 1)
-  // );
+
   const supaData = await prisma.raffles.findUnique({ where: { id: 2 } });
   console.log("data:", supaData);
   // const supaData: any = await getData(raffleId);

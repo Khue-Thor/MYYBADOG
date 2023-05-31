@@ -209,9 +209,9 @@ export default async function Page() {
                             </strong>
                             <div className="text-xl relative dark:text-white">
                               <div className="flex items-center gap-2">
-                                {max_tickets || sold_tickets === null
+                                {max_tickets === null || sold_tickets === null
                                   ? "N/A"
-                                  : max_tickets ?? 0 - (sold_tickets ?? 0)}
+                                  : (max_tickets ?? 0) - (sold_tickets ?? 0)}
                                 /{max_tickets}
                               </div>
                             </div>

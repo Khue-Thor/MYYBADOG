@@ -65,32 +65,28 @@ export const counterSlice = createSlice({
       state.propartiesModalValue = false;
     },
     updateTrendingCategoryItemData: (state, action) => {
+      console.log('this', action.payload);
       state.trendingCategoryItemData = action.payload;
       state.sortedtrendingCategoryItemData = action.payload;
     },
-    updatetrendingCategorySorText: (state, action: PayloadAction<String>) => {
+    updatetrendingCategorySorText: (state, action) => {
       const sortText = action.payload;
-      console.log(action.payload);
-
       if (sortText === 'Price: Low to High') {
-        console.log(1);
-        console.log(state.trendingCategoryItemData);
-
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => a.price - b.price);
+          state.trendingCategoryItemData.sort(
+            (a, b) => +a.sortPrice - +b.sortPrice
+          );
       } else if (sortText === 'Price: high to low') {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => b.price - a.price);
-      } else if (sortText === 'Recently Added') {
-        state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
-            (a, b) => +a.auction_timer - +b.auction_timer
+            (a, b) => +b.sortPrice - +a.sortPrice
           );
-      } else if (sortText === 'Auction Ending Soon') {
-        state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort(
-            (a, b) => +b.auction_timer - +a.auction_timer
-          );
+        // } else if (sortText === "Recently Added") {
+        //   state.sortedtrendingCategoryItemData =
+        //     state.trendingCategoryItemData.sort((a, b) => a.addDate - b.addDate);
+        // } else if (sortText === "Auction Ending Soon") {
+        //   state.sortedtrendingCategoryItemData =
+        //     state.trendingCategoryItemData.sort((a, b) => b.addDate - a.addDate);
       } else {
         state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
       }

@@ -54,7 +54,7 @@ const Collection = ({ params }: any) => {
           detailsText: 'Owners'
         }, {
           id: '3',
-          detailsNumber: response.floor_price.value,
+          detailsNumber: response.floor_price.value.toFixed(2),
           detailsText: 'Floor Price'
         }, {
           id: '4',
@@ -92,8 +92,6 @@ const Collection = ({ params }: any) => {
     fetchCollectionItems();
     fetchCollectionData();
   }, [])
-  // const router = useRouter();
-  // const contract_address = router.query.collection;
   function formatNumber(number: number): string {
     return (number / 1000).toFixed(0) + 'K'
   }

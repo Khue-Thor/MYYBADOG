@@ -37,6 +37,7 @@ export const counterSlice = createSlice({
     },
     handle_collection_activity_item_data: (state, action) => {
       // was payload.data before, payload on param
+      console.log(2);
       state.collection_activity_item_data = action.payload.data;
     },
     walletModalShow: (state) => {
@@ -69,7 +70,12 @@ export const counterSlice = createSlice({
     },
     updatetrendingCategorySorText: (state, action: PayloadAction<String>) => {
       const sortText = action.payload;
+      console.log(action.payload);
+
       if (sortText === 'Price: Low to High') {
+        console.log(1);
+        console.log(state.trendingCategoryItemData);
+
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort((a, b) => a.price - b.price);
       } else if (sortText === 'Price: high to low') {

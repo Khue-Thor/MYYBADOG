@@ -1,22 +1,74 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { collection_item_data } from '../../../data/collection_data';
-import Auctions_dropdown from '../../../components/dropdown/Auctions_dropdown';
-import Social_dropdown from '../../../components/dropdown/Social_dropdown';
-import Collection_items from '../../../components/collection/Collection_items';
+import { collection_item_data } from '../../../../data/collection_data';
+import Auctions_dropdown from '../../../../components/dropdown/Auctions_dropdown';
+import Social_dropdown from '../../../../components/dropdown/Social_dropdown';
+import Collection_items from '../../../../components/collection/Collection_items';
 import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
 import Meta from '@/components/wallet-btn/Meta';
+import { NFTContract, NFTItem } from '@/interfaces/CollectionItem';
+import CollectionItem, { CollectionData } from '@/interfaces/CollectionItem';
+import Collection_stats from '@/interfaces/Collection_stats';
 // import Meta from '../../components/Meta';
 
-const Collection = () => {
+const Collection = ({ params }: any) => {
   const [likesImage, setLikesImage] = useState(false);
+  const [collectionItemData, setCollectionItemData] = useState<NFTItem[]>([]);
+  const [collectionData, setCollectionData] = useState<Collection_stats[]>([]);
+  // const [collectionProfile, setCollectionProfile] = useState<NFTContract[]>([]);
+  const contract_address = params.contract_address;
+  const id = params.id;
+  const url = `https://eth-mainnet.g.alchemy.com/nft/v3/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  const fetchCollectionData = async () => {
+    const options = {
+      method: 'GET',
+      headers: new Headers({
+        accept: "application/json",
+        "X-API-KEY": process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
+      }),
+    };
+
+    fetch(`https://data-api.nftgo.io/eth/v1/collection/${contract_address}/metrics`, options)
+      .then(response => response.json())
+      .then(response => {
+        console.log('collectionData', response);
+        setCollectionData(response)
+      })
+      .catch(err => console.error(err));
+  }
+  // const fetchCollectionProfile = async () => {
+  //   const options = { method: 'GET', headers: { accept: 'application/json' } };
+  //   fetch(`${url}/getContractMetadata?contractAddress=${contract_address}`, options)
+  //     .then(response => response.json())
+  //     .then(response => {
+  //       console.log('collectionProfile', response);
+  //       setCollectionProfile(response)
+  //     })
+  //     .catch(err => console.error(err));
+  // }
+
+  const fetchCollectionItems = async () => {
+    const options = { method: 'GET', headers: { accept: 'application/json' } };
+    fetch(`${url}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1&limit=10`, options)
+      .then(response => response.json())
+      .then(response => {
+        console.log('collectionItemData', response.nfts);
+        setCollectionItemData(response.nfts)
+      })
+      .catch(err => console.error(err));
+  }
+
+  useEffect(() => {
+    // fetchCollectionProfile();
+    fetchCollectionItems();
+    fetchCollectionData();
+  }, [])
   // const router = useRouter();
-  // const pid = router.query.collection;
-  const pid = useSearchParams().get('collection');
+  // const contract_address = router.query.collection;
 
   const handleLikes = () => {
     if (!likesImage) {
@@ -25,15 +77,16 @@ const Collection = () => {
       setLikesImage(false);
     }
   };
+  const icon = true
 
   return <>
-    <Meta title={`${pid} || Xhibiter | NFT Marketplace Next.js Template`} />
+    <Meta title={'NFT Collection'} />
 
     <div className="pt-[5.5rem] lg:pt-24">
       {/* <!-- Banner --> */}
       <div className="relative h-[300px]">
         <Image
-          src="/images/collections/collection_banner.jpg"
+          src={collectionItemData.length > 0 ? collectionItemData[id - 1].image.cachedUrl : ''}
           alt="banner"
           layout="fill"
           objectFit="cover"
@@ -42,19 +95,21 @@ const Collection = () => {
       {/* <!-- end banner --> */}
 
       {/* <!-- Profile --> */}
-      {collection_item_data
-        .filter((item) => item.id === pid)
-        .map((item) => {
-          const { id, title, image, icon, creator, text, details } = item;
+
+      {collectionItemData.length > 0 && collectionItemData
+        .filter((item) => {
+          return item.tokenId === id
+        }).map((item) => {
+          const { tokenId, contract: { name, openSeaMetadata: { description }, contractDeployer }, image } = item;
 
           return (
-            <section key={id} className="dark:bg-jacarta-800 bg-light-base relative pb-12 pt-28">
+            <section key={tokenId} className="dark:bg-jacarta-800 bg-light-base relative pb-12 pt-28">
               {/* <!-- Avatar --> */}
               <div className="absolute left-1/2 top-0 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
                 <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white">
                   <Image
-                    src={image}
-                    alt={title}
+                    src={image.cachedUrl}
+                    alt={name}
                     layout="fill"
                     objectFit="contain"
                     className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
@@ -82,17 +137,20 @@ const Collection = () => {
               <div className="container">
                 <div className="text-center">
                   <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
-                    {title}
+                    {name}
                   </h2>
                   <div className="mb-8">
                     <span className="text-jacarta-400 text-sm font-bold">Created by </span>
-                    <Link href="/user/avatar_6" className="text-accent text-sm font-bold">
-                      {creator}
+                    <Link
+                      href=""
+                      className="text-accent text-sm font-bold"
+                      legacyBehavior>
+                      {contractDeployer}
                     </Link>
                   </div>
 
                   <div className="dark:bg-jacarta-800 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex flex-wrap items-center justify-center rounded-xl border bg-white">
-                    {details.map(({ id, detailsNumber, detailsText }) => {
+                    {/* {details.map(({ id, detailsNumber, detailsText }: any) => {
                       return (
                         (<Link
                           href="#"
@@ -108,10 +166,10 @@ const Collection = () => {
 
                         </Link>)
                       );
-                    })}
+                    })} */}
                   </div>
 
-                  <p className="dark:text-jacarta-300 mx-auto max-w-xl text-lg">{text}</p>
+                  <p className="dark:text-jacarta-300 mx-auto max-w-xl text-lg">{description}</p>
 
                   <div className="mt-6 flex items-center justify-center space-x-2.5 relative">
                     <div className="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white">

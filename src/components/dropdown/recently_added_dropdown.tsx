@@ -46,6 +46,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
 		});
 	};
 	const handleBlockChainDropdown = () => {
+
 		window.addEventListener('click', (w) => {
 			const target = w.target as HTMLInputElement;
 			if (target.closest('.blockchainDropdown')) {

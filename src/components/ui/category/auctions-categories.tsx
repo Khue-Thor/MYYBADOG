@@ -62,15 +62,15 @@ const AuctionsCategories = () => {
                           }
                         >
                           <Link href={/item/ + itemLink}>
-                            <a>
-                              <Image
-                                src={creatorImage}
-                                alt="creator"
-                                className="h-6 w-6 rounded-full"
-                                height={24}
-                                width={24}
-                              />
-                            </a>
+
+                            <Image
+                              src={creatorImage}
+                              alt="creator"
+                              className="h-6 w-6 rounded-full"
+                              height={24}
+                              width={24}
+                            />
+
                           </Link>
                         </Tippy>
                         <Tippy
@@ -81,15 +81,15 @@ const AuctionsCategories = () => {
                           }
                         >
                           <Link href={/item/ + itemLink}>
-                            <a>
-                              <Image
-                                src={ownerImage}
-                                alt="creator"
-                                className="h-6 w-6 rounded-full"
-                                height={24}
-                                width={24}
-                              />
-                            </a>
+
+                            <Image
+                              src={ownerImage}
+                              alt="creator"
+                              className="h-6 w-6 rounded-full"
+                              height={24}
+                              width={24}
+                            />
+
                           </Link>
                         </Tippy>
                       </div>
@@ -99,28 +99,28 @@ const AuctionsCategories = () => {
                     </div>
                     <figure className="relative">
                       <Link href={/item/ + itemLink}>
-                        <a>
-                          <Image
-                            src={bigImage}
-                            alt="item 8"
-                            className="w-full rounded-[0.625rem]"
-                            loading="lazy"
-                            // height="100%"
-                            // width="100%"
-                            layout="responsive"
-                            objectFit="cover"
-                          />
-                        </a>
+
+                        <Image
+                          src={bigImage}
+                          alt="item 8"
+                          className="w-full rounded-[0.625rem]"
+                          loading="lazy"
+                          // height="100%"
+                          // width="100%"
+                          layout="responsive"
+                          objectFit="cover"
+                        />
+
                       </Link>
                       {/* <Countdown_timer time={+auction_timer} /> */}
                     </figure>
                     <div className="mt-7 flex items-center justify-between">
                       <Link href={/item/ + itemLink}>
-                        <a>
-                          <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
-                            {title}
-                          </span>
-                        </a>
+
+                        <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
+                          {title}
+                        </span>
+
                       </Link>
                       <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                         <span>

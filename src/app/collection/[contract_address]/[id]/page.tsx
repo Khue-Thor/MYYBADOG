@@ -11,14 +11,21 @@ import Link from 'next/link';
 import Head from 'next/head';
 import Meta from '@/components/wallet-btn/Meta';
 import { NFTContract, NFTItem } from '@/interfaces/CollectionItem';
-import CollectionItem, { CollectionData } from '@/interfaces/CollectionItem';
+import CollectionItem from '@/interfaces/CollectionItem';
 import Collection_stats from '@/interfaces/Collection_stats';
 // import Meta from '../../components/Meta';
+
+interface DetailItem {
+  id: string;
+  detailsNumber: string;
+  detailsText: string;
+}
 
 const Collection = ({ params }: any) => {
   const [likesImage, setLikesImage] = useState(false);
   const [collectionItemData, setCollectionItemData] = useState<NFTItem[]>([]);
   const [collectionData, setCollectionData] = useState<Collection_stats[]>([]);
+  const [details, setDetails] = useState<DetailItem[]>([]);
   // const [collectionProfile, setCollectionProfile] = useState<NFTContract[]>([]);
   const contract_address = params.contract_address;
   const id = params.id;
@@ -36,6 +43,23 @@ const Collection = ({ params }: any) => {
       .then(response => response.json())
       .then(response => {
         console.log('collectionData', response);
+        setDetails([{
+          id: '1',
+          detailsNumber: response.total_supply,
+          detailsText: 'Items'
+        }, {
+          id: '2',
+          detailsNumber: response.holder_num,
+          detailsText: 'Owners'
+        }, {
+          id: '3',
+          detailsNumber: response.floor_price.value.toFixed(2),
+          detailsText: 'Floor Price'
+        }, {
+          id: '4',
+          detailsNumber: response.volume_eth.all.toFixed(2),
+          detailsText: 'Volume Traded'
+        }])
         setCollectionData(response)
       })
       .catch(err => console.error(err));
@@ -150,7 +174,7 @@ const Collection = ({ params }: any) => {
                   </div>
 
                   <div className="dark:bg-jacarta-800 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex flex-wrap items-center justify-center rounded-xl border bg-white">
-                    {/* {details.map(({ id, detailsNumber, detailsText }: any) => {
+                    {details.map(({ id, detailsNumber, detailsText }: any) => {
                       return (
                         (<Link
                           href="#"
@@ -166,7 +190,7 @@ const Collection = ({ params }: any) => {
 
                         </Link>)
                       );
-                    })} */}
+                    })}
                   </div>
 
                   <p className="dark:text-jacarta-300 mx-auto max-w-xl text-lg">{description}</p>

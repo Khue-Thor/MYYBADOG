@@ -26,6 +26,7 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
+import Autocomplete from "../autocomplete/autocomplete";
 
 // import WalletButton from "../wallet-btn/WalletButton";
 
@@ -34,6 +35,17 @@ export default function Header01() {
   const [isCollapse, setCollapse] = useState(null);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter()
+
+  const [jsonData, setJsonData] = useState([])
+
+  const onSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const encodedSearchQueary = encodeURI(searchQuery);
+    router.push(`/search?q=${encodedSearchQueary}`)
+    console.log("current query", encodedSearchQueary);
+  }
 
   // window resize
   useEffect(() => {
@@ -437,6 +449,7 @@ export default function Header01() {
           <form
             action="search"
             className="relative ml-12 mr-8 hidden basis-3/12 lg:block xl:ml-[8%]"
+            onSubmit={onSearch}
           >
             <input
               type="search"
@@ -445,6 +458,7 @@ export default function Header01() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+            
             <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -497,8 +511,8 @@ export default function Header01() {
                         >
                           <span
                             className={`font-display ${isChildrenPageActive(page.path, pathname)
-                                ? "text-accent dark:text-accent"
-                                : "text-jacarta-700"
+                              ? "text-accent dark:text-accent"
+                              : "text-jacarta-700"
                               } text-sm dark:text-white`}
                           >
                             {page.name}
@@ -548,8 +562,8 @@ export default function Header01() {
                         >
                           <span
                             className={`font-display ${isChildrenPageActive(page.path, pathname)
-                                ? "!text-accent !dark:text-accent"
-                                : "text-jacarta-700 dark:text-white"
+                              ? "!text-accent !dark:text-accent"
+                              : "text-jacarta-700 dark:text-white"
                               } text-sm `}
                           >
                             {page.name}
@@ -1017,8 +1031,8 @@ export default function Header01() {
                     >
                       <span
                         className={`font-display ${isChildrenPageActive(pathname, page.path)
-                            ? "text-accent dark:text-accent"
-                            : "text-jacarta-700"
+                          ? "text-accent dark:text-accent"
+                          : "text-jacarta-700"
                           } text-sm dark:text-white`}
                       >
                         {page.name}
@@ -1178,8 +1192,8 @@ export default function Header01() {
                     >
                       <span
                         className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, pathname)
-                            ? "text-accent dark:text-accent"
-                            : ""
+                          ? "text-accent dark:text-accent"
+                          : ""
                           }`}
                       >
                         {page.name}

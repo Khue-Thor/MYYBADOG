@@ -25,6 +25,7 @@ export default async function Home() {
       />
       {/* @ts-expect-error Server Component */}
       <Hero_6 />
+      {/* <Hero_6 data={data.nfts} /> */}
       {/* <Bids /> */}
       <Collection_category bgWhite={true} />
       {/* <Auctions_categories /> */}

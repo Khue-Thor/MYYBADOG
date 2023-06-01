@@ -30,6 +30,7 @@ const Collection = ({ params }: any) => {
   const contract_address = params.contract_address;
   const id = params.id;
   const url = `https://eth-mainnet.g.alchemy.com/nft/v3/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+
   const fetchCollectionData = async () => {
     const options = {
       method: 'GET',
@@ -45,19 +46,19 @@ const Collection = ({ params }: any) => {
         console.log('collectionData', response);
         setDetails([{
           id: '1',
-          detailsNumber: response.total_supply,
+          detailsNumber: formatNumber(+response.total_supply),
           detailsText: 'Items'
         }, {
           id: '2',
-          detailsNumber: response.holder_num,
+          detailsNumber: formatNumber(+response.holder_num),
           detailsText: 'Owners'
         }, {
           id: '3',
-          detailsNumber: response.floor_price.value.toFixed(2),
+          detailsNumber: response.floor_price.value,
           detailsText: 'Floor Price'
         }, {
           id: '4',
-          detailsNumber: response.volume_eth.all.toFixed(2),
+          detailsNumber: formatNumber(+response.volume_eth.all),
           detailsText: 'Volume Traded'
         }])
         setCollectionData(response)
@@ -93,6 +94,9 @@ const Collection = ({ params }: any) => {
   }, [])
   // const router = useRouter();
   // const contract_address = router.query.collection;
+  function formatNumber(number: number): string {
+    return (number / 1000).toFixed(0) + 'K'
+  }
 
   const handleLikes = () => {
     if (!likesImage) {

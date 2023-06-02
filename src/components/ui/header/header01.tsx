@@ -26,13 +26,15 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
+import { ConnectWallet, useUser } from "@thirdweb-dev/react";
 
 // import WalletButton from "../wallet-btn/WalletButton";
 
 export default function Header01() {
+  const { user, isLoggedIn, isLoading } = useUser();
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
-
+  console.log(user);
   // window resize
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -676,6 +678,9 @@ export default function Header01() {
                     </button>
                   </Link>
                 </li>
+                <li className="group">
+                  <ConnectWallet />
+                </li>
               </ul>
             </nav>
             {/* End menu for desktop */}
@@ -1167,6 +1172,7 @@ export default function Header01() {
                   </svg>
                 </i>
               </button>
+              <ConnectWallet />
               <ul
                 className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
                   isCollapse === resource.id ? "block" : "hidden"

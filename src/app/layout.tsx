@@ -42,8 +42,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <head />
         <body className={inter.className}>
-          <Header01 />
           <Providers>
+            <Header01 />
             {/* {header} */}
             {children}
           </Providers>

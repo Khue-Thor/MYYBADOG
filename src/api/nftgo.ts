@@ -85,7 +85,7 @@ const options = {
   method: 'GET',
   headers: new Headers({
     accept: 'application/json',
-    'X-API-KEY': process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
+    'X-API-KEY': process.env.NFT_GO_API_KEY as string,
   }),
 };
 

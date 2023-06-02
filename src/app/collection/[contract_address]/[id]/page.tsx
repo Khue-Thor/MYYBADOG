@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { collection_item_data } from '../../../../data/collection_data';
 import Auctions_dropdown from '../../../../components/dropdown/Auctions_dropdown';
 import Social_dropdown from '../../../../components/dropdown/Social_dropdown';
 import Collection_items from '../../../../components/collection/Collection_items';
@@ -10,10 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
 import Meta from '@/components/wallet-btn/Meta';
-import { NFTItem } from '@/interfaces/CollectionItem';
-import Collection_stats from '@/interfaces/Collection_stats';
 import { getColectionMetrics } from '@/api/nftgo';
-// import Meta from '../../components/Meta';
+import { NFTMetaData, getNFTsForContract } from '@/api/alchemy';
 
 interface DetailItem {
   id: string;
@@ -30,14 +26,14 @@ interface params {
 
 const Collection = ({ params }: params) => {
   const [likesImage, setLikesImage] = useState(false);
-  const [collectionItemData, setCollectionItemData] = useState<NFTItem[]>([]);
+  const [collectionItemData, setCollectionItemData] = useState<NFTMetaData[]>([]);
   const [details, setDetails] = useState<DetailItem[]>([]);
-  const contract_address = params.contract_address;
+  const contractAddress = params.contract_address;
   const id = params.id;
-  const url = `https://eth-mainnet.g.alchemy.com/nft/v3/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  const blockchain = 'eth-mainnet'
 
   const fetchCollectionData = async () => {
-    const data = await getColectionMetrics(contract_address);
+    const data = await getColectionMetrics(contractAddress);
     setDetails([{
       id: '1',
       detailsNumber: formatNumber(+data.total_supply),
@@ -58,18 +54,11 @@ const Collection = ({ params }: params) => {
   }
 
   const fetchCollectionItems = async () => {
-    const options = { method: 'GET', headers: { accept: 'application/json' } };
-    fetch(`${url}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1&limit=10`, options)
-      .then(response => response.json())
-      .then(response => {
-        console.log('collectionItemData', response.nfts);
-        setCollectionItemData(response.nfts)
-      })
-      .catch(err => console.error(err));
+    const items = await getNFTsForContract({ blockchain, contractAddress, limit: 8 });
+    setCollectionItemData(items);
   }
 
   useEffect(() => {
-    // fetchCollectionProfile();
     fetchCollectionItems();
     fetchCollectionData();
   }, [])

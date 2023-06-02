@@ -1,5 +1,6 @@
 "use client";
 
+
 import Image from "next/image";
 import Link from "next/link";
 import DarkMode from "../mode/dark-mode";
@@ -26,7 +27,9 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
-import Autocomplete from "../autocomplete/autocomplete";
+
+import { items_offer_data } from "@/data/items_tabs_data";
+
 
 // import WalletButton from "../wallet-btn/WalletButton";
 
@@ -434,6 +437,54 @@ export default function Header01() {
     setCollapse(id);
   };
 
+  const nft = ["Bored Ape Nike Club", "Dragon Stinky", "The King of Kind", "Ape the knight", "Drinking bady", "Bored Ape Yacht Club", "Bored Ape Nike Club", "Dragon Stinky", "The King of Kind", "Ape the knight", "Drinking bady", "Bored Ape Yacht Club"]
+  const [filteredData, setFilteredData] = useState([]);
+  const [enteredWord, setEnteredWord] = useState([]);
+
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    setEnteredWord(searchWord);
+    const newFilter = nft.filter((value) => {
+      return value.toLowerCase().includes(searchWord.toLowerCase());
+    });
+    if (searchWord === "") {
+      setFilteredData([]);
+    } else {
+      setFilteredData(newFilter);
+    }
+  };
+
+  const { Alchemy, Network } = require("alchemy-sdk");
+
+  // Configures the Alchemy SDK
+  const config = {
+    apiKey: "alchemy-replit", // Replace with your API key
+    network: Network.ETH_MAINNET, // Replace with your network
+  };
+
+  // Creates an Alchemy object instance with the config to use for making requests
+  const alchemy = new Alchemy(config);
+
+  const main = async () => {
+    const kw = "hair"
+
+    //Call the method to fetch metadata
+    const response = await alchemy.nft.searchContractMetadata(kw)
+
+    //Logging the response to the console
+    response.forEach(contract => {
+      const { name, openSea: { floorPrice, imageUrl } } = contract;
+      console.log('Name:', name);
+      console.log('Floor Price:', floorPrice);
+      console.log('Image URL:', imageUrl);
+    });
+
+
+  };
+
+
+
+
   return (
     <>
       {/* main desktop menu sart*/}
@@ -455,10 +506,28 @@ export default function Header01() {
               type="search"
               className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
               placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleFilter}
+
             />
-            
+            {filteredData.length !== 0 && (
+              <div className="scroll bg-white text-black -z-1 absolute left-[-60px] top-[60px] pt-3 pb-[20px] w-[400px] rounded-3xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+                <span className='font-bold text-sm'>COLLECTIONS</span>
+                {filteredData.map((value, key) => {
+                  return (
+                    <div key={key} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between">
+                      <div className="flex gap-3 items-top">
+                        <Image className="w-10 h-10 rounded-xl" alt="collect icon" />
+                        <span className="font-bold">{value}</span>
+                      </div>
+                      <span>5.6 ETH</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+
+
+
             <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

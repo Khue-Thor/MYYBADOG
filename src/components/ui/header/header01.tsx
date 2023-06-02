@@ -895,14 +895,17 @@ export default function Header01() {
                   return (
                     <div key={key} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
-                        <img src={value.openSeaMetadata.imageUrl} width={30} height={30} alt="Image" className="rounded-lg" />
-                        <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
+                        <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                        <div className="flex flex-col">
+                          <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
+                          <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                        </div>
                       </div>
-                      <span>{value.openSeaMetadata.floorPrice} ETH</span>
+                      <span className="font-medium text-sm">{value.openSeaMetadata.floorPrice} ETH</span>
                     </div>
                   );
                 })}
-                <span className='font-bold text-sm text-gray-600'>COLLECTIONS</span>
+                <span className='font-bold text-sm text-gray-600'>ACCOUNTS</span>
               </div>
             )}
 

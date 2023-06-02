@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { trendingCategoryData } from "../../data/categories_data";
 import Activity_item from "./Activity_item";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import FilterCategoryItem from "../categories/filterCategoryItem";
 
 const Collection_items = () => {

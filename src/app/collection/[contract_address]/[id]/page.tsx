@@ -83,12 +83,16 @@ const Collection = ({ params }: params) => {
     <div className="pt-[5.5rem] lg:pt-24">
       {/* <!-- Banner --> */}
       <div className="relative h-[300px]">
-        <Image
-          src={collectionItemData.length > 0 ? collectionItemData[1].image.cachedUrl : ''}
-          alt="banner"
-          layout="fill"
-          objectFit="cover"
-        />
+        {
+          collectionItemData.length > 0 &&
+          <Image
+            src={collectionItemData[0].image.cachedUrl}
+            alt="banner"
+            layout="fill"
+            objectFit="cover"
+            priority={true}
+          />
+        }
       </div>
       {/* <!-- end banner --> */}
 
@@ -140,7 +144,7 @@ const Collection = ({ params }: params) => {
                   <div className="mb-8">
                     <span className="text-jacarta-400 text-sm font-bold">Created by </span>
                     <Link
-                      href=""
+                      href="#"
                       className="text-accent text-sm font-bold"
                       legacyBehavior>
                       {contractDeployer}

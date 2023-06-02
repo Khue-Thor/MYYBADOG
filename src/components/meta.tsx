@@ -1,7 +1,11 @@
 import Head from "next/head";
 import React from "react";
 
-type Props = { title?: string; keyword?: string; desc?: string };
+type Props = {
+  title?: string;
+  keyword?: string;
+  desc?: string;
+};
 
 const Meta: React.FC<Props> = ({
   title = "Bad Dogs Company | NFT Marketplace",

@@ -10,8 +10,6 @@ const FilterCategoryItem = () => {
 	const params = usePathname();
 	const dispatch = useDispatch();
 	const { startToken, limit } = useSelector<RootState, RootState['counter']>((state) => state.counter);
-	console.log('startToken > ', startToken);
-	console.log('limit > ', limit);
 
 
 	const id = params.split('/')[3];
@@ -30,8 +28,6 @@ const FilterCategoryItem = () => {
 		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`, options);
 		const data = await response.json();
 		const list = data.nfts;
-		console.log('list > ', list);
-		console.log('list[0].tokenId > ', list[0].tokenId);
 
 		const formattedList = list.map((item: any) => ({
 			id: item.tokenId,

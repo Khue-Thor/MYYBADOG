@@ -2,7 +2,7 @@
 
 import HeadLine from "@/components/headline";
 import { newseLatterData } from "@/data/newseLatterData";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 interface NewsletterProps {
   bgWhite?: boolean;

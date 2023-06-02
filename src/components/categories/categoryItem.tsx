@@ -15,10 +15,26 @@ const CategoryItem = () => {
     (state) => state.counter
   );
   const dispatch = useDispatch();
+  const [visibleItems, setVisibleItems] = useState(8);
+  const [hasMoreItems, setHasMoreItems] = useState(true);
+
+  const loadMoreItems = () => {
+    const itemsToShow = visibleItems + 8;
+    setVisibleItems(itemsToShow);
+
+    if (itemsToShow >= sortedtrendingCategoryItemData.length) {
+      setHasMoreItems(false);
+    }
+  };
+
+  useEffect(() => {
+    setVisibleItems(8);
+    setHasMoreItems(true);
+  }, [sortedtrendingCategoryItemData]);
 
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
-      {sortedtrendingCategoryItemData.map((item: any) => {
+      {sortedtrendingCategoryItemData.slice(0, visibleItems).map((item: any) => {
         const {
           id,
           image,
@@ -121,8 +137,19 @@ const CategoryItem = () => {
               </div>
             </div>
           </article>
+
         );
       })}
+      {hasMoreItems && (
+        <div className="flex justify-center mt-6">
+          <button
+            className="text-accent font-display text-base font-semibold"
+            onClick={loadMoreItems}
+          >
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   );
 };

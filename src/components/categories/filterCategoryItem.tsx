@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateTrendingCategoryItemData } from '../../redux/counterSlice';
 import { usePathname } from 'next/navigation';
 import Collection_category_filter from '../collection/collection_category_filter';
 import CategoryItem from './categoryItem';
+import { RootState } from '@/redux/store';
 
 const FilterCategoryItem = () => {
 	const params = usePathname();
 	const dispatch = useDispatch();
-	const [trendingCategoryData, setTrendingCategoryData] = useState([]);
+	const { startToken } = useSelector<RootState, RootState['counter']>((state) => state.counter);
+	console.log('startToken > ', startToken);
 
 	const id = params.split('/')[3];
 	const contract_address = params.split('/')[2].replace(`/${id}`, '');
@@ -23,9 +25,10 @@ const FilterCategoryItem = () => {
 			}
 		};
 
-		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1`, options);
+		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}`, options);
 		const data = await response.json();
 		const list = data.nfts;
+		console.log('list > ', list);
 
 		const formattedList = list.map((item: any) => ({
 			id: item.tokenId,

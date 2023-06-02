@@ -49,10 +49,6 @@ function builtV3URL(blockchain: string) {
   return `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 }
 
-function builtV2URL(blockchain: string) {
-  return `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-}
-
 type GetNFTMetadataParam = {
   blockchain: string;
   contractAddress: string;

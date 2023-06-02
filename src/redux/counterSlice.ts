@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import TypeItem from '@/interfaces/TypeItem';
+import { trendingCategoryData } from '@/data/categories_data';
 
 const initialState = {
   mblMenu: false,
@@ -16,6 +17,7 @@ const initialState = {
   buyModal: false,
   propartiesModalValue: false,
   trendingCategorySorText: '',
+  startToken: 1,
 };
 
 export const counterSlice = createSlice({
@@ -24,6 +26,9 @@ export const counterSlice = createSlice({
   reducers: {
     openMblMenu: (state) => {
       state.mblMenu = true;
+    },
+    incrementStartToken: (state) => {
+      state.startToken += 8;
     },
     closeMblMenu: (state) => {
       state.mblMenu = false;
@@ -66,7 +71,10 @@ export const counterSlice = createSlice({
     },
     updateTrendingCategoryItemData: (state, action) => {
       console.log('this', action.payload);
-      state.trendingCategoryItemData = action.payload;
+      state.trendingCategoryItemData = [
+        ...trendingCategoryData,
+        ...action.payload,
+      ];
       state.sortedtrendingCategoryItemData = action.payload;
     },
     updatetrendingCategorySorText: (state, action) => {
@@ -175,6 +183,7 @@ export const counterSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   openMblMenu,
+  incrementStartToken,
   closeMblMenu,
   openDropdown,
   closeDropdown,

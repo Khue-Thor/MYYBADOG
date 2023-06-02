@@ -7,7 +7,7 @@ import "tippy.js/dist/tippy.css";
 import Likes from "../likes";
 import Auctions_dropdown from "../dropdown/Auctions_dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { buyModalShow } from "../../redux/counterSlice";
+import { buyModalShow, incrementStartToken } from "../../redux/counterSlice";
 import { RootState } from '@/redux/store';
 
 const CategoryItem = () => {
@@ -21,6 +21,7 @@ const CategoryItem = () => {
   const loadMoreItems = () => {
     const itemsToShow = visibleItems + 8;
     setVisibleItems(itemsToShow);
+    dispatch(incrementStartToken())
 
     if (itemsToShow >= sortedtrendingCategoryItemData.length) {
       setHasMoreItems(false);

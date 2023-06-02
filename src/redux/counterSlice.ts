@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import TypeItem from '@/interfaces/TypeItem';
-import { trendingCategoryData } from '@/data/categories_data';
 
 const initialState = {
   mblMenu: false,
@@ -18,6 +17,7 @@ const initialState = {
   propartiesModalValue: false,
   trendingCategorySorText: '',
   startToken: 1,
+  limit: 8,
 };
 
 export const counterSlice = createSlice({
@@ -27,8 +27,11 @@ export const counterSlice = createSlice({
     openMblMenu: (state) => {
       state.mblMenu = true;
     },
-    incrementStartToken: (state) => {
-      state.startToken += 8;
+    incrementStartToken: (state, action) => {
+      state.startToken += action.payload;
+    },
+    incrementLimit: (state, action) => {
+      state.limit += action.payload;
     },
     closeMblMenu: (state) => {
       state.mblMenu = false;
@@ -42,7 +45,6 @@ export const counterSlice = createSlice({
     },
     handle_collection_activity_item_data: (state, action) => {
       // was payload.data before, payload on param
-      console.log(2);
       state.collection_activity_item_data = action.payload.data;
     },
     walletModalShow: (state) => {
@@ -70,12 +72,15 @@ export const counterSlice = createSlice({
       state.propartiesModalValue = false;
     },
     updateTrendingCategoryItemData: (state, action) => {
-      console.log('this', action.payload);
-      state.trendingCategoryItemData = [
-        ...trendingCategoryData,
-        ...action.payload,
+      const newData = action.payload;
+
+      const existingItems = state.trendingCategoryItemData.filter(
+        (item) => !newData.some((newItem: TypeItem) => newItem.id === item.id)
+      );
+      state.trendingCategoryItemData = [...existingItems, ...newData];
+      state.sortedtrendingCategoryItemData = [
+        ...state.trendingCategoryItemData,
       ];
-      state.sortedtrendingCategoryItemData = action.payload;
     },
     updatetrendingCategorySorText: (state, action) => {
       const sortText = action.payload;
@@ -184,6 +189,7 @@ export const counterSlice = createSlice({
 export const {
   openMblMenu,
   incrementStartToken,
+  incrementLimit,
   closeMblMenu,
   openDropdown,
   closeDropdown,

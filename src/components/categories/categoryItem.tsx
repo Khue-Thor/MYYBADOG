@@ -7,7 +7,7 @@ import "tippy.js/dist/tippy.css";
 import Likes from "../likes";
 import Auctions_dropdown from "../dropdown/Auctions_dropdown";
 import { useDispatch, useSelector } from "react-redux";
-import { buyModalShow, incrementStartToken } from "../../redux/counterSlice";
+import { buyModalShow, incrementLimit, incrementStartToken } from "../../redux/counterSlice";
 import { RootState } from '@/redux/store';
 
 const CategoryItem = () => {
@@ -15,27 +15,22 @@ const CategoryItem = () => {
     (state) => state.counter
   );
   const dispatch = useDispatch();
-  const [visibleItems, setVisibleItems] = useState(8);
-  const [hasMoreItems, setHasMoreItems] = useState(true);
 
   const loadMoreItems = () => {
-    const itemsToShow = visibleItems + 8;
-    setVisibleItems(itemsToShow);
-    dispatch(incrementStartToken())
-
-    if (itemsToShow >= sortedtrendingCategoryItemData.length) {
-      setHasMoreItems(false);
-    }
-  };
-
-  useEffect(() => {
-    setVisibleItems(8);
-    setHasMoreItems(true);
-  }, [sortedtrendingCategoryItemData]);
+    let startTokenValue = 0;
+    if (sortedtrendingCategoryItemData.length === 8 && +sortedtrendingCategoryItemData[0].id !== 1) {
+      startTokenValue = +sortedtrendingCategoryItemData[0].id + 8
+    } else {
+      startTokenValue = 8
+    };
+    dispatch(incrementStartToken(startTokenValue))
+    dispatch(incrementLimit)
+  }
+  console.log('sortedtrendingCategoryItemData > ', sortedtrendingCategoryItemData);
 
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
-      {sortedtrendingCategoryItemData.slice(0, visibleItems).map((item: any) => {
+      {sortedtrendingCategoryItemData.map((item: any) => {
         const {
           id,
           image,
@@ -141,7 +136,7 @@ const CategoryItem = () => {
 
         );
       })}
-      {hasMoreItems && (
+      {(
         <div className="flex justify-center mt-6">
           <button
             className="text-accent font-display text-base font-semibold"

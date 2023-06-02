@@ -24,7 +24,7 @@ interface DetailItem {
 const Collection = ({ params }: any) => {
   const [likesImage, setLikesImage] = useState(false);
   const [collectionItemData, setCollectionItemData] = useState<NFTItem[]>([]);
-  // const [collectionData, setCollectionData] = useState<Collection_stats[]>([]);
+  const [collectionData, setCollectionData] = useState<Collection_stats[]>([]);
   const [details, setDetails] = useState<DetailItem[]>([]);
   // const [collectionProfile, setCollectionProfile] = useState<NFTContract[]>([]);
   const contract_address = params.contract_address;
@@ -43,6 +43,7 @@ const Collection = ({ params }: any) => {
     fetch(`https://data-api.nftgo.io/eth/v1/collection/${contract_address}/metrics`, options)
       .then(response => response.json())
       .then(response => {
+        console.log('collectionData', response);
         setDetails([{
           id: '1',
           detailsNumber: formatNumber(+response.total_supply),
@@ -60,7 +61,7 @@ const Collection = ({ params }: any) => {
           detailsNumber: formatNumber(+response.volume_eth.all),
           detailsText: 'Volume Traded'
         }])
-        // setCollectionData(response)
+        setCollectionData(response)
       })
       .catch(err => console.error(err));
   }
@@ -80,6 +81,7 @@ const Collection = ({ params }: any) => {
     fetch(`${url}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1&limit=10`, options)
       .then(response => response.json())
       .then(response => {
+        console.log('collectionItemData', response.nfts);
         setCollectionItemData(response.nfts)
       })
       .catch(err => console.error(err));
@@ -89,7 +91,6 @@ const Collection = ({ params }: any) => {
     // fetchCollectionProfile();
     fetchCollectionItems();
     fetchCollectionData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function formatNumber(number: number): string {

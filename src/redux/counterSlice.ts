@@ -81,12 +81,18 @@ export const counterSlice = createSlice({
           state.trendingCategoryItemData.sort(
             (a, b) => +b.sortPrice - +a.sortPrice
           );
-        // } else if (sortText === "Recently Added") {
-        //   state.sortedtrendingCategoryItemData =
-        //     state.trendingCategoryItemData.sort((a, b) => a.addDate - b.addDate);
-        // } else if (sortText === "Auction Ending Soon") {
-        //   state.sortedtrendingCategoryItemData =
-        //     state.trendingCategoryItemData.sort((a, b) => b.addDate - a.addDate);
+      } else if (sortText === 'Recently Added') {
+        state.sortedtrendingCategoryItemData =
+          state.trendingCategoryItemData.sort(
+            (a, b) =>
+              new Date(a.addDate).getTime() - new Date(b.addDate).getTime()
+          );
+      } else if (sortText === 'Auction Ending Soon') {
+        state.sortedtrendingCategoryItemData =
+          state.trendingCategoryItemData.sort(
+            (a, b) =>
+              new Date(b.addDate).getTime() - new Date(a.addDate).getTime()
+          );
       } else {
         state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
       }
@@ -139,11 +145,11 @@ export const counterSlice = createSlice({
     },
     updateRenkingData: (state, action) => {
       const text = action.payload;
-      // let tempItem = state.renkingData.filter((item) => item.category === text);
-      // if (text === 'All') {
-      //   tempItem = state.renkingData;
-      // }
-      // state.filteredRenkingData = tempItem;
+      let tempItem = state.renkingData.filter((item) => item.category === text);
+      if (text === 'All') {
+        tempItem = state.renkingData;
+      }
+      state.filteredRenkingData = tempItem;
     },
     updateRenkingDataByBlockchain: (state, action) => {
       const text = action.payload;

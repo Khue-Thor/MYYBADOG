@@ -25,6 +25,7 @@ const FilterCategoryItem = () => {
 
 	const id = params.split('/')[3];
 	const contract_address = params.split('/')[2].replace(`/${id}`, '');
+	const blockchain = 'eth-mainnet';
 
 
 	const fetchTrendingCategoryData = async () => {
@@ -40,22 +41,19 @@ const FilterCategoryItem = () => {
 		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1&limit=8`, options)
 		const data = await response.json();
 		const list = data.nfts
-		// console.log('list >', list);
+		console.log('list >', list);
 
-		const promise = list.map(async (item: any) => {
-			const response2 = await fetch(`${urlV2}/getNFTMetadata?contractAddress=${contract_address}&tokenId=${item.tokenId}&refreshCache=false`, options);
-			const data2 = await response2.json();
-			// console.log('data2 >', data2);
+		const formattedList = list.map((item: any) => {
 			return {
 				id: item.tokenId,
 				image: item.image.cachedUrl,
-				title: data2.title,
+				title: item.name,
 				price: 'SetPrice' + ' ETH',
 				sortPrice: Math.floor(Math.random() * 100) + 1,
 				bidLimit: Math.floor(Math.random() * 10) + 1,
 				bidCount: Math.floor(Math.random() * 10) + 1,
 				likes: Math.floor(Math.random() * 100) + 1,
-				creator: 'creator',
+				creator: 'Creator',
 				owner: {
 					name: 'owner',
 					image: ''
@@ -64,7 +62,6 @@ const FilterCategoryItem = () => {
 				category: 'Replace with item category'
 			}
 		})
-		const formattedList = await Promise.all(promise);
 		// console.log('formattedList >', formattedList);
 
 		dispatch(updateTrendingCategoryItemData(formattedList));

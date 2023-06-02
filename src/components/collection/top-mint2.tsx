@@ -75,9 +75,11 @@ const TopMint2 = async () => {
 
 				<div className="flex flex-col space-y-5">
 					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
+					{/* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */}
 						// console.log(index);
+						console.log(item);
 						return (
-							// @ts-expect-error Server Component
+							// @ts-expect-error Server Component 
 							<TopMintItem key={index} index={index} data={item} />
 						)
 					})}

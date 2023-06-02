@@ -1,6 +1,15 @@
-"use client"
+"use client";
 
-const HeadLine: React.FC<{text: string, classes: string, image?: string, pera?: boolean}> = ({text, classes, image, pera}) => {
+import React from "react";
+
+type Props = {
+  text: string;
+  classes: string;
+  image?: string;
+  pera?: boolean;
+}
+
+const HeadLine: React.FC<Props> = ({ text, classes, image, pera }) => {
   return (
     <div>
       <h2 className={classes}>

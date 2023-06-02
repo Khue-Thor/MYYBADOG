@@ -6,6 +6,7 @@ import { Providers } from "../components/providers";
 import Header01 from "@/components/ui/header/header01";
 import Footer from "../components/ui/footer";
 import "@/styles/custom.css";
+import BidsModal from "@/components/modal/BidsModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             {children}
           </Providers>
           <Footer />
+          <BidsModal />
         </body>
       </html>
     </ServerThemeProvider>

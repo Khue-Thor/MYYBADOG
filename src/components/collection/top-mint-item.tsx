@@ -111,8 +111,8 @@ async function getFirstCollectionImage(contract_address: string) {
 
 const TopMintItem = async (props: {index:number, data:TopMintCollectionRecord}) => {
 	const {index, data} = props;
-	console.log('Hi there3');
-	console.log(index);
+	// console.log('Hi there3');
+	// console.log(index);
 
 	const {collection_name, contract_address, blockchain, mint_num, minter_num, first_mint_time, fomo, mint_volume} = data;
 	const dataCollection = await getFirstCollectionImage(contract_address);

@@ -13,25 +13,14 @@ import { MdKeyboardArrowRight, MdKeyboardArrowLeft } from "react-icons/md";
 // import { useDispatch } from "react-redux";
 import Likes from "@/components/likes";
 import { use, useState, useEffect } from "react";
-import { supabase } from "@/lib/client";
+
 import Countdown from "react-countdown";
 
 export const revalidate = 60;
 
-// async function getData() {
-//   const { data, error } = await supabase
-//     .from("raffles") // the table is not empty
-//     .select();
+const BidsCarousel = async (data: any) => {
+  const supaData = data.data;
 
-//   if (error) {
-//     console.log("error", error);
-//     return { error: true };
-//   }
-//   return data;
-// }
-
-// const BidsCarousel = async () => {
-//   const supaData: any = await getData();
   return (
     <>
       <Swiper

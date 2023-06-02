@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model raffles {
+  id               BigInt    @id @default(autoincrement())
+  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  name             String?
+  token_id         Int?
+  nft_address      String?   @db.VarChar
+  start_date       DateTime? @db.Timestamptz(6)
+  end_date         DateTime? @db.Timestamptz(6)
+  raffle_cost      Float?    @db.Real
+  max_tickets      Int?
+  sold_tickets     Int?
+  created_by       String?   @db.VarChar
+  participant_list Json[]    @db.Json
+  transaction_list Json[]    @db.Json
+  favourite_count  Int?
+  nft_image        String?   @db.VarChar
+  raffler          String?   @unique @db.VarChar
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  id         BigInt    @id @default(autoincrement())
+  created_at DateTime? @default(now()) @db.Timestamptz(6)
+  username   String?
+  badges     Json?     @db.Json
+  level      BigInt?
+  quests     Json?     @db.Json
+  friends    Json?     @db.Json
+}

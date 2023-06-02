@@ -64,7 +64,7 @@ export async function getNFTMetadata({
     `${builtV3URL(
       blockchain
     )}/getNFTMetadata?contractAddress=${contractAddress}&tokenId=${tokenId}&refreshCache=false`,
-    { method: "GET", headers: { accept: "application/json" } }
+    { method: 'GET', headers: { accept: 'application/json' } }
   );
   return res.json();
 }
@@ -84,7 +84,7 @@ export async function getNFTsForContract({
     `${builtV3URL(
       blockchain
     )}/getNFTsForContract?contractAddress=${contractAddress}&withMetadata=true&limit=${limit}`,
-    { method: "GET", headers: { accept: "application/json" } }
+    { method: 'GET', headers: { accept: 'application/json' } }
   );
   const data = await res.json();
   return data.nfts;
@@ -115,7 +115,7 @@ export async function computeRarity({
     `${builtV3URL(
       blockchain
     )}/computeRarity?contractAddress=${contractAddress}&tokenId=${tokenId}`,
-    { method: "GET", headers: { accept: "application/json" } }
+    { method: 'GET', headers: { accept: 'application/json' } }
   );
   const data = await res.json();
   return data;

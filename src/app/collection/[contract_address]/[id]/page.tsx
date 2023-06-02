@@ -10,9 +10,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Head from 'next/head';
 import Meta from '@/components/wallet-btn/Meta';
-import { NFTContract, NFTItem } from '@/interfaces/CollectionItem';
-import CollectionItem from '@/interfaces/CollectionItem';
+import { NFTItem } from '@/interfaces/CollectionItem';
 import Collection_stats from '@/interfaces/Collection_stats';
+import { getColectionMetrics } from '@/api/nftgo';
 // import Meta from '../../components/Meta';
 
 interface DetailItem {
@@ -21,60 +21,41 @@ interface DetailItem {
   detailsText: string;
 }
 
-const Collection = ({ params }: any) => {
+interface params {
+  params: {
+    contract_address: string;
+    id: string;
+  }
+}
+
+const Collection = ({ params }: params) => {
   const [likesImage, setLikesImage] = useState(false);
   const [collectionItemData, setCollectionItemData] = useState<NFTItem[]>([]);
-  const [collectionData, setCollectionData] = useState<Collection_stats[]>([]);
   const [details, setDetails] = useState<DetailItem[]>([]);
-  // const [collectionProfile, setCollectionProfile] = useState<NFTContract[]>([]);
   const contract_address = params.contract_address;
   const id = params.id;
   const url = `https://eth-mainnet.g.alchemy.com/nft/v3/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
 
   const fetchCollectionData = async () => {
-    const options = {
-      method: 'GET',
-      headers: new Headers({
-        accept: "application/json",
-        "X-API-KEY": process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
-      }),
-    };
-
-    fetch(`https://data-api.nftgo.io/eth/v1/collection/${contract_address}/metrics`, options)
-      .then(response => response.json())
-      .then(response => {
-        console.log('collectionData', response);
-        setDetails([{
-          id: '1',
-          detailsNumber: formatNumber(+response.total_supply),
-          detailsText: 'Items'
-        }, {
-          id: '2',
-          detailsNumber: formatNumber(+response.holder_num),
-          detailsText: 'Owners'
-        }, {
-          id: '3',
-          detailsNumber: response.floor_price.value.toFixed(2),
-          detailsText: 'Floor Price'
-        }, {
-          id: '4',
-          detailsNumber: formatNumber(+response.volume_eth.all),
-          detailsText: 'Volume Traded'
-        }])
-        setCollectionData(response)
-      })
-      .catch(err => console.error(err));
+    const data = await getColectionMetrics(contract_address);
+    setDetails([{
+      id: '1',
+      detailsNumber: formatNumber(+data.total_supply),
+      detailsText: 'Items'
+    }, {
+      id: '2',
+      detailsNumber: formatNumber(+data.holder_num),
+      detailsText: 'Owners'
+    }, {
+      id: '3',
+      detailsNumber: data.floor_price.value.toFixed(2),
+      detailsText: 'Floor Price'
+    }, {
+      id: '4',
+      detailsNumber: formatNumber(+data.volume_eth.all),
+      detailsText: 'Volume Traded'
+    }])
   }
-  // const fetchCollectionProfile = async () => {
-  //   const options = { method: 'GET', headers: { accept: 'application/json' } };
-  //   fetch(`${url}/getContractMetadata?contractAddress=${contract_address}`, options)
-  //     .then(response => response.json())
-  //     .then(response => {
-  //       console.log('collectionProfile', response);
-  //       setCollectionProfile(response)
-  //     })
-  //     .catch(err => console.error(err));
-  // }
 
   const fetchCollectionItems = async () => {
     const options = { method: 'GET', headers: { accept: 'application/json' } };
@@ -114,7 +95,7 @@ const Collection = ({ params }: any) => {
       {/* <!-- Banner --> */}
       <div className="relative h-[300px]">
         <Image
-          src={collectionItemData.length > 0 ? collectionItemData[id - 1].image.cachedUrl : ''}
+          src={collectionItemData.length > 0 ? collectionItemData[+id - 1].image.cachedUrl : ''}
           alt="banner"
           layout="fill"
           objectFit="cover"

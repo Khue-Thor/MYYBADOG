@@ -26,6 +26,7 @@ const FilterCategoryItem = () => {
 	const id = params.split('/')[3];
 	const contract_address = params.split('/')[2].replace(`/${id}`, '');
 
+
 	const fetchTrendingCategoryData = async () => {
 		const urlV3 = `https://eth-mainnet.g.alchemy.com/nft/v3/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
 		const urlV2 = `https://eth-mainnet.g.alchemy.com/nft/v2/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
@@ -36,20 +37,15 @@ const FilterCategoryItem = () => {
 			}
 		};
 
-		// const response = await fetch('https://data-api.nftgo.io/eth/v1/market/rank/nft/24h?by=price&category=ALL&offset=0&limit=10', options);
-		// const data = await response.json();
-		// const list = data.nfts.slice(0, 8);
-		// console.log('list >', list);
-
 		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1&limit=8`, options)
 		const data = await response.json();
 		const list = data.nfts
-		console.log('list >', list);
+		// console.log('list >', list);
 
 		const promise = list.map(async (item: any) => {
 			const response2 = await fetch(`${urlV2}/getNFTMetadata?contractAddress=${contract_address}&tokenId=${item.tokenId}&refreshCache=false`, options);
 			const data2 = await response2.json();
-			console.log('data2 >', data2);
+			// console.log('data2 >', data2);
 			return {
 				id: item.tokenId,
 				image: item.image.cachedUrl,
@@ -69,7 +65,7 @@ const FilterCategoryItem = () => {
 			}
 		})
 		const formattedList = await Promise.all(promise);
-		console.log('formattedList >', formattedList);
+		// console.log('formattedList >', formattedList);
 
 		dispatch(updateTrendingCategoryItemData(formattedList));
 	}

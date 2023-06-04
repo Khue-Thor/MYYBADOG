@@ -2,7 +2,9 @@ import React from 'react'
 
 const searchPage = () => {
   return (
-    <div className='text-white'>pagadfade</div>
+    <div className='w-full'>
+      <p className='text-white'>searchPage</p>
+    </div>
   )
 }
 

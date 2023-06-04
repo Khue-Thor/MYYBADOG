@@ -523,8 +523,8 @@ export default function Header01() {
 
 
             {collectionsData.length !== 0 && (
-              <div className="scroll bg-white text-black -z-1 absolute left-[0px] top-[60px] pt-3 pb-[20px] w-full rounded-3xl flex flex-col gap-1 pr-[10px] pl-[10px]">
-                <span className='font-bold text-sm text-gray-600'>COLLECTIONS</span>
+              <div className="scroll bg-white text-black -z-1 absolute left-[0px] top-[60px] p-[10px] w-full rounded-3xl flex flex-col gap-1">
+                <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
                 {collectionsData.slice(0, 5).map((value) => {
                   return (
                     <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
@@ -535,11 +535,11 @@ export default function Header01() {
                           <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                         </div>
                       </div>
-                      <span className="font-medium text-sm">{value.openSeaMetadata.floorPrice} ETH</span>
+                      <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
                     </div>
                   );
                 })}
-                <span className='font-bold text-sm text-gray-600'>ACCOUNTS</span>
+                <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
               </div>
             )}
 
@@ -1081,7 +1081,7 @@ export default function Header01() {
           />
           {collectionsData.length !== 0 && (
             <div className="scroll bg-white text-black absolute z-10 left-[0px] top-[70px] pt-3 pb-[20px] w-full rounded-3xl flex flex-col gap-1 pr-[10px] pl-[10px]">
-              <span className='font-bold text-sm text-gray-600'>COLLECTIONS</span>
+              <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
               {collectionsData.slice(0, 5).map((value) => {
                 return (
                   <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
@@ -1092,11 +1092,11 @@ export default function Header01() {
                         <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                       </div>
                     </div>
-                    <span className="font-medium text-sm">{value.openSeaMetadata.floorPrice} ETH</span>
+                    <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
                   </div>
                 );
               })}
-              <span className='font-bold text-sm text-gray-600'>ACCOUNTS</span>
+              <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
             </div>
           )}
           <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
@@ -1113,22 +1113,22 @@ export default function Header01() {
           </span>
 
           {enteredWord.length == 0 ? (
-              <span></span>
-            ) : (
-              <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  width={26}
-                  height={26}
-                  className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+            <span></span>
+          ) : (
+            <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                width={26}
+                height={26}
+                className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
 
-                >
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                </svg>
-              </span>
-            )}
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+              </svg>
+            </span>
+          )}
         </form>
         {/* End search form mobile menu  */}
 

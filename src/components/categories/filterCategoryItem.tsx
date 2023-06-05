@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { incrementStartToken, updateTrendingCategoryItemData } from '../../redux/counterSlice';
+import { updateTrendingCategoryItemData } from '../../redux/counterSlice';
 import { usePathname } from 'next/navigation';
 import Collection_category_filter from '../collection/collection_category_filter';
 import CategoryItem from './categoryItem';

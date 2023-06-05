@@ -6,7 +6,6 @@ import Social_dropdown from '@/components/dropdown/Social_dropdown';
 import Collection_items from '@/components/collection/Collection_items';
 import Image from 'next/legacy/image';
 import Link from 'next/link';
-import Head from 'next/head';
 import Meta from '@/components/wallet-btn/Meta';
 import { getColectionMetrics } from '@/api/nftgo';
 import { NFTMetaData, getNFTsForContract } from '@/api/alchemy';

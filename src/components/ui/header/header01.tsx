@@ -40,8 +40,6 @@ export default function Header01() {
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter()
 
-  const [jsonData, setJsonData] = useState([])
-
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -1160,12 +1158,11 @@ export default function Header01() {
                     viewBox="0 0 24 24"
                     width={24}
                     height={24}
-                    className="fill-jacarta-500 h-10 w-10 dark:fill-black transform rotate-180"
+                    className="fill-jacarta-500 h-10 w-10 dark:fill-gray-700 transform rotate-180"
                   >
                     <path fill="none" d="M0 0h24v24H0z" />
                     <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
                   </svg>
-                 
                 </span>
               </form>
                {/* end mobile search bar inputs */}

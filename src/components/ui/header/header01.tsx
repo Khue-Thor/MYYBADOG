@@ -53,7 +53,7 @@ export default function Header01() {
   }
 
   const handleCloseSearchBar = () => {
-   setSearchBarOpen(false);
+    setSearchBarOpen(false);
   }
 
   // window resize
@@ -529,15 +529,15 @@ export default function Header01() {
 
 
             {collectionsData.length !== 0 && (
-              <div className="scroll bg-white text-black -z-1 absolute left-[0px] top-[60px] p-[10px] w-full rounded-3xl flex flex-col gap-1">
+              <div className="croll dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 pb-[20px] w-full rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
                 <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
                 {collectionsData.slice(0, 5).map((value) => {
                   return (
-                    <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                    <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
                         <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
                         <div className="flex flex-col">
-                          <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
+                          <span className="font-bold dark:text-white">{value.openSeaMetadata.collectionName}</span>
                           <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                         </div>
                       </div>
@@ -1045,127 +1045,70 @@ export default function Header01() {
                 <path d="M18 18v2H6v-2h12zm3-7v2H3v-2h18zm-3-7v2H6V4h12z" />
               </svg>
             </button>
-            {/* <form action="search" className="relative mt-24 mb-8 w-full lg:hidden">
-              <input
-                type="search"
-                className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-3 px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
-                placeholder="Search"
-                onChange={handleFilter}
-                value={enteredWord}
-              />
-              {collectionsData.length !== 0 && (
-                <div className="scroll bg-white text-black absolute z-10 left-[0px] top-[70px] pt-3 pb-[20px] w-full rounded-3xl flex flex-col gap-1 pr-[10px] pl-[10px]">
-                  <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
-                  {collectionsData.slice(0, 5).map((value) => {
-                    return (
-                      <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
-                        <div className="flex gap-3 items-top">
-                          <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
-                          <div className="flex flex-col">
-                            <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
-                            <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
-                          </div>
-                        </div>
-                        <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
-                      </div>
-                    );
-                  })}
-                  <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
-                </div>
-              )}
-              <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  width={24}
-                  height={24}
-                  className="fill-jacarta-500 h-4 w-4 dark:fill-white"
-                >
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
-                </svg>
-              </span>
-
-              {enteredWord.length == 0 ? (
-                <span></span>
-              ) : (
-                <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    width={26}
-                    height={26}
-                    className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
-
-                  >
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                  </svg>
-                </span>
-              )}
-            </form> */}
           </div>
           {/* End header right content  for mobile */}
 
           {/* start mobile search bar inputs */}
 
           {searchBarOpen && (
-            <div className="fixed w-full left-0 h-[60px]">
-              <form action="search" className="relative h-full w-full lg:hidden">
-                <input className="bg-white w-full h-full text-black pr-10 pl-20" type="search" placeholder="Search" onChange={handleFilter}
-                  value={enteredWord} />
-                {collectionsData.length !== 0 && (
-                  <div className="scroll bg-white text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
-                    <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
-                    {collectionsData.slice(0, 5).map((value) => {
-                      return (
-                        <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
-                          <div className="flex gap-3 items-top">
-                            <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
-                            <div className="flex flex-col">
-                              <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
-                              <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+            <div className="fixed w-full left-0 top-0 bg-black bg-opacity-50 h-full">
+              <div className="">
+                <form action="search" className="relative h-full w-full lg:hidden">
+                  <input className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]" type="search" placeholder="Search" onChange={handleFilter}
+                    value={enteredWord} />
+                  {collectionsData.length !== 0 && (
+                    <div className="scroll dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
+                      <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                      {collectionsData.slice(0, 5).map((value) => {
+                        return (
+                          <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                            <div className="flex gap-3 items-top">
+                              <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                              <div className="flex flex-col">
+                                <span className="font-bold dark:text-white">{value.openSeaMetadata.collectionName}</span>
+                                <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                              </div>
                             </div>
+                            <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
                           </div>
-                          <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
-                        </div>
-                      );
-                    })}
-                    <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
-                  </div>
-                )}
-                {enteredWord.length == 0 ? (
-                  <span></span>
-                ) : (
-                  <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                        );
+                      })}
+                      <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+                    </div>
+                  )}
+                  {enteredWord.length == 0 ? (
+                    <span></span>
+                  ) : (
+                    <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        width={26}
+                        height={26}
+                        className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+
+                      >
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                      </svg>
+                    </span>
+                  )}
+
+                  <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer" onClick={handleCloseSearchBar}>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      width={26}
-                      height={26}
-                      className="fill-jacarta-500 h-4 w-4 dark:fill-black cursor-pointer"
-
+                      viewBox="0 0 24 24"
+                      width={24}
+                      height={24}
+                      className="fill-jacarta-500 h-10 w-10 dark:fill-gray-700 transform rotate-180"
                     >
                       <path fill="none" d="M0 0h24v24H0z" />
-                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                      <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
                     </svg>
                   </span>
-                )}
-
-                <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer" onClick={handleCloseSearchBar}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    width={24}
-                    height={24}
-                    className="fill-jacarta-500 h-10 w-10 dark:fill-gray-700 transform rotate-180"
-                  >
-                    <path fill="none" d="M0 0h24v24H0z" />
-                    <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
-                  </svg>
-                </span>
-              </form>
-               {/* end mobile search bar inputs */}
+                </form>
+                {/* end mobile search bar inputs */}
+              </div>
             </div>
           )}
         </div>

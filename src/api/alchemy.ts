@@ -75,6 +75,12 @@ type GetNFTsForContractParam = {
   limit: number;
 };
 
+type GetOneNFTForContractParam = {
+  blockchain: string;
+  contractAddress: string;
+  startToken: number;
+};
+
 export async function getNFTsForContract({
   blockchain,
   contractAddress,
@@ -84,6 +90,21 @@ export async function getNFTsForContract({
     `${builtV3URL(
       blockchain
     )}/getNFTsForContract?contractAddress=${contractAddress}&withMetadata=true&limit=${limit}`,
+    { method: 'GET', headers: { accept: 'application/json' } }
+  );
+  const data = await res.json();
+  return data.nfts;
+}
+
+export async function getOneNFTForContract({
+  blockchain,
+  contractAddress,
+  startToken,
+}: GetOneNFTForContractParam): Promise<NFTMetaData[]> {
+  const res = await fetch(
+    `${builtV3URL(
+      blockchain
+    )}/getNFTsForContract?contractAddress=${contractAddress}&withMetadata=true&startToken=${startToken}&limit=${startToken}`,
     { method: 'GET', headers: { accept: 'application/json' } }
   );
   const data = await res.json();

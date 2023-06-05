@@ -8,7 +8,7 @@ import Image from 'next/legacy/image';
 import Link from 'next/link';
 import Meta from '@/components/wallet-btn/Meta';
 import { getColectionMetrics } from '@/api/nftgo';
-import { NFTMetaData, getNFTsForContract } from '@/api/alchemy';
+import { NFTMetaData, getOneNFTForContract } from '@/api/alchemy';
 
 interface DetailItem {
   id: string;
@@ -54,7 +54,7 @@ const Collection = ({ params }: params) => {
   }
 
   const fetchCollectionItems = async () => {
-    const items = await getNFTsForContract({ blockchain, contractAddress, limit: 8 });
+    const items = await getOneNFTForContract({ blockchain, contractAddress, startToken: +id });
     setCollectionItemData(items);
   }
 

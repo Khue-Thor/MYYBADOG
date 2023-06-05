@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import Auctions_dropdown from '../../../../components/dropdown/Auctions_dropdown';
-import Social_dropdown from '../../../../components/dropdown/Social_dropdown';
-import Collection_items from '../../../../components/collection/Collection_items';
+import Auctions_dropdown from '@/components/dropdown/Auctions_dropdown';
+import Social_dropdown from '@/components/dropdown/Social_dropdown';
+import Collection_items from '@/components/collection/Collection_items';
 import Image from 'next/legacy/image';
 import Link from 'next/link';
 import Head from 'next/head';
@@ -21,6 +21,7 @@ interface params {
   params: {
     contract_address: string;
     id: string;
+    blockchain: string;
   }
 }
 
@@ -30,7 +31,7 @@ const Collection = ({ params }: params) => {
   const [details, setDetails] = useState<DetailItem[]>([]);
   const contractAddress = params.contract_address;
   const id = params.id;
-  const blockchain = 'eth-mainnet'
+  const blockchain = params.blockchain;
 
   const fetchCollectionData = async () => {
     const data = await getColectionMetrics(contractAddress);

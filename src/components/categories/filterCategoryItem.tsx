@@ -12,12 +12,12 @@ const FilterCategoryItem = () => {
 	const { startToken, limit } = useSelector<RootState, RootState['counter']>((state) => state.counter);
 
 
-	const id = params.split('/')[3];
-	const contract_address = params.split('/')[2].replace(`/${id}`, '');
-	const blockchain = 'eth-mainnet';
+	const id = params.split('/')[4];
+	const contract_address = params.split('/')[3].replace(`/${id}`, '');
+	const blockchain = params.split('/')[2].replace(`/${contract_address}/${id}`, '');
 
 	const fetchTrendingCategoryData = async () => {
-		const urlV3 = `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
+		const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 		const options = {
 			method: 'GET',
 			headers: {

@@ -60,7 +60,6 @@ const CategoryItem = () => {
               contractAddress,
               blockchain,
             } = item;
-            console.log('contractAddress >', contractAddress);
             const itemLink = image
               .split("/")
               .slice(-1)

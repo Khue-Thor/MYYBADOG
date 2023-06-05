@@ -28,7 +28,6 @@ const FilterCategoryItem = () => {
 		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`, options);
 		const data = await response.json();
 		const list = data.nfts;
-		console.log(contract_address);
 
 		const formattedList = list.map((item: any) => ({
 			id: item.tokenId,

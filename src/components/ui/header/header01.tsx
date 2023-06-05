@@ -51,7 +51,11 @@ export default function Header01() {
   }
 
   const handleOpenSearchBar = () => {
-    setSearchBarOpen(true)
+    setSearchBarOpen(true);
+  }
+
+  const handleCloseSearchBar = () => {
+   setSearchBarOpen(false);
   }
 
   // window resize
@@ -1104,6 +1108,9 @@ export default function Header01() {
             </form> */}
           </div>
           {/* End header right content  for mobile */}
+
+          {/* start mobile search bar inputs */}
+
           {searchBarOpen && (
             <div className="fixed w-full left-0 h-[60px]">
               <form action="search" className="relative h-full w-full lg:hidden">
@@ -1147,19 +1154,21 @@ export default function Header01() {
                   </span>
                 )}
 
-                <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer" onClick={handleCloseSearchBar}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     width={24}
                     height={24}
-                    className="fill-jacarta-500 h-9 w-9 dark:fill-black transform rotate-180"
+                    className="fill-jacarta-500 h-10 w-10 dark:fill-black transform rotate-180"
                   >
                     <path fill="none" d="M0 0h24v24H0z" />
-                    <path d="M18.5 12l-6 6v-3H7.5v-2h5.999V6z" />
+                    <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
                   </svg>
+                 
                 </span>
               </form>
+               {/* end mobile search bar inputs */}
             </div>
           )}
         </div>
@@ -1167,14 +1176,6 @@ export default function Header01() {
 
       </header>
       {/* main desktop menu end */}
-
-      {/* start mobile search bar inputs */}
-
-
-
-
-
-      {/* end mobile search bar inputs */}
 
       {/* start mobile menu and it's other materials  */}
       <div

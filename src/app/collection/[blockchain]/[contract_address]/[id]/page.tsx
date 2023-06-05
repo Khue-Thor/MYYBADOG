@@ -111,7 +111,7 @@ const Collection = ({ params }: params) => {
               <div className="absolute left-1/2 top-0 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
                 <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white">
                   <Image
-                    src={image.cachedUrl}
+                    src={imageUrl}
                     alt={name}
                     layout="fill"
                     objectFit="contain"

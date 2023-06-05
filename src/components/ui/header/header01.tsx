@@ -1,6 +1,5 @@
 "use client";
 
-
 import Image from "next/image";
 import Link from "next/link";
 import DarkMode from "../mode/dark-mode";
@@ -36,6 +35,7 @@ import { items_offer_data } from "@/data/items_tabs_data";
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
+  const [searchBarOpen, setSearchBarOpen] = useState(false)
 
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter()
@@ -48,6 +48,10 @@ export default function Header01() {
     const encodedSearchQueary = encodeURI(searchQuery);
     router.push(`/search?q=${encodedSearchQueary}`)
     console.log("current query", encodedSearchQueary);
+  }
+
+  const handleOpenSearchBar = () => {
+    setSearchBarOpen(true)
   }
 
   // window resize
@@ -914,6 +918,25 @@ export default function Header01() {
           {/* header menu conent end for desktop */}
 
           <div className="ml-auto flex lg:hidden">
+            {/* search button for mobile respsonive */}
+            <button
+              className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
+              aria-label="open mobile search bar"
+              onClick={handleOpenSearchBar}
+            >
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width={24}
+                height={24}
+                className="fill-jacarta-500 h-4 w-4 dark:fill-white"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
+              </svg>
+
+            </button>
             <Link
               href="/profile/user_avatar"
               className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
@@ -1020,12 +1043,138 @@ export default function Header01() {
                 <path d="M18 18v2H6v-2h12zm3-7v2H3v-2h18zm-3-7v2H6V4h12z" />
               </svg>
             </button>
+            {/* <form action="search" className="relative mt-24 mb-8 w-full lg:hidden">
+              <input
+                type="search"
+                className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-3 px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
+                placeholder="Search"
+                onChange={handleFilter}
+                value={enteredWord}
+              />
+              {collectionsData.length !== 0 && (
+                <div className="scroll bg-white text-black absolute z-10 left-[0px] top-[70px] pt-3 pb-[20px] w-full rounded-3xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+                  <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                  {collectionsData.slice(0, 5).map((value) => {
+                    return (
+                      <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                        <div className="flex gap-3 items-top">
+                          <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                          <div className="flex flex-col">
+                            <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
+                            <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                          </div>
+                        </div>
+                        <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
+                      </div>
+                    );
+                  })}
+                  <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+                </div>
+              )}
+              <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width={24}
+                  height={24}
+                  className="fill-jacarta-500 h-4 w-4 dark:fill-white"
+                >
+                  <path fill="none" d="M0 0h24v24H0z" />
+                  <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
+                </svg>
+              </span>
+
+              {enteredWord.length == 0 ? (
+                <span></span>
+              ) : (
+                <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    width={26}
+                    height={26}
+                    className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+
+                  >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                  </svg>
+                </span>
+              )}
+            </form> */}
           </div>
           {/* End header right content  for mobile */}
+          {searchBarOpen && (
+            <div className="fixed w-full left-0 h-[60px]">
+              <form action="search" className="relative h-full w-full lg:hidden">
+                <input className="bg-white w-full h-full text-black pr-10 pl-20" type="search" placeholder="Search" onChange={handleFilter}
+                  value={enteredWord} />
+                {collectionsData.length !== 0 && (
+                  <div className="scroll bg-white text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
+                    <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                    {collectionsData.slice(0, 5).map((value) => {
+                      return (
+                        <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                          <div className="flex gap-3 items-top">
+                            <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                            <div className="flex flex-col">
+                              <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
+                              <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                            </div>
+                          </div>
+                          <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
+                        </div>
+                      );
+                    })}
+                    <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+                  </div>
+                )}
+                {enteredWord.length == 0 ? (
+                  <span></span>
+                ) : (
+                  <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      width={26}
+                      height={26}
+                      className="fill-jacarta-500 h-4 w-4 dark:fill-black cursor-pointer"
+
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                    </svg>
+                  </span>
+                )}
+
+                <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width={24}
+                    height={24}
+                    className="fill-jacarta-500 h-9 w-9 dark:fill-black transform rotate-180"
+                  >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M18.5 12l-6 6v-3H7.5v-2h5.999V6z" />
+                  </svg>
+                </span>
+              </form>
+            </div>
+          )}
         </div>
         {/* End flex item */}
+
       </header>
       {/* main desktop menu end */}
+
+      {/* start mobile search bar inputs */}
+
+
+
+
+
+      {/* end mobile search bar inputs */}
 
       {/* start mobile menu and it's other materials  */}
       <div

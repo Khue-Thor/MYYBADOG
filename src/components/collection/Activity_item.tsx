@@ -1,8 +1,9 @@
 import React, { FormEvent, useEffect, useState } from 'react';
-import { collection_activity_item_data } from '../../data/collection_data';
+// import { collection_activity_item_data } from '../../data/collection_data';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { usePathname } from 'next/navigation';
+import { NFTMetaData, NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
 
 type Item = {
 	id: string,
@@ -11,37 +12,67 @@ type Item = {
 	price: string,
 	time: string,
 	category: string,
+	contractAddress: string,
 }
 
 
 
 const Activity_item = () => {
 	const params = usePathname();
+	const [data, setData] = useState<Item[]>([]);
+	const [inputText, setInputText] = useState('');
 	const [filterVal, setFilterVal] = useState<number | null>(null);
 	function onlyUnique(value: any, index: number, self: any) {
 		return self.indexOf(value) === index;
 	}
 
 	const id = params.split('/')[4];
-	const contract_address = params.split('/')[3].replace(`/${id}`, '');
+	const contract_address = params.split('/')[3].replace(`/${id}`, '') as string;
 	const blockchain = params.split('/')[2].replace(`/${contract_address}/${id}`, '');
 
-	const [data, setData] = useState(collection_activity_item_data);
 	const [filterData, setfilterData] = useState(
-		collection_activity_item_data.map((item) => {
+		data.map((item) => {
 			const { category } = item;
 			return category;
 		})
 	);
 
-	const [inputText, setInputText] = useState('');
+	useEffect(() => {
+		fetchData();
+	}, [])
+
+	const fetchData = async () => {
+		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 10 });
+		const promise = data.map(async (item) => await formatData(item));
+		const formattedData = await Promise.all(promise);
+		setData(formattedData);
+	}
+
+	const formatData = async (data: NFTSale): Promise<Item> => {
+		const nftMetadata = (await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId })).pop() as NFTMetaData;
+		return {
+			id: data.tokenId,
+			image: nftMetadata.image.cachedUrl,
+			title: nftMetadata.name as string,
+			price: String(calculatePrice(+data.sellerFee.amount, +data.protocolFee.amount, +data.royaltyFee.amount)) + ' ETH',
+			time: 'input time of posting',
+			category: 'purchases',
+			contractAddress: nftMetadata.contract.address,
+		};
+	};
+
+	const calculatePrice = (seller: number, protocol: number, royalty: number) => {
+		const sum = seller + protocol + royalty;
+		const inputDecimals = 10 ** 18
+		return sum / inputDecimals;
+	}
 
 	const handleFilter = (category: string) => {
-		setData(collection_activity_item_data.filter((item) => item.category === category));
+		setData(data.filter((item) => item.category === category));
 	};
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const newArray = collection_activity_item_data.filter((item) => {
+		const newArray = data.filter((item) => {
 			return item.title.toLowerCase().includes(inputText);
 		});
 		setData(newArray);
@@ -59,7 +90,7 @@ const Activity_item = () => {
 			<div className="lg:flex">
 				{/* <!-- Records --> */}
 				<div className="mb-10 shrink-0 basis-8/12 space-y-5 lg:mb-0 lg:pr-10">
-					{data.slice(0, 5).map((item) => {
+					{data.length > 0 && data.slice(0, 5).map((item, index) => {
 						const { id, image, title, price, time, category } = item;
 						const itemLink = image
 							.split('/')
@@ -71,8 +102,8 @@ const Activity_item = () => {
 							.replace('avatar', 'item');
 						return (
 							(<Link
-								href={`/item/${itemLink}`}
-								key={id}
+								href={`/${blockchain}/${item.contractAddress}/${id}`}
+								key={index}
 								className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl relative flex items-center border bg-white p-8 transition-shadow hover:shadow-lg">
 
 								<figure className="mr-5 self-start">

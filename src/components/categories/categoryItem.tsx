@@ -57,7 +57,10 @@ const CategoryItem = () => {
               likes,
               creator,
               owner,
+              contractAddress,
+              blockchain,
             } = item;
+            console.log('contractAddress >', contractAddress);
             const itemLink = image
               .split("/")
               .slice(-1)
@@ -68,7 +71,7 @@ const CategoryItem = () => {
               <article ref={ref} key={id}>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                   <figure className="relative">
-                    <Link href={`/item/${itemLink}`}>
+                    <Link href={`/${blockchain}/${contractAddress}/${id}`}>
                       {
                         image &&
                         <img
@@ -84,7 +87,7 @@ const CategoryItem = () => {
 
                     <div className="absolute left-3 -bottom-3">
                       <div className="flex -space-x-2">
-                        <Link href={`/item/${itemLink}`}>
+                        <Link href={`/${blockchain}/${contractAddress}/${id}`}>
 
                           <Tippy content={<span>creator: {creator.name}</span>}>
                             {
@@ -98,7 +101,7 @@ const CategoryItem = () => {
                           </Tippy>
 
                         </Link>
-                        <Link href={`/item/${itemLink}`}>
+                        <Link href={`/${blockchain}/${contractAddress}/${id}`}>
 
                           <Tippy content={<span>creator: {owner.name}</span>}>
                             {
@@ -117,7 +120,7 @@ const CategoryItem = () => {
                     </div>
                   </figure>
                   <div className="mt-7 flex items-center justify-between">
-                    <Link href={`/item/${itemLink}`}>
+                    <Link href={`/${blockchain}/${contractAddress}/${id}`}>
 
                       <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
                         {title}
@@ -144,7 +147,7 @@ const CategoryItem = () => {
                     >
                       Buy now
                     </button>
-                    <Link href={`/item/${itemLink}`} className="group flex items-center">
+                    <Link href={`/${blockchain}/${contractAddress}/${id}`} className="group flex items-center">
 
                       <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
                         <use xlinkHref="/icons.svg#icon-history"></use>
@@ -170,6 +173,8 @@ const CategoryItem = () => {
             likes,
             creator,
             owner,
+            contractAddress,
+            blockchain
           } = item;
           const itemLink = image
             .split("/")
@@ -181,7 +186,7 @@ const CategoryItem = () => {
             <article key={id}>
               <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                 <figure className="relative">
-                  <Link href={`/item/${itemLink}`}>
+                  <Link href={`/${blockchain}/${contractAddress}/${id}`}>
                     {
                       image &&
                       <img
@@ -197,7 +202,7 @@ const CategoryItem = () => {
 
                   <div className="absolute left-3 -bottom-3">
                     <div className="flex -space-x-2">
-                      <Link href={`/item/${itemLink}`}>
+                      <Link href={`/${blockchain}/${contractAddress}/${id}`}>
 
                         <Tippy content={<span>creator: {creator.name}</span>}>
                           {
@@ -211,7 +216,7 @@ const CategoryItem = () => {
                         </Tippy>
 
                       </Link>
-                      <Link href={`/item/${itemLink}`}>
+                      <Link href={`/${blockchain}/${contractAddress}/${id}`}>
 
                         <Tippy content={<span>creator: {owner.name}</span>}>
                           {
@@ -230,7 +235,7 @@ const CategoryItem = () => {
                   </div>
                 </figure>
                 <div className="mt-7 flex items-center justify-between">
-                  <Link href={`/item/${itemLink}`}>
+                  <Link href={`/${blockchain}/${contractAddress}/${id}`}>
 
                     <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
                       {title}
@@ -257,7 +262,7 @@ const CategoryItem = () => {
                   >
                     Buy now
                   </button>
-                  <Link href={`/item/${itemLink}`} className="group flex items-center">
+                  <Link href={`/${blockchain}/${contractAddress}/${id}`} className="group flex items-center">
 
                     <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
                       <use xlinkHref="/icons.svg#icon-history"></use>

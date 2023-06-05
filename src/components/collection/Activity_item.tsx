@@ -2,12 +2,29 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { collection_activity_item_data } from '../../data/collection_data';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+
+type Item = {
+	id: string,
+	image: string,
+	title: string,
+	price: string,
+	time: string,
+	category: string,
+}
+
+
 
 const Activity_item = () => {
+	const params = usePathname();
 	const [filterVal, setFilterVal] = useState<number | null>(null);
 	function onlyUnique(value: any, index: number, self: any) {
 		return self.indexOf(value) === index;
 	}
+
+	const id = params.split('/')[4];
+	const contract_address = params.split('/')[3].replace(`/${id}`, '');
+	const blockchain = params.split('/')[2].replace(`/${contract_address}/${id}`, '');
 
 	const [data, setData] = useState(collection_activity_item_data);
 	const [filterData, setfilterData] = useState(

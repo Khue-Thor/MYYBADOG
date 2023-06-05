@@ -28,6 +28,7 @@ const FilterCategoryItem = () => {
 		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`, options);
 		const data = await response.json();
 		const list = data.nfts;
+		console.log(contract_address);
 
 		const formattedList = list.map((item: any) => ({
 			id: item.tokenId,
@@ -44,7 +45,9 @@ const FilterCategoryItem = () => {
 				image: ''
 			},
 			addDate: new Date().toISOString(),
-			category: 'Replace with item category'
+			category: 'Replace with item category',
+			contractAddress: contract_address,
+			blockchain: blockchain
 		}));
 		// if (startToken === 1) {
 		// 	dispatch(incrementStartToken(+list[0].tokenId))

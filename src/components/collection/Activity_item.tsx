@@ -30,22 +30,23 @@ const Activity_item = () => {
 	const contract_address = params.split('/')[3].replace(`/${id}`, '') as string;
 	const blockchain = params.split('/')[2].replace(`/${contract_address}/${id}`, '');
 
-	const [filterData, setfilterData] = useState(
-		data.map((item) => {
-			const { category } = item;
-			return category;
-		})
-	);
+	const [filterData, setfilterData] = useState<string[]>([]);
 
 	useEffect(() => {
-		fetchData();
+		fetchDataAndSetFilters();
 	}, [])
 
-	const fetchData = async () => {
-		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 10 });
+	const fetchDataAndSetFilters = async () => {
+		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 5 });
 		const promise = data.map(async (item) => await formatData(item));
 		const formattedData = await Promise.all(promise);
 		setData(formattedData);
+		const filters = formattedData.map((item) => {
+			const { category } = item;
+			return category;
+		});
+		const filteredFilters = filters.filter(onlyUnique);
+		setfilterData(filteredFilters)
 	}
 
 	const formatData = async (data: NFTSale): Promise<Item> => {

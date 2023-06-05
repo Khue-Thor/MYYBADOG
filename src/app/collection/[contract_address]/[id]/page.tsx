@@ -1,19 +1,15 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { collection_item_data } from '../../../../data/collection_data';
 import Auctions_dropdown from '../../../../components/dropdown/Auctions_dropdown';
 import Social_dropdown from '../../../../components/dropdown/Social_dropdown';
 import Collection_items from '../../../../components/collection/Collection_items';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 import Head from 'next/head';
 import Meta from '@/components/wallet-btn/Meta';
-import { NFTContract, NFTItem } from '@/interfaces/CollectionItem';
-import CollectionItem from '@/interfaces/CollectionItem';
-import Collection_stats from '@/interfaces/Collection_stats';
-// import Meta from '../../components/Meta';
+import { getColectionMetrics } from '@/api/nftgo';
+import { NFTMetaData, getNFTsForContract } from '@/api/alchemy';
 
 interface DetailItem {
   id: string;
@@ -21,80 +17,54 @@ interface DetailItem {
   detailsText: string;
 }
 
-const Collection = ({ params }: any) => {
+interface params {
+  params: {
+    contract_address: string;
+    id: string;
+  }
+}
+
+const Collection = ({ params }: params) => {
   const [likesImage, setLikesImage] = useState(false);
-  const [collectionItemData, setCollectionItemData] = useState<NFTItem[]>([]);
-  const [collectionData, setCollectionData] = useState<Collection_stats[]>([]);
+  const [collectionItemData, setCollectionItemData] = useState<NFTMetaData[]>([]);
   const [details, setDetails] = useState<DetailItem[]>([]);
-  // const [collectionProfile, setCollectionProfile] = useState<NFTContract[]>([]);
-  const contract_address = params.contract_address;
+  const contractAddress = params.contract_address;
   const id = params.id;
-  const url = `https://eth-mainnet.g.alchemy.com/nft/v3/` + process.env.NEXT_PUBLIC_ALCHEMY_API_KEY
+  const blockchain = 'eth-mainnet'
 
   const fetchCollectionData = async () => {
-    const options = {
-      method: 'GET',
-      headers: new Headers({
-        accept: "application/json",
-        "X-API-KEY": process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
-      }),
-    };
-
-    fetch(`https://data-api.nftgo.io/eth/v1/collection/${contract_address}/metrics`, options)
-      .then(response => response.json())
-      .then(response => {
-        console.log('collectionData', response);
-        setDetails([{
-          id: '1',
-          detailsNumber: formatNumber(+response.total_supply),
-          detailsText: 'Items'
-        }, {
-          id: '2',
-          detailsNumber: formatNumber(+response.holder_num),
-          detailsText: 'Owners'
-        }, {
-          id: '3',
-          detailsNumber: response.floor_price.value,
-          detailsText: 'Floor Price'
-        }, {
-          id: '4',
-          detailsNumber: formatNumber(+response.volume_eth.all),
-          detailsText: 'Volume Traded'
-        }])
-        setCollectionData(response)
-      })
-      .catch(err => console.error(err));
+    const data = await getColectionMetrics(contractAddress);
+    setDetails([{
+      id: '1',
+      detailsNumber: formatNumber(+data.total_supply),
+      detailsText: 'Items'
+    }, {
+      id: '2',
+      detailsNumber: formatNumber(+data.holder_num),
+      detailsText: 'Owners'
+    }, {
+      id: '3',
+      detailsNumber: data.floor_price.value.toFixed(2),
+      detailsText: 'Floor Price'
+    }, {
+      id: '4',
+      detailsNumber: formatNumber(+data.volume_eth.all),
+      detailsText: 'Volume Traded'
+    }])
   }
-  // const fetchCollectionProfile = async () => {
-  //   const options = { method: 'GET', headers: { accept: 'application/json' } };
-  //   fetch(`${url}/getContractMetadata?contractAddress=${contract_address}`, options)
-  //     .then(response => response.json())
-  //     .then(response => {
-  //       console.log('collectionProfile', response);
-  //       setCollectionProfile(response)
-  //     })
-  //     .catch(err => console.error(err));
-  // }
 
   const fetchCollectionItems = async () => {
-    const options = { method: 'GET', headers: { accept: 'application/json' } };
-    fetch(`${url}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=1&limit=10`, options)
-      .then(response => response.json())
-      .then(response => {
-        console.log('collectionItemData', response.nfts);
-        setCollectionItemData(response.nfts)
-      })
-      .catch(err => console.error(err));
+    const items = await getNFTsForContract({ blockchain, contractAddress, limit: 8 });
+    setCollectionItemData(items);
   }
 
   useEffect(() => {
-    // fetchCollectionProfile();
     fetchCollectionItems();
     fetchCollectionData();
   }, [])
-  // const router = useRouter();
-  // const contract_address = router.query.collection;
+
   function formatNumber(number: number): string {
+    if (number < 100) return number.toString();
     return (number / 1000).toFixed(0) + 'K'
   }
 
@@ -113,12 +83,16 @@ const Collection = ({ params }: any) => {
     <div className="pt-[5.5rem] lg:pt-24">
       {/* <!-- Banner --> */}
       <div className="relative h-[300px]">
-        <Image
-          src={collectionItemData.length > 0 ? collectionItemData[id - 1].image.cachedUrl : ''}
-          alt="banner"
-          layout="fill"
-          objectFit="cover"
-        />
+        {
+          collectionItemData.length > 0 &&
+          <Image
+            src={collectionItemData[0].image.cachedUrl}
+            alt="banner"
+            layout="fill"
+            objectFit="cover"
+            priority={true}
+          />
+        }
       </div>
       {/* <!-- end banner --> */}
 
@@ -170,7 +144,7 @@ const Collection = ({ params }: any) => {
                   <div className="mb-8">
                     <span className="text-jacarta-400 text-sm font-bold">Created by </span>
                     <Link
-                      href=""
+                      href="#"
                       className="text-accent text-sm font-bold"
                       legacyBehavior>
                       {contractDeployer}

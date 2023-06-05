@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import TypeItem from '@/interfaces/TypeItem';
 
 const initialState = {
@@ -16,6 +16,8 @@ const initialState = {
   buyModal: false,
   propartiesModalValue: false,
   trendingCategorySorText: '',
+  startToken: 1,
+  limit: 8,
 };
 
 export const counterSlice = createSlice({
@@ -24,6 +26,12 @@ export const counterSlice = createSlice({
   reducers: {
     openMblMenu: (state) => {
       state.mblMenu = true;
+    },
+    incrementStartToken: (state, action) => {
+      state.startToken += action.payload;
+    },
+    incrementLimit: (state, action) => {
+      state.limit += action.payload;
     },
     closeMblMenu: (state) => {
       state.mblMenu = false;
@@ -37,7 +45,6 @@ export const counterSlice = createSlice({
     },
     handle_collection_activity_item_data: (state, action) => {
       // was payload.data before, payload on param
-      console.log(2);
       state.collection_activity_item_data = action.payload.data;
     },
     walletModalShow: (state) => {
@@ -65,31 +72,39 @@ export const counterSlice = createSlice({
       state.propartiesModalValue = false;
     },
     updateTrendingCategoryItemData: (state, action) => {
-      state.trendingCategoryItemData = action.payload;
-      state.sortedtrendingCategoryItemData = action.payload;
+      const newData = action.payload;
+
+      const existingItems = state.trendingCategoryItemData.filter(
+        (item) => !newData.some((newItem: TypeItem) => newItem.id === item.id)
+      );
+      state.trendingCategoryItemData = [...existingItems, ...newData];
+      state.sortedtrendingCategoryItemData = [
+        ...state.trendingCategoryItemData,
+      ];
     },
-    updatetrendingCategorySorText: (state, action: PayloadAction<String>) => {
+    updatetrendingCategorySorText: (state, action) => {
       const sortText = action.payload;
-      console.log(action.payload);
-
       if (sortText === 'Price: Low to High') {
-        console.log(1);
-        console.log(state.trendingCategoryItemData);
-
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => a.price - b.price);
+          state.trendingCategoryItemData.sort(
+            (a, b) => +a.sortPrice - +b.sortPrice
+          );
       } else if (sortText === 'Price: high to low') {
         state.sortedtrendingCategoryItemData =
-          state.trendingCategoryItemData.sort((a, b) => b.price - a.price);
+          state.trendingCategoryItemData.sort(
+            (a, b) => +b.sortPrice - +a.sortPrice
+          );
       } else if (sortText === 'Recently Added') {
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
-            (a, b) => +a.auction_timer - +b.auction_timer
+            (a, b) =>
+              new Date(a.addDate).getTime() - new Date(b.addDate).getTime()
           );
       } else if (sortText === 'Auction Ending Soon') {
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
-            (a, b) => +b.auction_timer - +a.auction_timer
+            (a, b) =>
+              new Date(b.addDate).getTime() - new Date(a.addDate).getTime()
           );
       } else {
         state.sortedtrendingCategoryItemData = state.trendingCategoryItemData;
@@ -143,11 +158,11 @@ export const counterSlice = createSlice({
     },
     updateRenkingData: (state, action) => {
       const text = action.payload;
-      // let tempItem = state.renkingData.filter((item) => item.category === text);
-      // if (text === 'All') {
-      //   tempItem = state.renkingData;
-      // }
-      // state.filteredRenkingData = tempItem;
+      let tempItem = state.renkingData.filter((item) => item.category === text);
+      if (text === 'All') {
+        tempItem = state.renkingData;
+      }
+      state.filteredRenkingData = tempItem;
     },
     updateRenkingDataByBlockchain: (state, action) => {
       const text = action.payload;
@@ -173,6 +188,8 @@ export const counterSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   openMblMenu,
+  incrementStartToken,
+  incrementLimit,
   closeMblMenu,
   openDropdown,
   closeDropdown,

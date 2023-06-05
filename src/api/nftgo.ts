@@ -1,4 +1,4 @@
-export default interface Collection_stats {
+interface ColectionMetrics {
   last_updated: number;
   market_cap_usd: number;
   market_cap_eth: number;
@@ -75,4 +75,27 @@ export default interface Collection_stats {
     '7d': number;
     '24h': number;
   };
+}
+
+const urlBuilder = (contractAdress: string) => {
+  return `https://data-api.nftgo.io/eth/v1/collection/${contractAdress}`;
+};
+
+const options = {
+  method: 'GET',
+  headers: new Headers({
+    accept: 'application/json',
+    'X-API-KEY': process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
+  }),
+};
+
+export async function getColectionMetrics(
+  contractAddress: string
+): Promise<ColectionMetrics> {
+  const request = await fetch(
+    `${urlBuilder(contractAddress)}/metrics`,
+    options
+  );
+  const data = await request.json();
+  return data;
 }

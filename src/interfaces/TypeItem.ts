@@ -10,6 +10,9 @@ type TypeItem = {
   creatorname: string;
   ownerName: string;
   auction_timer: string;
+  sortPrice: string;
+  addDate: Date;
+  category: string;
 };
 
 export default TypeItem;

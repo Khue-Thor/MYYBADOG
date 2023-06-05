@@ -16,7 +16,7 @@ import {
   isChildrenPageActive,
   isParentPageActive,
 } from "../../../utils/daynamicNavigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Sheet,
   SheetContent,
@@ -26,15 +26,50 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
-import { ConnectWallet, useUser } from "@thirdweb-dev/react";
+import {
+  ConnectWallet,
+  useUser,
+  useAddress,
+  useConnectionStatus,
+} from "@thirdweb-dev/react";
+import { createSupabaseClient } from "@/lib/createSupabase";
+import { User, Session } from "@supabase/supabase-js";
+import useSupabaseUser from "@/components/lib/useSupabaseUser";
+import {
+  createClientComponentClient,
+  createBrowserSupabaseClient,
+} from "@supabase/auth-helpers-nextjs";
+// import { createSupabaseClient } from "@/components/lib/createSupabase";
+// import { useStorage } from "@thirdweb-dev/react";
+// import { Database } from '@/types_db';
+// import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+// import { cookies } from 'next/headers';
+// import { cache } from 'react';
 
-// import WalletButton from "../wallet-btn/WalletButton";
+// const createServerSupabaseClient = cache(() =>
+//   createServerComponentClient<Database>({ cookies })
+// );
+
+// async function getSession() {
+//   const { auth } = createClientComponentClient();
+//   const session = await auth.getSession();
+//   console.log(session);
+//   return session;
+// }
+// async function getUser() {
+//   const { auth } = createClientComponentClient();
+//   const user = await auth.getUser();
+//   console.log(user);
+//   return user;
+// }
 
 export default function Header01() {
-  const { user, isLoggedIn, isLoading } = useUser();
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
-  console.log(user);
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+
+  // const { user, session, refresh } = useSupabaseUser();
+
   // window resize
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -42,7 +77,8 @@ export default function Header01() {
         setToggle(false);
       }
     });
-  });
+  }, []);
+  // console.log(user);
 
   const route = useRouter();
   const pathname = usePathname();

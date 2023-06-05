@@ -87,7 +87,7 @@ const Collection = ({ params }: params) => {
         {
           collectionItemData.length > 0 &&
           <Image
-            src={collectionItemData[0]?.contract.openSeaMetadata.imageUrl}
+            src={collectionItemData[0].contract.openSeaMetadata.imageUrl}
             alt="banner"
             layout="fill"
             objectFit="cover"
@@ -103,7 +103,7 @@ const Collection = ({ params }: params) => {
         .filter((item) => {
           return item.tokenId === id
         }).map((item) => {
-          const { tokenId, contract: { name, openSeaMetadata: { description, imageUrl }, contractDeployer }, image } = item;
+          const { tokenId, contract: { name, openSeaMetadata: { description, imageUrl }, contractDeployer } } = item;
 
           return (
             <section key={tokenId} className="dark:bg-jacarta-800 bg-light-base relative pb-12 pt-28">

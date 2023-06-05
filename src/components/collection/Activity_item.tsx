@@ -1,12 +1,12 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 // import { collection_activity_item_data } from '../../data/collection_data';
 import Link from 'next/link';
-import Image from 'next/legacy/image';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { NFTMetaData, NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
 
 type Item = {
-	id: string,
+	tokenId: string,
 	image: string,
 	title: string,
 	price: string,
@@ -38,6 +38,8 @@ const Activity_item = () => {
 
 	const fetchDataAndSetFilters = async () => {
 		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 5 });
+		console.log('data >', data);
+
 		const promise = data.map(async (item) => await formatData(item));
 		const formattedData = await Promise.all(promise);
 		setData(formattedData);
@@ -51,9 +53,11 @@ const Activity_item = () => {
 
 	const formatData = async (data: NFTSale): Promise<Item> => {
 		const nftMetadata = (await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId })).pop() as NFTMetaData;
+		console.log('nftMetadata >', nftMetadata);
+
 		return {
-			id: data.tokenId,
-			image: nftMetadata.image.cachedUrl,
+			tokenId: data.tokenId,
+			image: nftMetadata.image.cachedUrl || '',
 			title: nftMetadata.name as string,
 			price: String(calculatePrice(+data.sellerFee.amount, +data.protocolFee.amount, +data.royaltyFee.amount)) + ' ETH',
 			time: 'input time of posting',
@@ -64,8 +68,8 @@ const Activity_item = () => {
 
 	const calculatePrice = (seller: number, protocol: number, royalty: number) => {
 		const sum = seller + protocol + royalty;
-		const inputDecimals = 10 ** 18
-		return sum / inputDecimals;
+		const decimals = 10 ** 18
+		return sum / decimals;
 	}
 
 	const handleFilter = (category: string) => {
@@ -80,10 +84,6 @@ const Activity_item = () => {
 		setInputText('');
 	};
 
-	useEffect(() => {
-		setfilterData(filterData.filter(onlyUnique));
-	}, []);
-
 	return <>
 		{/* <!-- Activity Tab --> */}
 		<div className="tab-pane fade">
@@ -92,30 +92,21 @@ const Activity_item = () => {
 				{/* <!-- Records --> */}
 				<div className="mb-10 shrink-0 basis-8/12 space-y-5 lg:mb-0 lg:pr-10">
 					{data.length > 0 && data.slice(0, 5).map((item, index) => {
-						const { id, image, title, price, time, category } = item;
-						const itemLink = image
-							.split('/')
-							.slice(-1)
-							.toString()
-							.replace('.jpg', '')
-							.replace('.gif', '')
-							.replace('_sm', '')
-							.replace('avatar', 'item');
+						const { tokenId, image, title, price, time, category } = item;
 						return (
 							(<Link
-								href={`/${blockchain}/${item.contractAddress}/${id}`}
+								href={`/${blockchain}/${item.contractAddress}/${tokenId}`}
 								key={index}
 								className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl relative flex items-center border bg-white p-8 transition-shadow hover:shadow-lg">
 
 								<figure className="mr-5 self-start">
 									<Image
-										src={image}
+										src={image || ''}
 										alt={title}
 										height={50}
 										width={50}
 										objectFit="cover"
 										className="rounded-2lg"
-										loading="lazy"
 									/>
 								</figure>
 								<div>

@@ -514,7 +514,7 @@ export default function Header01() {
     <>
       {/* main desktop menu sart*/}
       <header className="js-page-header fixed top-0 z-20 w-full bg-purple-base transition-colors">
-        <div className="flex items-center px-3 py-2 xl:px-10">
+        <div className="flex items-center px-3 py-2 xl:px-10 ">
           <Link className="px-4 shrink-0" href="/">
             <div>
               <Image src={Logo} alt="Bad Dogs Company | NFT Marketplace" />
@@ -545,7 +545,7 @@ export default function Header01() {
                       <div className="flex gap-3 items-top">
                         <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white">{value.openSeaMetadata.collectionName}</span>
+                          <span className="font-bold dark:text-white w-[150px]">{value.openSeaMetadata.collectionName}</span>
                           <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                         </div>
                       </div>
@@ -1169,7 +1169,7 @@ export default function Header01() {
         </div>
         {/* mobile menu top header content */}
 
-        <form action="search" className="relative mt-24 mb-8 w-full lg:hidden">
+        {/* <form action="search" className="relative mt-24 mb-8 w-full lg:hidden">
           <input
             type="search"
             className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-3 px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
@@ -1227,10 +1227,10 @@ export default function Header01() {
               </svg>
             </span>
           )}
-        </form>
+        </form> */}
         {/* End search form mobile menu  */}
 
-        <nav className="navbar w-full">
+        <nav className="navbar w-full mt-24">
           <ul className="flex flex-col lg:flex-row">
             <li className="js-nav-dropdown group relative">
               <button

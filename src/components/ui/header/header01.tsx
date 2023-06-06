@@ -545,7 +545,7 @@ export default function Header01() {
                       <div className="flex gap-3 items-top">
                         <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white w-[150px]">{value.openSeaMetadata.collectionName}</span>
+                          <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
                           <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                         </div>
                       </div>
@@ -1069,15 +1069,15 @@ export default function Header01() {
                       <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
                       {collectionsData.slice(0, 5).map((value) => {
                         return (
-                          <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                          <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                             <div className="flex gap-3 items-top">
                               <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
                               <div className="flex flex-col">
-                                <span className="font-bold dark:text-white">{value.openSeaMetadata.collectionName}</span>
+                                <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
                                 <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                               </div>
                             </div>
-                            <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
+                            <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
                           </div>
                         );
                       })}

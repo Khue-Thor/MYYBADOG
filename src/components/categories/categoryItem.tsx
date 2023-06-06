@@ -42,18 +42,7 @@ const CategoryItem = () => {
 
 
   return (
-    <div className="flex flex-col items-center">
-      <input
-        type="search"
-        className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
-        placeholder="Search"
-      // value={inputText}
-      // onChange={(e) => setInputText(e.target.value)}
-      />
-      <button
-        type="submit"
-        className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
-      ></button>
+    <div>
       <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
         {sortedtrendingCategoryItemData.map((item: any, index: number) => {
           if (sortedtrendingCategoryItemData.length === index + 1) {

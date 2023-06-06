@@ -15,12 +15,20 @@ type Item = {
 	contractAddress: string,
 }
 
-
+const emptyItem = {
+	tokenId: '',
+	image: '',
+	title: '',
+	price: '',
+	time: '',
+	category: '',
+	contractAddress: '',
+}
 
 const Activity_item = () => {
 	const params = usePathname();
 	const [data, setData] = useState<Item[]>([]);
-	const [inputText, setInputText] = useState('');
+	// const [inputText, setInputText] = useState('');
 	const [filterVal, setFilterVal] = useState<number | null>(null);
 	function onlyUnique(value: any, index: number, self: any) {
 		return self.indexOf(value) === index;
@@ -33,13 +41,7 @@ const Activity_item = () => {
 	const [filterData, setfilterData] = useState<string[]>([]);
 
 	useEffect(() => {
-		try {
-			fetchDataAndSetFilters();
-		} catch (error) {
-			console.log(error);
-			setData([]);
-			setfilterData([]);
-		}
+		fetchDataAndSetFilters();
 	}, [])
 
 	const fetchDataAndSetFilters = async () => {
@@ -57,17 +59,21 @@ const Activity_item = () => {
 	}
 
 	const formatData = async (data: NFTSale): Promise<Item> => {
-		const nftMetadata = (await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId })).pop() as NFTMetaData;
+		try {
+			const nftMetadata = await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId });
+			return {
+				tokenId: data.tokenId,
+				image: nftMetadata[0].image.cachedUrl || '',
+				title: nftMetadata[0].name as string || `#${data.tokenId}`,
+				price: String(calculatePrice(+data.sellerFee.amount, +data.protocolFee.amount, +data.royaltyFee.amount)) + ' ETH',
+				time: 'input time of posting',
+				category: 'purchases',
+				contractAddress: nftMetadata[0].contract.address,
+			};
 
-		return {
-			tokenId: data.tokenId,
-			image: nftMetadata.image.cachedUrl || '',
-			title: nftMetadata.name as string || `#${data.tokenId}`,
-			price: String(calculatePrice(+data.sellerFee.amount, +data.protocolFee.amount, +data.royaltyFee.amount)) + ' ETH',
-			time: 'input time of posting',
-			category: 'purchases',
-			contractAddress: nftMetadata.contract.address,
-		};
+		} catch (error) {
+			return emptyItem;
+		}
 	};
 
 	const calculatePrice = (seller: number, protocol: number, royalty: number) => {
@@ -79,14 +85,14 @@ const Activity_item = () => {
 	const handleFilter = (category: string) => {
 		setData(data.filter((item) => item.category === category));
 	};
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		const newArray = data.filter((item) => {
-			return item.title.toLowerCase().includes(inputText);
-		});
-		setData(newArray);
-		setInputText('');
-	};
+	// const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	// 	e.preventDefault();
+	// 	const newArray = data.filter((item) => {
+	// 		return item.title.toLowerCase().includes(inputText);
+	// 	});
+	// 	setData(newArray);
+	// 	setInputText('');
+	// };
 
 	return <>
 		{/* <!-- Activity Tab --> */}
@@ -133,15 +139,15 @@ const Activity_item = () => {
 
 				{/* <!-- Filters --> */}
 				<aside className="basis-4/12 lg:pl-5">
-					<form action="search" className="relative mb-12 block" onSubmit={handleSubmit}>
-						<input
+					{/* <form action="search" className="relative mb-12 block" onSubmit={handleSubmit}> */}
+					{/* <input
 							type="search"
 							className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
 							placeholder="Search"
 							value={inputText}
 							onChange={(e) => setInputText(e.target.value)}
-						/>
-						<button
+						/> */}
+					{/* <button
 							type="submit"
 							className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
 						>
@@ -156,7 +162,7 @@ const Activity_item = () => {
 								<path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z"></path>
 							</svg>
 						</button>
-					</form>
+					</form> */}
 
 					<h3 className="font-display text-jacarta-500 mb-4 font-semibold dark:text-white">
 						Filters

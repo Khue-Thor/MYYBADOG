@@ -33,12 +33,17 @@ const Activity_item = () => {
 	const [filterData, setfilterData] = useState<string[]>([]);
 
 	useEffect(() => {
-		fetchDataAndSetFilters();
+		try {
+			fetchDataAndSetFilters();
+		} catch (error) {
+			console.log(error);
+			setData([]);
+			setfilterData([]);
+		}
 	}, [])
 
 	const fetchDataAndSetFilters = async () => {
 		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 5 });
-		console.log('data >', data);
 
 		const promise = data.map(async (item) => await formatData(item));
 		const formattedData = await Promise.all(promise);
@@ -53,7 +58,6 @@ const Activity_item = () => {
 
 	const formatData = async (data: NFTSale): Promise<Item> => {
 		const nftMetadata = (await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId })).pop() as NFTMetaData;
-		console.log('nftMetadata >', nftMetadata);
 
 		return {
 			tokenId: data.tokenId,

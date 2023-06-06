@@ -58,7 +58,7 @@ const Activity_item = () => {
 		return {
 			tokenId: data.tokenId,
 			image: nftMetadata.image.cachedUrl || '',
-			title: nftMetadata.name as string,
+			title: nftMetadata.name as string || `#${data.tokenId}`,
 			price: String(calculatePrice(+data.sellerFee.amount, +data.protocolFee.amount, +data.royaltyFee.amount)) + ' ETH',
 			time: 'input time of posting',
 			category: 'purchases',
@@ -105,8 +105,6 @@ const Activity_item = () => {
 										alt={title}
 										height={50}
 										width={50}
-										objectFit="cover"
-										className="rounded-2lg"
 									/>
 								</figure>
 								<div>

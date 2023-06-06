@@ -32,7 +32,7 @@ const FilterCategoryItem = () => {
 		const formattedList = list.map((item: any) => ({
 			id: item.tokenId,
 			image: item.image.cachedUrl,
-			title: item.name,
+			title: item.name || `#${item.tokenId}`,
 			price: 'SetPrice' + ' ETH',
 			sortPrice: Math.floor(Math.random() * 100) + 1,
 			bidLimit: Math.floor(Math.random() * 10) + 1,

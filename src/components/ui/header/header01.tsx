@@ -56,6 +56,14 @@ export default function Header01() {
     setSearchBarOpen(false);
   }
 
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 1024) {
+        setSearchBarOpen(false);
+      }
+    });
+  });
+
   // window resize
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -506,7 +514,7 @@ export default function Header01() {
     <>
       {/* main desktop menu sart*/}
       <header className="js-page-header fixed top-0 z-20 w-full bg-purple-base transition-colors">
-        <div className="flex items-center px-3 py-2 xl:px-24 ">
+        <div className="flex items-center px-3 py-2 xl:px-10">
           <Link className="px-4 shrink-0" href="/">
             <div>
               <Image src={Logo} alt="Bad Dogs Company | NFT Marketplace" />
@@ -516,12 +524,12 @@ export default function Header01() {
 
           <form
             action="search"
-            className="relative hidden ml-5 basis-3/12 lg:block xl:ml-[8%]"
+            className="relative hidden ml-3 basis-3/12 lg:block xl:ml-[8%]"
             onSubmit={onSearch}
           >
             <input
               type="search"
-              className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 xl:w-[400px] w-[350px] rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
+              className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 xl:w-[430px] w-[380px] rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
               placeholder="Search"
               onChange={handleFilter}
               value={enteredWord}

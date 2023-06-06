@@ -105,7 +105,7 @@ const Activity_item = () => {
 
 								<figure className="mr-5 self-start">
 									<Image
-										src={image || ''}
+										src={image || '/public/images/404.png'}
 										alt={title}
 										height={50}
 										width={50}

@@ -536,7 +536,7 @@ export default function Header01() {
             />
 
 
-            {collectionsData.length !== 0 && (
+            {enteredWord.length >= 3 && collectionsData.length !== 0 && (
               <div className="croll dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 pb-[20px] w-full rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
                 <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
                 {collectionsData.slice(0, 5).map((value) => {
@@ -1064,8 +1064,8 @@ export default function Header01() {
                 <form action="search" className="relative h-full w-full lg:hidden">
                   <input className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]" type="search" placeholder="Search" onChange={handleFilter}
                     value={enteredWord} />
-                  {collectionsData.length !== 0 && (
-                    <div className="scroll dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
+                  {enteredWord.length >= 3 && collectionsData.length !== 0 && (
+                    <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
                       <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
                       {collectionsData.slice(0, 5).map((value) => {
                         return (

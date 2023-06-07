@@ -24,10 +24,10 @@ const CategoryItem = () => {
 
   const loadMoreItems = () => {
     let startTokenValue = 0;
-    if (sortedtrendingCategoryItemData.length === 30 && +sortedtrendingCategoryItemData[0].id !== 1) {
-      startTokenValue = +sortedtrendingCategoryItemData[0].id + 30
+    if (sortedtrendingCategoryItemData.length === 32 && +sortedtrendingCategoryItemData[0].id !== 1) {
+      startTokenValue = +sortedtrendingCategoryItemData[0].id + 32
     } else {
-      startTokenValue = 30
+      startTokenValue = 32
     };
     dispatch(incrementStartToken(startTokenValue))
     dispatch(incrementLimit)

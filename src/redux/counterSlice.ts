@@ -17,7 +17,7 @@ const initialState = {
   propartiesModalValue: false,
   trendingCategorySorText: '',
   startToken: 1,
-  limit: 30,
+  limit: 32,
 };
 
 export const counterSlice = createSlice({

@@ -6,6 +6,7 @@ import { headers, cookies } from "next/headers";
 
 // import { useState, useEffect } from 'react';
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { redirect } from "next/navigation";
 
 async function signInWithEmail() {
   const { auth } = createClientComponentClient();
@@ -14,20 +15,19 @@ async function signInWithEmail() {
     password: "example-password",
   });
 
-  console.log(auth);
   if (error) {
     console.log(error);
   } else {
-    console.log("SUCCESS!:", data);
+    console.log("SUCCESS!");
     return data;
   }
-  // revalidatePath("/");
+  redirect("/");
 }
 export default async function Page() {
-  const supabase = createServerComponentSupabaseClient({
-    headers,
-    cookies,
-  });
+  // const supabase = createServerComponentSupabaseClient({
+  //   headers,
+  //   cookies,
+  // });
 
-  const session = signInWithEmail();
+  signInWithEmail();
 }

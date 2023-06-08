@@ -3,8 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import DarkMode from "../mode/dark-mode";
+// import Logo from "../../../public/images/logo.png";
+// import Logo from "@/public/images/logo.png";
 import Logo from "@/public/images/bdco-skull-white-28x40.svg";
 import WhiteLogo from "@/public/images/bdco-skull-dark-28x40.svg";
+// import WhiteLogo from "./../../public/images/logo_white.png";
+// import WhiteLogo from "@/public/images/logo_white.png";
+import BdcoSkull from "../logo/bdco-skull";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter, usePathname } from "next/navigation";
 import { RiLoginBoxLine } from "react-icons/ri";
@@ -23,90 +28,43 @@ import {
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
 import {
-  signIn,
-  signOut,
-  useSession,
-  getSession,
-  getCsrfToken,
-} from "next-auth/react";
-import {
   ConnectWallet,
   useAddress,
   useAuth,
-  useUser,
+  useMetamask,
   useLogin,
+  Web3Button,
 } from "@thirdweb-dev/react";
-import { PrismaClient, Prisma, raffles } from "@prisma/client";
+import { createSupabaseClient } from "@/lib/createSupabase";
+import useSupabaseUser from "@/lib/useSupabaseUser";
 
 // import {
 //   createClientComponentClient,
 //   createBrowserSupabaseClient,
 // } from "@supabase/auth-helpers-nextjs";
-// const getRaffle = async () => {
-//   const res = await fetch("/api/raffles", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   return res;
-// };
-
-// const linkWallet = async () => {
-//   const payload = await thirdwebAuth?.login();
-//   await fetch("/api/link", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ payload, access_token: session?.access_token }),
-//   });
-
-//   refresh();
-// };
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
-  const authLogin = useLogin();
-  const { user, isLoggedIn, isLoading } = useUser();
+  const thirdwebAuth = useAuth();
+
   // const shortenedAddress = address.substring(0, 17).concat("...");
+  const connect = useMetamask();
+  const { auth } = createSupabaseClient();
+  const { user, session, refresh, isLoading } = useSupabaseUser();
   const address = useAddress();
-  // const connect = useMetamask();
-  const auth = useAuth();
-  const { data: session } = useSession();
-
-  async function loginWithWallet() {
-    try {
-      const callbackUrl = "/protected";
-      // Prompt the user to sign a login with wallet message
-      const { payload, signature } = await auth?.login();
-
-      console.log("payload", payload);
-
-      // Then send the payload to next auth as login credentials
-      // using the "credentials" provider method
-      const data = await signIn("credentials", {
-        payload: JSON.stringify(payload),
-        redirect: false,
-      });
-      console.log(session);
-      console.log(data);
-    } catch (error) {
-      window.alert(error);
-    }
-  }
-  const getRaffle = async () => {
-    const payload = await getSession();
-    console.log(payload);
-    const res = await fetch("/api/raffles", {
+  console.log(session);
+  const linkWallet = async () => {
+    const payload = await thirdwebAuth?.login();
+    await fetch("/api/link", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ payload }),
+      body: JSON.stringify({ payload, access_token: session?.access_token }),
     });
-    return res;
+
+    refresh();
   };
 
   // window resize
@@ -755,22 +713,14 @@ export default function Header01() {
                 </li>
                 <li className="group">
                   <div>
-                    {session ? (
-                      <button onClick={() => signOut()}>Logout</button>
-                    ) : address ? (
-                      <button onClick={() => loginWithWallet()}>Login</button>
-                    ) : (
-                      <ConnectWallet />
-                    )}
-                    <pre>Connected Wallet: {address}</pre>
-                    <button onClick={() => getRaffle()}>getRaffle</button>
+                    <ConnectWallet />
                   </div>
                 </li>
               </ul>
             </nav>
             {/* End menu for desktop */}
 
-            {address ? (
+            {address && user ? (
               <div className="hidden items-center lg:flex xl:ml-12">
                 <p className="pt-2 pl-4 text-xs w-24 text-jacarta-900 inline dark:text-white font-bold">
                   Next: <span>40 EXP</span>{" "}
@@ -796,7 +746,7 @@ export default function Header01() {
                   <div className="dropdown-menu dark:bg-jacarta-800 group-dropdown-hover:opacity-100 group-dropdown-hover:visible !-right-4 !top-[85%] !left-auto z-10 min-w-[14rem] whitespace-nowrap rounded-xl bg-white transition-all will-change-transform before:absolute before:-top-3 before:h-3 before:w-full lg:absolute lg:grid lg:!translate-y-4 lg:py-4 lg:px-2 lg:shadow-2xl hidden lg:invisible lg:opacity-0">
                     <div>
                       <button className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white">
-                        <span>{address}</span>
+                        <span>{isLoading ? "Loading..." : address}</span>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -823,6 +773,41 @@ export default function Header01() {
                       </div>
                       <div>
                         <hr className="divider" />
+                        {user ? (
+                          <div>
+                            <h2>Current User Information</h2>
+                            <button onClick={linkWallet}>Link to DB</button>
+                            <p>
+                              <b>User ID: </b>
+                              {isLoading ? "Loading..." : user?.id || "N/A"}
+                            </p>
+
+                            <p>
+                              <b>User Email: </b>
+                              {isLoading ? "Loading..." : user?.email || "N/A"}
+                            </p>
+
+                            <p>
+                              <b>User Address: </b>
+                              {isLoading
+                                ? "Loading..."
+                                : user?.address || "N/A"}
+                            </p>
+                          </div>
+                        ) : (
+                          <div>
+                            <button
+                              onClick={() =>
+                                auth.signInWithOAuth({
+                                  provider: "google",
+                                })
+                              }
+                              className="mainButton"
+                            >
+                              Login with Google
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <Link
@@ -862,7 +847,7 @@ export default function Header01() {
                       </span>
                     </Link>
                     <button
-                      onClick={() => signOut()}
+                      onClick={() => auth.signOut()}
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
                     >
                       <svg
@@ -885,12 +870,12 @@ export default function Header01() {
               </div>
             ) : address ? (
               <button
-              // onClick={() =>
-              //   auth.signInWithPassword({
-              //     email: "example@email.com",
-              //     password: "example-password",
-              //   })
-              // }
+                onClick={() =>
+                  auth.signInWithPassword({
+                    email: "example@email.com",
+                    password: "example-password",
+                  })
+                }
               >
                 <RiLoginBoxLine className="hover:opacity-70 text-2xl ml-2 h-full" />
               </button>

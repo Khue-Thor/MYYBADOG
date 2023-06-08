@@ -8,7 +8,6 @@ import Image from 'next/legacy/image';
 import Link from 'next/link';
 import Meta from '@/components/wallet-btn/Meta';
 import { getColectionMetrics } from '@/api/nftgo';
-import { NFTMetaData, getOneNFTForContract } from '@/api/alchemy';
 import { Data, getCollectionData } from '@/api/nftscan';
 
 interface DetailItem {
@@ -35,24 +34,44 @@ const Collection = ({ params }: params) => {
   // const blockchain = params.blockchain;
 
   const fetchCollectionData = async () => {
-    const data = await getColectionMetrics(contractAddress);
-    setDetails([{
-      id: '1',
-      detailsNumber: formatNumber(+data.total_supply),
-      detailsText: 'Items'
-    }, {
-      id: '2',
-      detailsNumber: formatNumber(+data.holder_num),
-      detailsText: 'Owners'
-    }, {
-      id: '3',
-      detailsNumber: data.floor_price.value.toFixed(2),
-      detailsText: 'Floor Price'
-    }, {
-      id: '4',
-      detailsNumber: formatNumber(+data.volume_eth.all),
-      detailsText: 'Volume Traded'
-    }])
+    try {
+      const data = await getColectionMetrics(contractAddress);
+      setDetails([{
+        id: '1',
+        detailsNumber: data?.total_supply ? formatNumber(+data.total_supply) : 'No items',
+        detailsText: 'Items'
+      }, {
+        id: '2',
+        detailsNumber: data?.holder_num ? formatNumber(+data.holder_num) : 'No holders',
+        detailsText: 'Owners'
+      }, {
+        id: '3',
+        detailsNumber: data.floor_price?.value ? data.floor_price.value.toFixed(2) : '0',
+        detailsText: 'Floor Price'
+      }, {
+        id: '4',
+        detailsNumber: data.volume_eth?.all ? formatNumber(+data.volume_eth.all) : '0',
+        detailsText: 'Volume Traded'
+      }])
+    } catch (error) {
+      setDetails([{
+        id: '1',
+        detailsNumber: 'No items',
+        detailsText: 'Items'
+      }, {
+        id: '2',
+        detailsNumber: 'No holders',
+        detailsText: 'Owners'
+      }, {
+        id: '3',
+        detailsNumber: '0',
+        detailsText: 'Floor Price'
+      }, {
+        id: '4',
+        detailsNumber: '0',
+        detailsText: 'Volume Traded'
+      }])
+    }
   }
 
   // const fetchCollectionItems = async () => {
@@ -95,7 +114,7 @@ const Collection = ({ params }: params) => {
         {
           profile &&
           <Image
-            src={profile.banner_url}
+            src={profile.banner_url || '/public/images/404.png'}
             alt="banner"
             layout="fill"
             objectFit="cover"
@@ -113,7 +132,7 @@ const Collection = ({ params }: params) => {
           <div className="absolute left-1/2 top-0 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
             <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white">
               <Image
-                src={profile.logo_url}
+                src={profile.logo_url || '/public/images/404.png'}
                 alt={profile.name}
                 layout="fill"
                 objectFit="contain"
@@ -155,11 +174,11 @@ const Collection = ({ params }: params) => {
               </div>
 
               <div className="dark:bg-jacarta-800 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex flex-wrap items-center justify-center rounded-xl border bg-white">
-                {details.map(({ id, detailsNumber, detailsText }: any) => {
+                {details.map(({ detailsNumber, detailsText }: any, index) => {
                   return (
                     (<Link
                       href="#"
-                      key={id}
+                      key={index}
                       className="dark:border-jacarta-600 border-jacarta-100 w-1/2 rounded-l-xl border-r py-4 hover:shadow-md sm:w-32">
 
                       <div className="text-jacarta-700 mb-1 text-base font-bold dark:text-white">

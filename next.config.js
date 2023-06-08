@@ -12,6 +12,9 @@ const nextConfig = {
       '*.ipfs.io',
       'ipfs.io',
       'nft-cdn.alchemy.com',
+      'i.seadn.io',
+      'logo.nftscan.com',
+      'openseauserdata.com',
     ],
     remotePatterns: [
       {

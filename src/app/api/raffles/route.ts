@@ -31,39 +31,62 @@ export async function GET(req:Request) {
 
 
 export async function POST(req:NextRequest,res:NextResponse) {
-  const { payload }= await req.json();
+  const { payload:{user:address} }= await req.json();
   const session = await getServerSession(authOptions);
 
-  console.log("1",session)
-
-
-  
-    const { address, error: verifyErr } = await verifyLogin(
-      process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
-      payload
-    );
-    if (!address) {
-      return NextResponse.json({error: verifyErr },{status:401 });
+    if (!session || !address) {
+      return NextResponse.json({error: "Not authorized. Please Sign in using your wallet." },{status:401 });
+    }else{
+      try{
+        const supaData: raffles | null = await prisma.raffles.update({
+          where: { id: 2 },
+          data:{
+            token_id: 491
+          }
+        });
+        if (supaData) {
+          console.log(supaData);
+          return NextResponse.json({data:supaData},{ status:200 })
+        }else{
+          return NextResponse.json({error: "Data not found." },{status:401 })
+        }
+        
+      }
+    catch(err){
+      console.log(err)
+    }
+   
     }    
     
-    const supaData: raffles | null = await prisma.raffles.update({
-        where: { id: 2 },
-        data:{
-          token_id:491
-        }
-      });
-      if (supaData) {
-        console.log(supaData);
-      }
-  
-  //   if (!session) {
-  //     return NextResponse.json({error: "Not Authorized." },{status:401 })
-  //   }
-  
-    if (!supaData) {
-      return NextResponse.json({error: "Data not found." },{status:401 })
-    }
-    // Get the wallet address if the user is logged in with their wallet
-    // Otherwise get their email
-    return NextResponse.json({data:supaData},{ status:200 })
   };
+
+  export async function PUT(req:NextRequest,res:NextResponse) {
+    const {id} = await req.json();
+
+    const session = await getServerSession(authOptions);
+  
+      if (!session ) {
+        return NextResponse.json({error: "Not authorized. Please Sign in using your wallet." },{status:401 });
+      }else{
+        try{
+          const supaData: raffles | null = await prisma.raffles.update({
+            where: { id: 2 },
+            data:{
+              token_id: id
+            }
+          });
+          if (supaData) {
+            console.log(supaData);
+            return NextResponse.json({data:supaData},{ status:200 })
+          }else{
+            return NextResponse.json({error: "Data not found." },{status:401 })
+          }
+          
+        }
+      catch(err){
+        console.log(err)
+      }
+     
+      }    
+      
+    };

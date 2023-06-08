@@ -36,34 +36,8 @@ import {
   useUser,
   useLogin,
 } from "@thirdweb-dev/react";
-import { PrismaClient, Prisma, raffles } from "@prisma/client";
 
-// import {
-//   createClientComponentClient,
-//   createBrowserSupabaseClient,
-// } from "@supabase/auth-helpers-nextjs";
-// const getRaffle = async () => {
-//   const res = await fetch("/api/raffles", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
-//   return res;
-// };
 
-// const linkWallet = async () => {
-//   const payload = await thirdwebAuth?.login();
-//   await fetch("/api/link", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({ payload, access_token: session?.access_token }),
-//   });
-
-//   refresh();
-// };
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
@@ -78,11 +52,8 @@ export default function Header01() {
 
   async function loginWithWallet() {
     try {
-      const callbackUrl = "/protected";
       // Prompt the user to sign a login with wallet message
-      const { payload, signature } = await auth?.login();
-
-      console.log("payload", payload);
+      const payload = await auth?.login();
 
       // Then send the payload to next auth as login credentials
       // using the "credentials" provider method
@@ -90,23 +61,30 @@ export default function Header01() {
         payload: JSON.stringify(payload),
         redirect: false,
       });
-      console.log(session);
-      console.log(data);
+      console.log("Signed in", session);
     } catch (error) {
       window.alert(error);
     }
   }
   const getRaffle = async () => {
-    const payload = await getSession();
-    console.log(payload);
-    const res = await fetch("/api/raffles", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ payload }),
-    });
-    return res;
+    const id = 161;
+    try {
+      const res = await fetch("/api/raffles", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: id }),
+      });
+      if (!res.ok) {
+        // This will activate the closest `error.js` Error Boundary
+        throw new Error("Failed to fetch data");
+      }
+      const jsonRes = await res.json();
+      return jsonRes;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // window resize

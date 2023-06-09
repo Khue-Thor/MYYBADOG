@@ -27,11 +27,42 @@ import {
 } from "@/components/shadcn/sheet";
 import ChatUI from "@/components/chat/chatui";
 
+import { items_offer_data } from "@/data/items_tabs_data";
+
+
 // import WalletButton from "../wallet-btn/WalletButton";
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
+  const [searchBarOpen, setSearchBarOpen] = useState(false)
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter()
+
+  const onSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const encodedSearchQueary = encodeURI(searchQuery);
+    router.push(`/search?q=${encodedSearchQueary}`)
+    console.log("current query", encodedSearchQueary);
+  }
+
+  const handleOpenSearchBar = () => {
+    setSearchBarOpen(true);
+  }
+
+  const handleCloseSearchBar = () => {
+    setSearchBarOpen(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 1024) {
+        setSearchBarOpen(false);
+      }
+    });
+  });
 
   // window resize
   useEffect(() => {
@@ -420,11 +451,70 @@ export default function Header01() {
     setCollapse(id);
   };
 
+
+  // filter and autocomplete for the search bar
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [enteredWord, setEnteredWord] = useState([]);
+  const [collectionsData, setCollectionsData] = useState([]);
+
+  useEffect(() => {
+    getCollections();
+  }, []);
+
+  async function getCollections() {
+    // Fetch collections data and update state
+    try {
+      const options: RequestInit = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        },
+        next: {
+          revalidate: 86400, // 24 hrs in sec 
+        }
+      };
+
+      const res = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`, options);
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await res.json();
+      setFilteredData(data.contracts);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // console.log(filteredData)
+
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    setEnteredWord(searchWord);
+    const newFilter = filteredData.filter((value) => {
+      return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+    });
+    if (searchWord === "") {
+      setCollectionsData([])
+    } else {
+      setCollectionsData(newFilter);
+    }
+  };
+
+  const clearInput = () => {
+    setCollectionsData([]);
+    setEnteredWord([]);
+  };
+
+  // filter and autocomplete for the search bar end***
+
   return (
     <>
       {/* main desktop menu sart*/}
       <header className="js-page-header fixed top-0 z-20 w-full bg-purple-base transition-colors">
-        <div className="flex items-center px-3 py-2 xl:px-24 ">
+        <div className="flex items-center px-3 py-2 xl:px-10 ">
           <Link className="px-4 shrink-0" href="/">
             <div>
               <Image src={Logo} alt="Bad Dogs Company | NFT Marketplace" />
@@ -434,13 +524,41 @@ export default function Header01() {
 
           <form
             action="search"
-            className="relative ml-12 mr-8 hidden basis-3/12 lg:block xl:ml-[8%]"
+            className="relative hidden ml-3 basis-3/12 lg:block xl:ml-[8%]"
+            onSubmit={onSearch}
           >
             <input
               type="search"
-              className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
+              className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 xl:w-[430px] w-[380px] rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
               placeholder="Search"
+              onChange={handleFilter}
+              value={enteredWord}
             />
+
+
+            {collectionsData.length !== 0 && (
+              <div className="croll dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 pb-[20px] w-full rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+                <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                {collectionsData.slice(0, 5).map((value) => {
+                  return (
+                    <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                      <div className="flex gap-3 items-top">
+                        <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                        <div className="flex flex-col">
+                          <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
+                          <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                        </div>
+                      </div>
+                      <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
+                    </div>
+                  );
+                })}
+                <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+              </div>
+            )}
+
+
+
             <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -453,6 +571,24 @@ export default function Header01() {
                 <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
               </svg>
             </span>
+
+            {enteredWord.length == 0 ? (
+              <span></span>
+            ) : (
+              <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  width={26}
+                  height={26}
+                  className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+
+                >
+                  <path fill="none" d="M0 0h24v24H0z" />
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                </svg>
+              </span>
+            )}
           </form>
           {/* End Desktop search form */}
 
@@ -492,11 +628,10 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between "
                         >
                           <span
-                            className={`font-display ${
-                              isChildrenPageActive(page.path, pathname)
-                                ? "text-accent dark:text-accent"
-                                : "text-jacarta-700"
-                            } text-sm dark:text-white`}
+                            className={`font-display ${isChildrenPageActive(page.path, pathname)
+                              ? "text-accent dark:text-accent"
+                              : "text-jacarta-700"
+                              } text-sm dark:text-white`}
                           >
                             {page.name}
                           </span>
@@ -544,11 +679,10 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                         >
                           <span
-                            className={`font-display ${
-                              isChildrenPageActive(page.path, pathname)
-                                ? "!text-accent !dark:text-accent"
-                                : "text-jacarta-700 dark:text-white"
-                            } text-sm `}
+                            className={`font-display ${isChildrenPageActive(page.path, pathname)
+                              ? "!text-accent !dark:text-accent"
+                              : "text-jacarta-700 dark:text-white"
+                              } text-sm `}
                           >
                             {page.name}
                           </span>
@@ -794,6 +928,25 @@ export default function Header01() {
           {/* header menu conent end for desktop */}
 
           <div className="ml-auto flex lg:hidden">
+            {/* search button for mobile respsonive */}
+            <button
+              className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
+              aria-label="open mobile search bar"
+              onClick={handleOpenSearchBar}
+            >
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width={24}
+                height={24}
+                className="fill-jacarta-500 h-4 w-4 dark:fill-white"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
+              </svg>
+
+            </button>
             <Link
               href="/profile/user_avatar"
               className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
@@ -902,16 +1055,80 @@ export default function Header01() {
             </button>
           </div>
           {/* End header right content  for mobile */}
+
+          {/* start mobile search bar inputs */}
+
+          {searchBarOpen && (
+            <div className="fixed w-full left-0 top-0 bg-black bg-opacity-50 h-full">
+              <div className="">
+                <form action="search" className="relative h-full w-full lg:hidden">
+                  <input className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]" type="search" placeholder="Search" onChange={handleFilter}
+                    value={enteredWord} />
+                  {collectionsData.length !== 0 && (
+                    <div className="scroll dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
+                      <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                      {collectionsData.slice(0, 5).map((value) => {
+                        return (
+                          <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                            <div className="flex gap-3 items-top">
+                              <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                              <div className="flex flex-col">
+                                <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
+                                <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                              </div>
+                            </div>
+                            <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
+                          </div>
+                        );
+                      })}
+                      <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+                    </div>
+                  )}
+                  {enteredWord.length == 0 ? (
+                    <span></span>
+                  ) : (
+                    <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        width={26}
+                        height={26}
+                        className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+
+                      >
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+                      </svg>
+                    </span>
+                  )}
+
+                  <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer" onClick={handleCloseSearchBar}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width={24}
+                      height={24}
+                      className="fill-jacarta-500 h-10 w-10 dark:fill-gray-700 transform rotate-180"
+                    >
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
+                    </svg>
+                  </span>
+                </form>
+                {/* end mobile search bar inputs */}
+              </div>
+            </div>
+          )}
         </div>
         {/* End flex item */}
+
       </header>
       {/* main desktop menu end */}
 
       {/* start mobile menu and it's other materials  */}
       <div
-        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${
-          toggle ? "nav-menu--is-open" : "hidden"
-        }`}
+        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${toggle ? "nav-menu--is-open" : "hidden"
+          }`}
       >
         <div className="t-0 dark:bg-jacarta-800 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 lg:hidden">
           <div className="dark:hidden">
@@ -952,12 +1169,34 @@ export default function Header01() {
         </div>
         {/* mobile menu top header content */}
 
-        <form action="search" className="relative mt-24 mb-8 w-full lg:hidden">
+        {/* <form action="search" className="relative mt-24 mb-8 w-full lg:hidden">
           <input
             type="search"
             className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-3 px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
             placeholder="Search"
+            onChange={handleFilter}
+            value={enteredWord}
           />
+          {collectionsData.length !== 0 && (
+            <div className="scroll bg-white text-black absolute z-10 left-[0px] top-[70px] pt-3 pb-[20px] w-full rounded-3xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+              <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+              {collectionsData.slice(0, 5).map((value) => {
+                return (
+                  <div key={value.address} className="p-1 hover:bg-gray-500 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                    <div className="flex gap-3 items-top">
+                      <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                      <div className="flex flex-col">
+                        <span className="font-bold">{value.openSeaMetadata.collectionName}</span>
+                        <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                      </div>
+                    </div>
+                    <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
+                  </div>
+                );
+              })}
+              <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+            </div>
+          )}
           <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -970,10 +1209,28 @@ export default function Header01() {
               <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
             </svg>
           </span>
-        </form>
+
+          {enteredWord.length == 0 ? (
+            <span></span>
+          ) : (
+            <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                width={26}
+                height={26}
+                className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+              </svg>
+            </span>
+          )}
+        </form> */}
         {/* End search form mobile menu  */}
 
-        <nav className="navbar w-full">
+        <nav className="navbar w-full mt-24">
           <ul className="flex flex-col lg:flex-row">
             <li className="js-nav-dropdown group relative">
               <button
@@ -1004,9 +1261,8 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === home.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === home.id ? "block" : "hidden"
+                  }`}
               >
                 {home?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -1015,11 +1271,10 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                     >
                       <span
-                        className={`font-display ${
-                          isChildrenPageActive(pathname, page.path)
-                            ? "text-accent dark:text-accent"
-                            : "text-jacarta-700"
-                        } text-sm dark:text-white`}
+                        className={`font-display ${isChildrenPageActive(pathname, page.path)
+                          ? "text-accent dark:text-accent"
+                          : "text-jacarta-700"
+                          } text-sm dark:text-white`}
                       >
                         {page.name}
                       </span>
@@ -1061,9 +1316,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === page.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === page.id ? "block" : "hidden"
+                  }`}
               >
                 {page?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -1118,9 +1372,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === explore.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === explore.id ? "block" : "hidden"
+                  }`}
                 aria-labelledby="navDropdown-1"
               >
                 {explore?.pages?.map((page) => (
@@ -1168,9 +1421,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === resource.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === resource.id ? "block" : "hidden"
+                  }`}
                 aria-labelledby="navDropdown-4"
               >
                 {resource?.pages?.map((page) => (
@@ -1180,11 +1432,10 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                     >
                       <span
-                        className={`font-display text-jacarta-700 text-sm dark:text-white ${
-                          isChildrenPageActive(page.path, pathname)
-                            ? "text-accent dark:text-accent"
-                            : ""
-                        }`}
+                        className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, pathname)
+                          ? "text-accent dark:text-accent"
+                          : ""
+                          }`}
                       >
                         {page.name}
                       </span>

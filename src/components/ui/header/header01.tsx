@@ -543,7 +543,7 @@ export default function Header01() {
                   return (
                     <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
-                        <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                        <img src={value.openSeaMetadata.imageUrl} alt="collection image" className="rounded-lg w-9 h-9" />
                         <div className="flex flex-col">
                           <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
                           <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>

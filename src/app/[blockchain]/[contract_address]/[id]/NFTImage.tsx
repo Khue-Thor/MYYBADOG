@@ -18,7 +18,7 @@ const NFTImage: React.FC<Props> = ({ image, name }) => {
         }}
       >
         <img
-          src={image}
+          src={image || "/images/avatars/avatar_1"}
           alt={`${name} NFT image`}
           className="rounded-2xl cursor-pointer  w-full"
         />
@@ -28,7 +28,7 @@ const NFTImage: React.FC<Props> = ({ image, name }) => {
       <div className={imageModal ? "modal fade show block" : "modal fade"}>
         <div className="modal-dialog !my-0 flex h-full max-w-4xl items-center justify-center">
           <img
-            src={image}
+            src={image || "/images/avatars/avatar_1"}
             alt={`${name} NFT image`}
             className="h-full rounded-2xl"
           />

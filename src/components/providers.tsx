@@ -9,10 +9,8 @@ import {
   metamaskWallet,
   coinbaseWallet,
 } from "@thirdweb-dev/react";
-import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
-import { useState } from "react";
 
 export function Providers({
   children,
@@ -23,10 +21,6 @@ export function Providers({
 }) {
   return (
     <Provider store={store}>
-      {/* <SessionContextProvider
-        supabaseClient={supabaseClient}
-        initialSession={null}
-      > */}
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <SessionProvider session={session}>
           <ThirdwebProvider
@@ -42,7 +36,6 @@ export function Providers({
           </ThirdwebProvider>
         </SessionProvider>
       </ThemeProvider>
-      {/* </SessionContextProvider> */}
     </Provider>
   );
 }

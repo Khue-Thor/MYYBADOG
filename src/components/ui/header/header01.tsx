@@ -37,8 +37,6 @@ import {
   useLogin,
 } from "@thirdweb-dev/react";
 
-
-
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
@@ -49,12 +47,12 @@ export default function Header01() {
   // const connect = useMetamask();
   const auth = useAuth();
   const { data: session } = useSession();
-
+  console.log(session);
   async function loginWithWallet() {
     try {
       // Prompt the user to sign a login with wallet message
       const payload = await auth?.login();
-
+      console.log(payload);
       // Then send the payload to next auth as login credentials
       // using the "credentials" provider method
       const data = await signIn("credentials", {

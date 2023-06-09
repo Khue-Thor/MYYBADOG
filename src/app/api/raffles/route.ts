@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
 import { raffles } from "@prisma/client";
-import { authOptions }  from "../../../lib/auth";
-import prisma from "@/components/lib/prisma";
+import { authOptions }  from "@/lib/auth";
+import prisma from "@/lib/prisma";
 // import { authOptions } from "../api/auth/[...nextauth]";
 
 
@@ -62,8 +62,9 @@ export async function POST(req:NextRequest,res:NextResponse) {
 
   export async function PUT(req:NextRequest,res:NextResponse) {
     const {id} = await req.json();
-
+    const session1 = await getSession()
     const session = await getServerSession(authOptions);
+    console.log(session1);
   
       if (!session ) {
         return NextResponse.json({error: "Not authorized. Please Sign in using your wallet." },{status:401 });

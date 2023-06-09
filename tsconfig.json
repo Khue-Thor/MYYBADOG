@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "typeRoots": ["src/types", "node_modules/@types"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -29,7 +28,6 @@
       "@/public/*": ["./public/*"],
       "@/data/*": ["./src/data/*"],
       "@/redux/*": ["./src/redux/*"],
-      "@/api/*": ["./src/app/api/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/lib/client.js"],

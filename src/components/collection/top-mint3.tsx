@@ -38,7 +38,7 @@ async function getTopMintData() {
 
 	const res = await fetch(
 		// "https://data-api.nftgo.io/eth/v1/market/rank/top-mints/24h?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=5",
-		getTopMint("24h", "mint_num", false, false, 0, 5),
+		getTopMint("24h", "mint_num", false, false, 5, 5),
 		options
 	);
 	// console.log(getTopMint("24h", "mint_num", false, false, 0, 5));
@@ -57,7 +57,7 @@ async function getTopMintData() {
 	return res.json();
 }
 
-const TopMint1 = async () => {
+const TopMint3 = async () => {
 	const data = await getTopMintData();
 	// console.log(data);
 
@@ -70,7 +70,7 @@ const TopMint1 = async () => {
 				key={"TopMint1"}
 			>
 				<h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-					{"Top 1-5"}
+					{"Top 6-10"}
 				</h2>
 
 				<div className="flex flex-col space-y-5">
@@ -80,7 +80,7 @@ const TopMint1 = async () => {
 						console.log(item);
 						return (
 							// @ts-expect-error Server Component 
-							<TopMintItem key={index} index={index} data={item} />
+							<TopMintItem key={index} index={index + 5} data={item} />
 						)
 					})}
 				</div>
@@ -94,4 +94,4 @@ const TopMint1 = async () => {
 	);
 };
 
-export default TopMint1;
+export default TopMint3;

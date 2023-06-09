@@ -29,54 +29,54 @@ type TopMintItemProps = {
 
 type SingleNftRecord = {
 	contract: {
-	  address: string,
-	  name: string,
-	  symbol: string,
-	  totalSupply: string,
-	  tokenType: string,
-	  contractDeployer: string,
-	  deployedBlockNumber: number,
-	  openSeaMetadata: {
-		floorPrice: number,
-		collectionName: string,
-		safelistRequestStatus: string,
-		imageUrl: string,
-		description: string,
-		externalUrl: string,
-		twitterUsername: string,
-		discordUrl: string,
-		lastIngestedAt: string
-	  },
-	  isSpam: null | boolean,
-	  spamClassifications: any[]
+		address: string,
+		name: string,
+		symbol: string,
+		totalSupply: string,
+		tokenType: string,
+		contractDeployer: string,
+		deployedBlockNumber: number,
+		openSeaMetadata: {
+			floorPrice: number,
+			collectionName: string,
+			safelistRequestStatus: string,
+			imageUrl: string,
+			description: string,
+			externalUrl: string,
+			twitterUsername: string,
+			discordUrl: string,
+			lastIngestedAt: string
+		},
+		isSpam: null | boolean,
+		spamClassifications: any[]
 	},
 	tokenId: string,
 	tokenType: string,
 	name: string,
 	description: null | string,
 	image: {
-	  cachedUrl: string,
-	  thumbnailUrl: string,
-	  pngUrl: string,
-	  contentType: string,
-	  size: number,
-	  originalUrl: string
+		cachedUrl: string,
+		thumbnailUrl: string,
+		pngUrl: string,
+		contentType: string,
+		size: number,
+		originalUrl: string
 	},
 	raw: {
-	  tokenUri: string,
-	  metadata: {
-		name: string,
-		image: string,
-		attributes: {
-		  value: string,
-		  trait_type: string
-		}[]
-	  },
-	  error: any | null
+		tokenUri: string,
+		metadata: {
+			name: string,
+			image: string,
+			attributes: {
+				value: string,
+				trait_type: string
+			}[]
+		},
+		error: any | null
 	},
 	tokenUri: string,
 	timeLastUpdated: string
-  }
+}
 
 async function getFirstCollectionImage(contract_address: string) {
 	const options: RequestInit = {
@@ -109,18 +109,17 @@ async function getFirstCollectionImage(contract_address: string) {
 	return res.json();
 }
 
-const TopMintItem = async (props: {index:number, data:TopMintCollectionRecord}) => {
-	const {index, data} = props;
+const TopMintItem = async (props: { index: number, data: TopMintCollectionRecord }) => {
+	const { index, data } = props;
 	// console.log('Hi there3');
 	// console.log(index);
-
-	const {collection_name, contract_address, blockchain, mint_num, minter_num, first_mint_time, fomo, mint_volume} = data;
+	const { collection_name, contract_address, blockchain, mint_num, minter_num, first_mint_time, fomo, mint_volume } = data;
 	const dataCollection = await getFirstCollectionImage(contract_address);
 	// console.log(data[index]);
 	const { image } = dataCollection.nfts[0];
 	const icon = false; // TODO: Turn off all verification checkmark icon for now
 	// const image = `https://www.gravatar.com/avatar/${contract_address}`;  // TODO: change to collection pfp
-
+	const linkPath = `/collection/${blockchain === 'ETH' ? 'eth-mainnet' : blockchain}/${contract_address}`
 	return (
 		<>
 			{/* <!-- Top Mint Item --> */}
@@ -129,13 +128,13 @@ const TopMintItem = async (props: {index:number, data:TopMintCollectionRecord}) 
 				className="border-jacarta-100 dark:bg-jacarta-700 rounded-2xl flex border bg-white py-4 px-7 transition-shadow hover:shadow-lg dark:border-transparent"
 			>
 				<figure className="mr-4 shrink-0">
-					<Link href={`/collection/${contract_address}`} className="relative block">
-						<Image 
-							src={image.thumbnailUrl} 
-							alt={collection_name} 
+					<Link href={linkPath} className="relative block">
+						<Image
+							src={image.thumbnailUrl}
+							alt={collection_name || 'NFTimage'}
 							width="48"
 							height="48"
-							className="rounded-2lg h-12 w-12" 
+							className="rounded-2lg h-12 w-12"
 						/>
 						<div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
 							{/*  // Index of current item */}
@@ -161,7 +160,7 @@ const TopMintItem = async (props: {index:number, data:TopMintCollectionRecord}) 
 					</Link>
 				</figure>
 				<div>
-					<Link href={`/collection/${contract_address}`} className="block">
+					<Link href={linkPath} className="block">
 						<span className="font-display text-jacarta-700 hover:text-accent font-semibold dark:text-white">
 							{collection_name}
 						</span>

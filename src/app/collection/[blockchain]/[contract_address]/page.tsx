@@ -54,23 +54,46 @@ const Collection = ({ params }: params) => {
         detailsText: 'Volume Traded'
       }])
     } catch (error) {
-      setDetails([{
-        id: '1',
-        detailsNumber: 'No items',
-        detailsText: 'Items'
-      }, {
-        id: '2',
-        detailsNumber: 'No holders',
-        detailsText: 'Owners'
-      }, {
-        id: '3',
-        detailsNumber: '0',
-        detailsText: 'Floor Price'
-      }, {
-        id: '4',
-        detailsNumber: '0',
-        detailsText: 'Volume Traded'
-      }])
+      try {
+        const data = await getCollectionData(contractAddress);
+        setDetails([{
+          id: '1',
+          detailsNumber: data?.items_total ? formatNumber(+data.items_total) : 'No items',
+          detailsText: 'Items'
+        }, {
+          id: '2',
+          detailsNumber: data?.owners_total ? formatNumber(+data.owners_total) : 'No holders',
+          detailsText: 'Owners'
+        }, {
+          id: '3',
+          detailsNumber: data.floor_price ? data.floor_price.toFixed(2) : '0',
+          detailsText: 'Floor Price'
+        }, {
+          id: '4',
+          // ! this needs to be changed to volume traded, for now it's just the floor price * owners
+          detailsNumber: data.floor_price ? formatNumber(+data.floor_price * +data.owners_total) : '0',
+          detailsText: 'Volume Traded'
+        }])
+      } catch (error) {
+        setDetails([{
+          id: '1',
+          detailsNumber: 'No items',
+          detailsText: 'Items'
+        }, {
+          id: '2',
+          detailsNumber: 'No holders',
+          detailsText: 'Owners'
+        }, {
+          id: '3',
+          detailsNumber: '0',
+          detailsText: 'Floor Price'
+        }, {
+          id: '4',
+          detailsNumber: '0',
+          detailsText: 'Volume Traded'
+        }])
+
+      }
     }
   }
 
@@ -91,7 +114,7 @@ const Collection = ({ params }: params) => {
   }, [])
 
   function formatNumber(number: number): string {
-    if (number < 100) return number.toString();
+    if (number < 100) return number.toFixed(0)
     if (number < 1000) return (number / 1000).toFixed(1) + 'K'
     return (number / 1000).toFixed(0) + 'K'
   }

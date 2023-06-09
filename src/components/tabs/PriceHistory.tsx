@@ -58,7 +58,7 @@ const PriceHistory: React.FC<Props> = ({ classes }) => {
                 ],
                 datasets: [
                   {
-                    type: "line",
+                    type: "bar", //supposed to be 'line'? but throws error
                     label: "Avg. price",
                     backgroundColor: "#10B981",
                     borderColor: "#10B981",

@@ -1,6 +1,9 @@
+
 import Image from 'next/legacy/image';
 import TopMint from './top-mint';
 import TopMint2 from './top-mint2';
+import TopMintBDogs from './top-mint_BadDogs';
+import TopMint3 from './top-mint3';
 
 interface CollectionCategoryProps {
 	bgWhite: boolean
@@ -27,9 +30,9 @@ const CollectionCategory = ({ bgWhite }: CollectionCategoryProps) => {
 						{/* @ts-expect-error Server Component */}
 						<TopMint2 />
 						{/* @ts-expect-error Server Component */}
-						<TopMint />
+						<TopMintBDogs />
 						{/* @ts-expect-error Server Component */}
-						<TopMint />
+						<TopMint3 />
 					</div>
 				</div>
 			</section>

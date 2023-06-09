@@ -15,7 +15,14 @@ import {
 
     ],
     callbacks: {
-     session:authSession
+      async session({ session,user, token }) {
+        console.log("calling back");
+        console.log(session);
+        console.log(user);
+        const sessionWithAddress = authSession({ session, token });
+        // Make sure to return the session with the address
+        return sessionWithAddress;
+      }
     }
   };
   const handler= NextAuth(authOptions);

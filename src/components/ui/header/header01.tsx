@@ -442,12 +442,6 @@ export default function Header01() {
     setCollapse(id);
   };
 
-
-  // filter and autocomplete for the search bar
-
-
-  // filter and autocomplete for the search bar end***
-
   return (
     <>
       {/* main desktop menu sart*/}
@@ -1000,7 +994,7 @@ export default function Header01() {
           {searchBarOpen && (
             <div className="fixed w-full left-0 top-0 bg-black bg-opacity-50 h-full">
               <div className="">
-                <SearchBar02 handleCloseSearchBar={handleCloseSearchBar}/>
+                <SearchBar02 handleCloseSearchBar={handleCloseSearchBar} />
                 {/* end mobile search bar inputs */}
               </div>
             </div>

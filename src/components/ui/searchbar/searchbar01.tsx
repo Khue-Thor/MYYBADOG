@@ -1,14 +1,76 @@
 "use client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+const SearchBar01 = () => {
 
-const SearchBar = ({ enteredWord, handleFilter, collectionsData, onSearch, clearInput}) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter()
 
- 
+  const onSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const encodedSearchQueary = encodeURI(searchQuery);
+    router.push(`/search?q=${encodedSearchQueary}`)
+    console.log("current query", encodedSearchQueary);
+  }
+
+  const [filteredData, setFilteredData] = useState([]);
+  const [enteredWord, setEnteredWord] = useState([]);
+  const [collectionsData, setCollectionsData] = useState([]);
+
+  useEffect(() => {
+    getCollections();
+  }, []);
+
+  async function getCollections() {
+    // Fetch collections data and update state
+    try {
+      const options: RequestInit = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        },
+        next: {
+          revalidate: 86400, // 24 hrs in sec 
+        }
+      };
+
+      const res = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`, options);
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await res.json();
+      setFilteredData(data.contracts);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleFilter = (e) => {
+    const searchWord = e.target.value;
+    setEnteredWord(searchWord);
+    const newFilter = filteredData.filter((value) => {
+      return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+    });
+    if (searchWord === "") {
+      setCollectionsData([])
+    } else {
+      setCollectionsData(newFilter);
+    }
+  };
+
+  const clearInput = () => {
+    setCollectionsData([]);
+    setEnteredWord([]);
+  };
+
   return (
     <form
       action="search"
       className="relative hidden ml-3 basis-3/12 lg:block xl:ml-[8%]"
-      onSubmit={onSearch}
+
     >
       <input
         type="search"
@@ -26,13 +88,13 @@ const SearchBar = ({ enteredWord, handleFilter, collectionsData, onSearch, clear
             return (
               <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                 <div className="flex gap-3 items-top">
-                  <img src={value.openSeaMetadata.imageUrl} alt="collection image" className="rounded-lg w-9 h-9" />
+                  <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
                   <div className="flex flex-col">
                     <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
-                    <span className='font-medium text-xs text-gray-700'>{value} items</span>
+                    <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
                   </div>
                 </div>
-                <span className="font-medium text-sm text-gray-700">{value} ETH</span>
+                <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
               </div>
             );
           })}
@@ -76,4 +138,4 @@ const SearchBar = ({ enteredWord, handleFilter, collectionsData, onSearch, clear
   )
 }
 
-export default SearchBar
+export default SearchBar01

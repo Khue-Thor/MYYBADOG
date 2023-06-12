@@ -70,14 +70,13 @@ const TopMint1 = async () => {
 				key={"TopMint1"}
 			>
 				<h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-					{"Top 1-5"}
+					{"Top Minted"}
 				</h2>
 
 				<div className="flex flex-col space-y-5">
 					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
 						{/* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */ }
 						// console.log(index);
-						console.log(item);
 						return (
 							// @ts-expect-error Server Component 
 							<TopMintItem key={index} index={index} data={item} />

@@ -117,7 +117,7 @@ const TopMintItem = async (props: {index:number, data:TopMintCollectionRecord}) 
 	const {collection_name, contract_address, blockchain, mint_num, minter_num, first_mint_time, fomo, mint_volume} = data;
 	const dataCollection = await getFirstCollectionImage(contract_address);
 	// console.log(data[index]);
-	const { image } = dataCollection.nfts[0];
+	const { image } = dataCollection.nfts[0] || {};
 	const icon = false; // TODO: Turn off all verification checkmark icon for now
 	// const image = `https://www.gravatar.com/avatar/${contract_address}`;  // TODO: change to collection pfp
 
@@ -131,7 +131,7 @@ const TopMintItem = async (props: {index:number, data:TopMintCollectionRecord}) 
 				<figure className="mr-4 shrink-0">
 					<Link href={`/collection/${contract_address}`} className="relative block">
 						<Image 
-							src={image.thumbnailUrl} 
+							src={image?.thumbnailUrl || "/public/images/404.png"} 
 							alt={collection_name} 
 							width="48"
 							height="48"

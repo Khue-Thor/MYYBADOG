@@ -25,6 +25,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/shadcn/sheet";
+import SearchBar01 from "../searchbar/searchbar01";
+import SearchBar02 from "../searchbar/searchbar02";
 import ChatUI from "@/components/chat/chatui";
 
 import { items_offer_data } from "@/data/items_tabs_data";
@@ -36,17 +38,6 @@ export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
   const [searchBarOpen, setSearchBarOpen] = useState(false)
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter()
-
-  const onSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const encodedSearchQueary = encodeURI(searchQuery);
-    router.push(`/search?q=${encodedSearchQueary}`)
-    console.log("current query", encodedSearchQueary);
-  }
 
   const handleOpenSearchBar = () => {
     setSearchBarOpen(true);
@@ -527,7 +518,8 @@ export default function Header01() {
           </Link>
           {/* End  logo */}
 
-          <form
+          <SearchBar01 />
+          {/* <form
             action="search"
             className="relative hidden ml-3 basis-3/12 lg:block xl:ml-[8%]"
             onSubmit={onSearch}
@@ -541,7 +533,7 @@ export default function Header01() {
             />
 
 
-            {collectionsData.length !== 0 && (
+            {enteredWord.length >= 3 && collectionsData.length !== 0 && (
               <div className="croll dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 pb-[20px] w-full rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
                 <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
                 {collectionsData.slice(0, 5).map((value) => {
@@ -594,7 +586,7 @@ export default function Header01() {
                 </svg>
               </span>
             )}
-          </form>
+          </form> */}
           {/* End Desktop search form */}
 
           <div className="js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-10 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:flex lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent">
@@ -1066,60 +1058,7 @@ export default function Header01() {
           {searchBarOpen && (
             <div className="fixed w-full left-0 top-0 bg-black bg-opacity-50 h-full">
               <div className="">
-                <form action="search" className="relative h-full w-full lg:hidden">
-                  <input className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]" type="search" placeholder="Search" onChange={handleFilter}
-                    value={enteredWord} />
-                  {collectionsData.length !== 0 && (
-                    <div className="scroll dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
-                      <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
-                      {collectionsData.slice(0, 5).map((value) => {
-                        return (
-                          <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
-                            <div className="flex gap-3 items-top">
-                              <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
-                              <div className="flex flex-col">
-                                <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
-                                <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
-                              </div>
-                            </div>
-                            <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
-                          </div>
-                        );
-                      })}
-                      <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
-                    </div>
-                  )}
-                  {enteredWord.length == 0 ? (
-                    <span></span>
-                  ) : (
-                    <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        width={26}
-                        height={26}
-                        className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
-
-                      >
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-                      </svg>
-                    </span>
-                  )}
-
-                  <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer" onClick={handleCloseSearchBar}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width={24}
-                      height={24}
-                      className="fill-jacarta-500 h-10 w-10 dark:fill-gray-700 transform rotate-180"
-                    >
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
-                    </svg>
-                  </span>
-                </form>
+                <SearchBar02 handleCloseSearchBar={handleCloseSearchBar} />
                 {/* end mobile search bar inputs */}
               </div>
             </div>

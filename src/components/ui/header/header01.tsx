@@ -468,7 +468,7 @@ export default function Header01() {
 
       // TODO: Need to refresh with the proper query
       const query = "bad";
-      console.log(`enteredWord ${enteredWord}`);
+      // console.log(`enteredWord ${enteredWord}`);
 
       // const res = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`, options);
       const res = await fetch(`/api/search/collection/${query}`, options);

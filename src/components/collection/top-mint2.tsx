@@ -61,40 +61,32 @@ const TopMint1 = async () => {
   const data = await getTopMintData();
   // console.log(data);
 
-  return (
-    <>
-      {/* <!-- Today's Top Mint --> */}
-      <div
-        className="dark:bg-jacarta-800 bg-light-base rounded-2.5xl p-12 lg:w-1/3"
-        // key={parentId}
-        key={"TopMint1"}
-      >
-        <h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-          {"Top 1-5"}
-        </h2>
+	return (
+		<>
+			{/* <!-- Today's Top Mint --> */}
+			<div
+				className="dark:bg-jacarta-800 bg-light-base rounded-2.5xl p-12 lg:w-1/3"
+				// key={parentId}
+				key={"TopMint1"}
+			>
+				<h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
+					{"Top Minted"}
+				</h2>
 
-        <div className="flex flex-col space-y-5">
-          {data.top_mint_collection_items.map(
-            (item: TopMintCollectionRecord, index: number) => {
-              {
-                /* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */
-              }
-              // console.log(index);
-              // console.log(item);
-              return (
-                // @ts-expect-error Server Component
-                <TopMintItem key={index} index={index} data={item} />
-              );
-            }
-          )}
-        </div>
-        <Link
-          href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688"
-          className="text-accent mt-8 block text-center text-sm font-bold tracking-tight"
-        >
-          View All Drops
-        </Link>
-      </div>
+				<div className="flex flex-col space-y-5">
+					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
+						{/* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */ }
+						// console.log(index);
+						return (
+							// @ts-expect-error Server Component 
+							<TopMintItem key={index} index={index} data={item} />
+						)
+					})}
+				</div>
+				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
+					View All Drops
+				</Link>
+			</div>
 
       {/* <!-- end today's top mint --> */}
     </>

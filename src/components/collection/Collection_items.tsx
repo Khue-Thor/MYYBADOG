@@ -1,14 +1,16 @@
+'use client'
+
 import React, { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { trendingCategoryData } from "../../data/categories_data";
 import Activity_item from "./Activity_item";
 import Image from "next/legacy/image";
 import FilterCategoryItem from "../categories/filterCategoryItem";
 
+
 const Collection_items = () => {
   const [itemsTabs, setItemsTabs] = useState(1);
-  const [categoryItemData, setCategoryItemData] =
-    useState(trendingCategoryData);
+  // const [categoryItemData, setCategoryItemData] =
+  //   useState(trendingCategoryData);
 
   const collectionItemsTabs = [
     {

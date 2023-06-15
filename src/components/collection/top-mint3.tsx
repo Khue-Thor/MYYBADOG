@@ -2,6 +2,7 @@
 import { getTopMint } from '@/utils/urlGetter';
 import Link from 'next/link';
 import TopMintItem from './top-mint-item';
+import { getRanking, rankingData } from '@/api/nftscan';
 
 type MintVolumeType = {
 	quantity: number,
@@ -25,36 +26,12 @@ interface TopMintCollectionRecord {
 }
 
 async function getTopMintData() {
-	const options: RequestInit = {
-		method: "GET",
-		headers: new Headers({
-			accept: "application/json",
-			"X-API-KEY": process.env.NFT_GO_API_KEY as string,
-		}),
-		next: {
-			revalidate: 3600,
-		},
-	};
-
-	const res = await fetch(
-		// "https://data-api.nftgo.io/eth/v1/market/rank/top-mints/24h?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=5",
-		getTopMint("24h", "mint_num", false, false, 5, 5),
-		options
-	);
-	// console.log(getTopMint("24h", "mint_num", false, false, 0, 5));
-	// .then(response => response.json())
-	// .then(response => console.log(response))
-	// .catch(err => console.error(err));
-
-	// console.log(res);
-
-	// TODO: Handle the error
-	if (Number(res.status) != 200) {
-		// This will activate the closest 'error.js' Error Boundary
-		throw new Error("Failed to fetch data");
+	try {
+		const data = await getRanking('volume')
+		return data;
+	} catch (error) {
+		return null
 	}
-
-	return res.json();
 }
 
 const TopMint3 = async () => {
@@ -70,18 +47,65 @@ const TopMint3 = async () => {
 				key={"TopMint1"}
 			>
 				<h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-					{"Top 6-10"}
+					{"Top Volume"}
 				</h2>
 
 				<div className="flex flex-col space-y-5">
-					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
-						{/* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */ }
-						// console.log(index);
-						console.log(item);
+					{data && data.slice(0, 5).map((item: rankingData, index: number) => {
+						// const { id, image, title, icon, amount, postTime } = item;
+						const icon = false; // TODO: Turn off all verification checkmark icon for now
+						const image = item.logo_url || '../../../public/images/404.png';  // TODO: change to collection pfp3
+						const blockchain = 'eth-mainnet'
+						// const id="1"; // Counter for rank
+						// const itemLink = image
+						// 	.split('/')
+						// 	.slice(-1)
+						// 	.toString()
+						// 	.replace('.jpg', '')
+						// 	.replace('.gif', '');
+
 						return (
-							// @ts-expect-error Server Component 
-							<TopMintItem key={index} index={index + 5} data={item} />
-						)
+							<div
+								key={index}
+								className="border-jacarta-100 dark:bg-jacarta-700 rounded-2xl flex border bg-white py-4 px-7 transition-shadow hover:shadow-lg dark:border-transparent"
+							>
+								<figure className="mr-4 shrink-0">
+									<Link href={`/collection/${blockchain}/${item.contract_address}`} className="relative block">
+										<img src={image} alt={item.contract_name} className="rounded-2lg h-12 w-12" />
+										<div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
+											{/*  // Index of current item */}
+											{index + 1}
+										</div>
+										{icon && (
+											<div
+												className="dark:border-jacarta-600 bg-green absolute -left-3 top-[60%] flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
+												data-tippy-content="Verified Collection"
+											>
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													viewBox="0 0 24 24"
+													width="24"
+													height="24"
+													className="h-[.875rem] w-[.875rem] fill-white"
+												>
+													<path fill="none" d="M0 0h24v24H0z"></path>
+													<path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+												</svg>
+											</div>
+										)}
+									</Link>
+								</figure>
+								<div>
+									<Link href={`/collection/${blockchain}/${item.contract_address}`} className="block">
+										<span className="font-display text-jacarta-700 hover:text-accent font-semibold dark:text-white">
+											{item.contract_name}
+										</span>
+									</Link>
+									{/* <span className="dark:text-jacarta-300 text-sm">{Math.round(mint_num * mint_volume.value)} {mint_volume.crypto_unit}</span> */}
+									<span className="dark:text-jacarta-300 text-sm">{item.volume.toFixed(2)} ETH</span>
+								</div>
+							</div>
+						);
 					})}
 				</div>
 				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">

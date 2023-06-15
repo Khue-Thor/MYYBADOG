@@ -1,14 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef } from "react";
-import { useIntersection } from "@mantine/hooks";
+import React from "react";
 import Link from "next/link";
-import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import Likes from "../likes";
 import Auctions_dropdown from "../dropdown/Auctions_dropdown";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { buyModalShow } from "../../redux/counterSlice";
-import { RootState } from '@/redux/store';
 
 type Item = {
   id: number;
@@ -45,6 +42,7 @@ const OneCategoryItem = ({ item }: { item: Item | null }) => {
   } = item;
   return (
     <div>
+
       <div className="">
         <article key={id}>
           <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
@@ -69,28 +67,28 @@ const OneCategoryItem = ({ item }: { item: Item | null }) => {
 
                     <Tippy content={<span>creator: {creator}</span>}>
                       <img
-                        src={creator}
-                        alt="creator"
+                      src={creator}
+                      alt="creator"
                         className="dark:border-jacarta-600 hover:border-accent dark:hover:border-accent h-6 w-6 rounded-full border-2 border-white"
-                      />
-                    </Tippy>
-
-                  </Link>
-                  <Link href={`/${blockchain}/${contractAddress}/${id}`}>
-
-                    <Tippy content={<span>creator: {owner.name}</span>}>
-                      {
-                        <img
-                          src={owner.image}
-                          alt="owner"
-                          // layout="fill"
-                          className="dark:border-jacarta-600 hover:border-accent dark:hover:border-accent h-6 w-6 rounded-full border-2 border-white"
                         />
-                      }
                     </Tippy>
-
-                  </Link>
-                </div> */}
+                    
+                    </Link>
+                    <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                    
+                    <Tippy content={<span>creator: {owner.name}</span>}>
+                    {
+                      <img
+                      src={owner.image}
+                      alt="owner"
+                      // layout="fill"
+                      className="dark:border-jacarta-600 hover:border-accent dark:hover:border-accent h-6 w-6 rounded-full border-2 border-white"
+                      />
+                    }
+                    </Tippy>
+                    
+                    </Link>
+                  </div> */}
               </div>
             </figure>
             <div className="mt-7 flex items-center justify-between">
@@ -141,7 +139,7 @@ const OneCategoryItem = ({ item }: { item: Item | null }) => {
       >
         Load More
       </button> */}
-    </div>
+    </div >
   );
 };
 

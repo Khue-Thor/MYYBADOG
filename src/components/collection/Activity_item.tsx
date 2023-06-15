@@ -1,9 +1,9 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-// import { collection_activity_item_data } from '../../data/collection_data';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { NFTMetaData, NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
+import { NFTSale } from '@/api/alchemy';
+import { CollectionActivitySkeleton } from '../collection-activity-skeleton';
 
 type Item = {
 	tokenId: string,
@@ -28,6 +28,7 @@ const emptyItem = {
 const Activity_item = () => {
 	const params = usePathname();
 	const [data, setData] = useState<Item[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 	// const [inputText, setInputText] = useState('');
 	const [filterVal, setFilterVal] = useState<number | null>(null);
 	function onlyUnique(value: any, index: number, self: any) {
@@ -45,9 +46,10 @@ const Activity_item = () => {
 	}, [])
 
 	const fetchDataAndSetFilters = async () => {
-		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 5 });
-
-		const promise = data.map(async (item) => await formatData(item));
+		setIsLoading(true);
+		const request = await fetch(`/api/collection/activity_item/nftsales/${blockchain}/${contract_address}`)
+		const data = await request.json();
+		const promise = data.map(async (item: NFTSale) => await formatData(item));
 		const formattedData = await Promise.all(promise);
 		setData(formattedData);
 		const filters = formattedData.map((item) => {
@@ -56,11 +58,13 @@ const Activity_item = () => {
 		});
 		const filteredFilters = filters.filter(onlyUnique);
 		setfilterData(filteredFilters)
+		setIsLoading(false)
 	}
 
 	const formatData = async (data: NFTSale): Promise<Item> => {
 		try {
-			const nftMetadata = await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId });
+			const request = await fetch(`/api/collection/activity_item/getonenftforcontract/${blockchain}/${contract_address}/${data.tokenId}`)
+			const nftMetadata = await request.json();
 			return {
 				tokenId: data.tokenId,
 				image: nftMetadata[0].image.cachedUrl || '',
@@ -93,6 +97,11 @@ const Activity_item = () => {
 	// 	setData(newArray);
 	// 	setInputText('');
 	// };
+	if (isLoading) {
+		return (
+			<CollectionActivitySkeleton />
+		);
+	}
 
 	return <>
 		{/* <!-- Activity Tab --> */}

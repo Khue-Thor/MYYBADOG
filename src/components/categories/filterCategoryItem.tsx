@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
 import { usePathname } from "next/navigation";
-import Collection_category_filter from "../collection/collection_category_filter";
 import CategoryItem from "./categoryItem";
 import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
-import { format } from "path";
+import { CollectionItemSkeleton } from '../CollectionItemSkeleton';
 
 type Item = {
   id: number;
@@ -42,7 +41,18 @@ const initialItem = {
   blockchain: "",
 };
 
+const options: RequestInit = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+  },
+  next: {
+    revalidate: 86400, // 24 hrs in sec 
+  }
+}
+
 const FilterCategoryItem = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const params = usePathname();
   const dispatch = useDispatch();
   const { startToken, limit } = useSelector<RootState, RootState["counter"]>(
@@ -78,46 +88,30 @@ const FilterCategoryItem = () => {
   });
 
   const fetchOneItem = async (token: number) => {
-    const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    };
     try {
-      const response = await fetch(
-        `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${token}&limit=${token}`,
-        options
-      );
-      const data = await response.json();
-      return formatItem(data.nfts[0]);
+      const response = await fetch(`/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`, options)
+      console.log('response', response);
+
+      const item = await response.json();
+
+      return formatItem(item);
     } catch (error) {
+      console.log(error);
       return null;
     }
   };
 
   const fetchTrendingCategoryData = async () => {
-    const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    };
+    if (startToken === 1) {
+      setIsLoading(true);
+    }
+    const data = await fetch(`/api/collection/items/fetch32/${blockchain}/${contract_address}/${startToken}/${limit}`, options)
 
-    const response = await fetch(
-      `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`,
-      options
-    );
-    const data = await response.json();
-    const list = data.nfts || [];
-
+    const list = await data.json();
     const formattedList = list?.map((item: any) => formatItem(item));
-    // if (startToken === 1) {
-    // 	dispatch(incrementStartToken(+list[0].tokenId))
-    // }
+
     dispatch(updateTrendingCategoryItemData(formattedList));
+    if (isLoading) setIsLoading(false);
   };
 
   useEffect(() => {
@@ -140,6 +134,7 @@ const FilterCategoryItem = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
+
       {/* <!-- Filter --> */}
       {/* <Collection_category_filter /> */}
       <input
@@ -154,13 +149,19 @@ const FilterCategoryItem = () => {
         className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
       ></button>
       <div className="flex flex-col justify-center items-center">
-        {searchInput.length > 0 ? (
-          <OneCategoryItem item={searchResult} />
+
+        {isLoading ? (
+          // Loading skeleton
+          <CollectionItemSkeleton />
         ) : (
-          <CategoryItem />
+          searchInput.length > 0 ? (
+            <OneCategoryItem item={searchResult} />
+          ) : (
+            <CategoryItem />
+          )
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -1,6 +1,5 @@
-'use client'
 
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 import Auctions_dropdown from '@/components/dropdown/Auctions_dropdown';
 import Social_dropdown from '@/components/dropdown/Social_dropdown';
 import Collection_items from '@/components/collection/Collection_items';
@@ -8,7 +7,8 @@ import Image from 'next/legacy/image';
 import Link from 'next/link';
 import Meta from '@/components/wallet-btn/Meta';
 import { getColectionMetrics } from '@/api/nftgo';
-import { Data, getCollectionData } from '@/api/nftscan';
+import { getCollectionData } from '@/api/nftscan';
+import formatNumber from '@/utils/formatNumber';
 
 interface DetailItem {
   id: string;
@@ -24,11 +24,12 @@ interface params {
   }
 }
 
-const Collection = ({ params }: params) => {
-  const [likesImage, setLikesImage] = useState(false);
+const Collection = async ({ params }: params) => {
+  // const [likesImage, setLikesImage] = useState(false);
+  const likesImage = false;
   // const [collectionItemData, setCollectionItemData] = useState<NFTMetaData[]>([]);
-  const [details, setDetails] = useState<DetailItem[]>([]);
-  const [profile, setProfile] = useState<Data>();
+  // const [details, setDetails] = useState<DetailItem[]>([]);
+  // const [profile, setProfile] = useState<Data>();
   const contractAddress = params.contract_address;
   // const id = params.id;
   // const blockchain = params.blockchain;
@@ -36,7 +37,7 @@ const Collection = ({ params }: params) => {
   const fetchCollectionData = async () => {
     try {
       const data = await getColectionMetrics(contractAddress);
-      setDetails([{
+      return [{
         id: '1',
         detailsNumber: data?.total_supply ? formatNumber(+data.total_supply) : 'No items',
         detailsText: 'Items'
@@ -46,17 +47,17 @@ const Collection = ({ params }: params) => {
         detailsText: 'Owners'
       }, {
         id: '3',
-        detailsNumber: data.floor_price?.value ? data.floor_price.value.toFixed(2) : '0',
+        detailsNumber: data.floor_price?.value ? data.floor_price.value.toFixed(2) + ' ETH' : '0',
         detailsText: 'Floor Price'
       }, {
         id: '4',
-        detailsNumber: data.volume_eth?.all ? formatNumber(+data.volume_eth.all) : '0',
+        detailsNumber: data.volume_eth?.all ? formatNumber(+data.volume_eth.all) + ' ETH' : '0',
         detailsText: 'Volume Traded'
-      }])
+      }]
     } catch (error) {
       try {
         const data = await getCollectionData(contractAddress);
-        setDetails([{
+        return [{
           id: '1',
           detailsNumber: data?.items_total ? formatNumber(+data.items_total) : 'No items',
           detailsText: 'Items'
@@ -66,16 +67,16 @@ const Collection = ({ params }: params) => {
           detailsText: 'Owners'
         }, {
           id: '3',
-          detailsNumber: data.floor_price ? data.floor_price.toFixed(2) : '0',
+          detailsNumber: data.floor_price ? data.floor_price.toFixed(2) + ' ETH' : '0',
           detailsText: 'Floor Price'
         }, {
           id: '4',
           // ! this needs to be changed to volume traded, for now it's just the floor price * owners
-          detailsNumber: data.floor_price ? formatNumber(+data.floor_price * +data.owners_total) : '0',
+          detailsNumber: data.floor_price ? formatNumber(+data.floor_price * +data.owners_total) + ' ETH' : '0',
           detailsText: 'Volume Traded'
-        }])
+        }]
       } catch (error) {
-        setDetails([{
+        return [{
           id: '1',
           detailsNumber: 'No items',
           detailsText: 'Items'
@@ -91,41 +92,37 @@ const Collection = ({ params }: params) => {
           id: '4',
           detailsNumber: '0',
           detailsText: 'Volume Traded'
-        }])
-
+        }]
       }
     }
   }
-
   // const fetchCollectionItems = async () => {
   //   const items = await getOneNFTForContract({ blockchain, contractAddress, startToken: +id });
   //   setCollectionItemData(items);
   // }
 
-  const fetchBannerAndProfile = async () => {
+  const fetchBannerAndProfile = async (contractAddress: string) => {
     const data = await getCollectionData(contractAddress);
-    setProfile(data);
+    // setProfile(data);
+    return data
   }
 
-  useEffect(() => {
-    // fetchCollectionItems();
-    fetchCollectionData();
-    fetchBannerAndProfile()
-  }, [])
+  const profile = await fetchBannerAndProfile(contractAddress)
+  const details = await fetchCollectionData()
 
-  function formatNumber(number: number): string {
-    if (number < 100) return number.toFixed(0)
-    if (number < 1000) return (number / 1000).toFixed(1) + 'K'
-    return (number / 1000).toFixed(0) + 'K'
-  }
+  // useEffect(() => {
+  //   // fetchCollectionItems();
+  //   fetchCollectionData();
+  //   fetchBannerAndProfile()
+  // }, [])
 
-  const handleLikes = () => {
-    if (!likesImage) {
-      setLikesImage(true);
-    } else {
-      setLikesImage(false);
-    }
-  };
+  // const handleLikes = () => {
+  //   if (!likesImage) {
+  //     setLikesImage(true);
+  //   } else {
+  //     setLikesImage(false);
+  //   }
+  // };
   const icon = true
 
   return <>
@@ -223,7 +220,7 @@ const Collection = ({ params }: params) => {
                   {/* <Likes data={} /> */}
                   <div
                     className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                    onClick={() => handleLikes()}
+                  // onClick={() => handleLikes()}
                   >
                     <button>
                       {likesImage ? (

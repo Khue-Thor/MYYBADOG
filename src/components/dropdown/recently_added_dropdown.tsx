@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Tippy from '@tippyjs/react';
 import {
 	updatetrendingCategorySorText,
 	updateTrendingCategoryItemByInput,
@@ -11,6 +10,7 @@ import {
 	updateRenkingDataByPostdate,
 } from '../../redux/counterSlice';
 import TypeItem from '@/interfaces/TypeItem';
+import Tippy from '../Tippy';
 
 const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
 	const dispatch = useDispatch();

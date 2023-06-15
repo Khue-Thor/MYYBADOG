@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
 import { usePathname } from "next/navigation";
-import Collection_category_filter from "../collection/collection_category_filter";
 import CategoryItem from "./categoryItem";
 import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
-import { format } from "path";
+import { CollectionItemSkeleton } from '../CollectionItemSkeleton';
 
 type Item = {
   id: number;
@@ -43,6 +42,7 @@ const initialItem = {
 };
 
 const FilterCategoryItem = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const params = usePathname();
   const dispatch = useDispatch();
   const { startToken, limit } = useSelector<RootState, RootState["counter"]>(
@@ -78,26 +78,45 @@ const FilterCategoryItem = () => {
   });
 
   const fetchOneItem = async (token: number) => {
-    const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    };
+    // const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
+    // const options = {
+    //   method: "GET",
+    //   headers: {
+    //     accept: "application/json",
+    //   },
+    // };
     try {
-      const response = await fetch(
-        `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${token}&limit=${token}`,
-        options
-      );
-      const data = await response.json();
-      return formatItem(data.nfts[0]);
+      //   const response = await fetch(
+      //     `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${token}&limit=${token}`,
+      //     options
+      //   );
+      //   const data = await response.json();
+      const options: RequestInit = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        },
+        next: {
+          revalidate: 86400, // 24 hrs in sec 
+        }
+      };
+      const response = await fetch(`/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`, options)
+      console.log('response', response);
+
+      const item = await response.json();
+      console.log('item', item);
+
+      return formatItem(item);
     } catch (error) {
+      console.log(error);
       return null;
     }
   };
 
   const fetchTrendingCategoryData = async () => {
+    if (startToken === 1) {
+      setIsLoading(true);
+    }
     const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
     const options = {
       method: "GET",
@@ -114,10 +133,9 @@ const FilterCategoryItem = () => {
     const list = data.nfts || [];
 
     const formattedList = list?.map((item: any) => formatItem(item));
-    // if (startToken === 1) {
-    // 	dispatch(incrementStartToken(+list[0].tokenId))
-    // }
+
     dispatch(updateTrendingCategoryItemData(formattedList));
+    if (isLoading) setIsLoading(false);
   };
 
   useEffect(() => {
@@ -140,6 +158,7 @@ const FilterCategoryItem = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
+
       {/* <!-- Filter --> */}
       {/* <Collection_category_filter /> */}
       <input
@@ -154,13 +173,19 @@ const FilterCategoryItem = () => {
         className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
       ></button>
       <div className="flex flex-col justify-center items-center">
-        {searchInput.length > 0 ? (
-          <OneCategoryItem item={searchResult} />
+
+        {isLoading ? (
+          // Loading skeleton
+          <CollectionItemSkeleton />
         ) : (
-          <CategoryItem />
+          searchInput.length > 0 ? (
+            <OneCategoryItem item={searchResult} />
+          ) : (
+            <CategoryItem />
+          )
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

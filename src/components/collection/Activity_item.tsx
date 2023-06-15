@@ -1,9 +1,8 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-// import { collection_activity_item_data } from '../../data/collection_data';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { NFTMetaData, NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
+import { NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
 
 type Item = {
 	tokenId: string,

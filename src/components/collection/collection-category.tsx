@@ -4,6 +4,7 @@ import TopMint from './top-mint';
 import TopMint2 from './top-mint2';
 import TopMintBDogs from './top-mint_BadDogs';
 import TopMint3 from './top-mint3';
+import { Skeleton } from '../skeleton/skeleton';
 
 interface CollectionCategoryProps {
 	bgWhite: boolean

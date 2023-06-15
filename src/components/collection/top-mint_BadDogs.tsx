@@ -30,7 +30,7 @@ async function getTopMintData() {
 		const res = await getColectionNfts(badDogsContract, 0, 5)
 		return res
 	} catch (error) {
-
+		console.log(error);
 	}
 }
 

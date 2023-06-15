@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
-import { data } from 'autoprefixer';
+import { NFTSale } from '@/api/alchemy';
+import { CollectionActivitySkeleton } from '../collection-activity-skeleton';
 
 type Item = {
 	tokenId: string,
@@ -28,6 +28,7 @@ const emptyItem = {
 const Activity_item = () => {
 	const params = usePathname();
 	const [data, setData] = useState<Item[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
 	// const [inputText, setInputText] = useState('');
 	const [filterVal, setFilterVal] = useState<number | null>(null);
 	function onlyUnique(value: any, index: number, self: any) {
@@ -45,6 +46,7 @@ const Activity_item = () => {
 	}, [])
 
 	const fetchDataAndSetFilters = async () => {
+		setIsLoading(true);
 		const request = await fetch(`/api/collection/activity_item/nftsales/${blockchain}/${contract_address}`)
 		const data = await request.json();
 		const promise = data.map(async (item: NFTSale) => await formatData(item));
@@ -56,6 +58,7 @@ const Activity_item = () => {
 		});
 		const filteredFilters = filters.filter(onlyUnique);
 		setfilterData(filteredFilters)
+		setIsLoading(false)
 	}
 
 	const formatData = async (data: NFTSale): Promise<Item> => {
@@ -94,6 +97,11 @@ const Activity_item = () => {
 	// 	setData(newArray);
 	// 	setInputText('');
 	// };
+	if (isLoading) {
+		return (
+			<CollectionActivitySkeleton />
+		);
+	}
 
 	return <>
 		{/* <!-- Activity Tab --> */}

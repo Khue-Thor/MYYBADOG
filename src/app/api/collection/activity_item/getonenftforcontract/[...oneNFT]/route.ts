@@ -1,4 +1,4 @@
-import { getNFTSales, getOneNFTForContract } from '@/api/alchemy';
+import { getOneNFTForContract } from '@/api/alchemy';
 import { NextResponse } from 'next/server';
 
 export async function GET(

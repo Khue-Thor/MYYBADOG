@@ -38,6 +38,7 @@ export default async function NFTItemPage({ params }: Props) {
       contractAddress: contract_address,
       tokenId: id,
     }),
+    await new Promise((resolve) => setTimeout(resolve, 3000)),
   ]);
   const data: NFTMetaData & { likes: number; auctionTimer: number } = {
     ...nftMetadata,

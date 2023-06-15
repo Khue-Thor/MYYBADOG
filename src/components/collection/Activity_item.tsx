@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { NFTSale, getNFTSales, getOneNFTForContract } from '@/api/alchemy';
+import { data } from 'autoprefixer';
 
 type Item = {
 	tokenId: string,
@@ -44,9 +45,9 @@ const Activity_item = () => {
 	}, [])
 
 	const fetchDataAndSetFilters = async () => {
-		const data = await getNFTSales({ blockchain, contractAddress: contract_address, limit: 5 });
-
-		const promise = data.map(async (item) => await formatData(item));
+		const request = await fetch(`/api/collection/activity_item/nftsales/${blockchain}/${contract_address}`)
+		const data = await request.json();
+		const promise = data.map(async (item: NFTSale) => await formatData(item));
 		const formattedData = await Promise.all(promise);
 		setData(formattedData);
 		const filters = formattedData.map((item) => {
@@ -59,7 +60,8 @@ const Activity_item = () => {
 
 	const formatData = async (data: NFTSale): Promise<Item> => {
 		try {
-			const nftMetadata = await getOneNFTForContract({ blockchain, contractAddress: contract_address, startToken: +data.tokenId });
+			const request = await fetch(`/api/collection/activity_item/getonenftforcontract/${blockchain}/${contract_address}/${data.tokenId}`)
+			const nftMetadata = await request.json();
 			return {
 				tokenId: data.tokenId,
 				image: nftMetadata[0].image.cachedUrl || '',

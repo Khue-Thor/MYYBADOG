@@ -105,14 +105,6 @@ const FilterCategoryItem = () => {
     if (startToken === 1) {
       setIsLoading(true);
     }
-    // const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-
-    // const response = await fetch(
-    //   `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`,
-    //   options
-    // );
-    // const data = await response.json();
-    // const list = data.nfts || [];
     const data = await fetch(`/api/collection/items/fetch32/${blockchain}/${contract_address}/${startToken}/${limit}`, options)
 
     const list = await data.json();

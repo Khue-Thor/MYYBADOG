@@ -8,6 +8,7 @@ import Link from 'next/link';
 import Meta from '@/components/wallet-btn/Meta';
 import { getColectionMetrics } from '@/api/nftgo';
 import { getCollectionData } from '@/api/nftscan';
+import formatNumber from '@/utils/formatNumber';
 
 interface DetailItem {
   id: string;
@@ -46,11 +47,11 @@ const Collection = async ({ params }: params) => {
         detailsText: 'Owners'
       }, {
         id: '3',
-        detailsNumber: data.floor_price?.value ? data.floor_price.value.toFixed(2) : '0',
+        detailsNumber: data.floor_price?.value ? data.floor_price.value.toFixed(2) + ' ETH' : '0',
         detailsText: 'Floor Price'
       }, {
         id: '4',
-        detailsNumber: data.volume_eth?.all ? formatNumber(+data.volume_eth.all) : '0',
+        detailsNumber: data.volume_eth?.all ? formatNumber(+data.volume_eth.all) + ' ETH' : '0',
         detailsText: 'Volume Traded'
       }]
     } catch (error) {
@@ -66,12 +67,12 @@ const Collection = async ({ params }: params) => {
           detailsText: 'Owners'
         }, {
           id: '3',
-          detailsNumber: data.floor_price ? data.floor_price.toFixed(2) : '0',
+          detailsNumber: data.floor_price ? data.floor_price.toFixed(2) + ' ETH' : '0',
           detailsText: 'Floor Price'
         }, {
           id: '4',
           // ! this needs to be changed to volume traded, for now it's just the floor price * owners
-          detailsNumber: data.floor_price ? formatNumber(+data.floor_price * +data.owners_total) : '0',
+          detailsNumber: data.floor_price ? formatNumber(+data.floor_price * +data.owners_total) + ' ETH' : '0',
           detailsText: 'Volume Traded'
         }]
       } catch (error) {
@@ -114,12 +115,6 @@ const Collection = async ({ params }: params) => {
   //   fetchCollectionData();
   //   fetchBannerAndProfile()
   // }, [])
-
-  function formatNumber(number: number): string {
-    if (number < 100) return number.toFixed(0)
-    if (number < 1000) return (number / 1000).toFixed(1) + 'K'
-    return (number / 1000).toFixed(0) + 'K'
-  }
 
   // const handleLikes = () => {
   //   if (!likesImage) {

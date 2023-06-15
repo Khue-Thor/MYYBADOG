@@ -41,6 +41,16 @@ const initialItem = {
   blockchain: "",
 };
 
+const options: RequestInit = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+  },
+  next: {
+    revalidate: 86400, // 24 hrs in sec 
+  }
+}
+
 const FilterCategoryItem = () => {
   const [isLoading, setIsLoading] = useState(true);
   const params = usePathname();
@@ -78,33 +88,11 @@ const FilterCategoryItem = () => {
   });
 
   const fetchOneItem = async (token: number) => {
-    // const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-    // const options = {
-    //   method: "GET",
-    //   headers: {
-    //     accept: "application/json",
-    //   },
-    // };
     try {
-      //   const response = await fetch(
-      //     `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${token}&limit=${token}`,
-      //     options
-      //   );
-      //   const data = await response.json();
-      const options: RequestInit = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-        },
-        next: {
-          revalidate: 86400, // 24 hrs in sec 
-        }
-      };
       const response = await fetch(`/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`, options)
       console.log('response', response);
 
       const item = await response.json();
-      console.log('item', item);
 
       return formatItem(item);
     } catch (error) {
@@ -117,21 +105,17 @@ const FilterCategoryItem = () => {
     if (startToken === 1) {
       setIsLoading(true);
     }
-    const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-    const options = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    };
+    // const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
 
-    const response = await fetch(
-      `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`,
-      options
-    );
-    const data = await response.json();
-    const list = data.nfts || [];
+    // const response = await fetch(
+    //   `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`,
+    //   options
+    // );
+    // const data = await response.json();
+    // const list = data.nfts || [];
+    const data = await fetch(`/api/collection/items/fetch32/${blockchain}/${contract_address}/${startToken}/${limit}`, options)
 
+    const list = await data.json();
     const formattedList = list?.map((item: any) => formatItem(item));
 
     dispatch(updateTrendingCategoryItemData(formattedList));

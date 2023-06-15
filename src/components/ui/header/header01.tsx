@@ -13,55 +13,43 @@ import {
   isParentPageActive,
 } from "../../../utils/daynamicNavigation";
 import React, { useEffect, useState, useCallback } from "react";
+
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/shadcn/sheet";
-import ChatUI from "@/components/chat/chatui";
-import {
-  signIn,
   signOut,
   useSession,
-  getSession,
-  getCsrfToken,
 } from "next-auth/react";
 import {
   ConnectWallet,
   useAddress,
   useAuth,
-  useUser,
-  useLogin,
 } from "@thirdweb-dev/react";
-
+import AuthenticationButton from "./AuthenticationButton";
+import ProfileSheet from "./ProfileSheet"
 
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
-  const [searchBarOpen, setSearchBarOpen] = useState(false)
+  const [searchBarOpen, setSearchBarOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter()
+  const router = useRouter();
 
   const onSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
     const encodedSearchQueary = encodeURI(searchQuery);
-    router.push(`/search?q=${encodedSearchQueary}`)
+    router.push(`/search?q=${encodedSearchQueary}`);
     console.log("current query", encodedSearchQueary);
-  }
+  };
 
   const handleOpenSearchBar = () => {
     setSearchBarOpen(true);
-  }
+  };
 
   const handleCloseSearchBar = () => {
     setSearchBarOpen(false);
-  }
+  };
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -70,50 +58,11 @@ export default function Header01() {
       }
     });
   });
-  const authLogin = useLogin();
-  const { user, isLoggedIn, isLoading } = useUser();
+
   // const shortenedAddress = address.substring(0, 17).concat("...");
   const address = useAddress();
-  // const connect = useMetamask();
   const auth = useAuth();
   const { data: session } = useSession();
-
-  async function loginWithWallet() {
-    try {
-      // Prompt the user to sign a login with wallet message
-      const payload = await auth?.login();
-
-      // Then send the payload to next auth as login credentials
-      // using the "credentials" provider method
-      const data = await signIn("credentials", {
-        payload: JSON.stringify(payload),
-        redirect: false,
-      });
-      console.log("Signed in", session);
-    } catch (error) {
-      window.alert(error);
-    }
-  }
-  const getRaffle = async () => {
-    const id = 161;
-    try {
-      const res = await fetch("/api/raffles", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: id }),
-      });
-      if (!res.ok) {
-        // This will activate the closest `error.js` Error Boundary
-        throw new Error("Failed to fetch data");
-      }
-      const jsonRes = await res.json();
-      return jsonRes;
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   // window resize
   useEffect(() => {
@@ -503,7 +452,6 @@ export default function Header01() {
     setCollapse(id);
   };
 
-
   // filter and autocomplete for the search bar
 
   const [filteredData, setFilteredData] = useState([]);
@@ -518,19 +466,22 @@ export default function Header01() {
     // Fetch collections data and update state
     try {
       const options: RequestInit = {
-        method: 'GET',
+        method: "GET",
         headers: {
-          accept: 'application/json',
+          accept: "application/json",
         },
         next: {
-          revalidate: 86400, // 24 hrs in sec 
-        }
+          revalidate: 86400, // 24 hrs in sec
+        },
       };
 
-      const res = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`, options);
+      const res = await fetch(
+        `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`,
+        options
+      );
 
       if (!res.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error("Failed to fetch data");
       }
 
       const data = await res.json();
@@ -542,14 +493,16 @@ export default function Header01() {
 
   // console.log(filteredData)
 
-  const handleFilter = (e:any) => {
+  const handleFilter = (e: any) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
-    const newFilter = filteredData.filter((value:any) => {
-      return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+    const newFilter = filteredData.filter((value: any) => {
+      return value.openSeaMetadata.collectionName
+        .toLowerCase()
+        .includes(searchWord.toLowerCase());
     });
     if (searchWord === "") {
-      setCollectionsData([])
+      setCollectionsData([]);
     } else {
       setCollectionsData(newFilter);
     }
@@ -587,29 +540,43 @@ export default function Header01() {
               value={enteredWord}
             />
 
-
             {collectionsData.length !== 0 && (
               <div className="croll dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 pb-[20px] w-full rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
-                <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                <span className="font-bold text-sm text-gray-600 p-3">
+                  COLLECTIONS
+                </span>
                 {collectionsData.slice(0, 5).map((value) => {
                   return (
-                    <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                    <div
+                      key={value.address}
+                      className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer"
+                    >
                       <div className="flex gap-3 items-top">
-                        <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                        <img
+                          src={value.openSeaMetadata.imageUrl}
+                          alt="Image"
+                          className="rounded-lg w-9 h-9"
+                        />
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
-                          <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                          <span className="font-bold dark:text-white text-base w-[150px]">
+                            {value.openSeaMetadata.collectionName}
+                          </span>
+                          <span className="font-medium text-xs text-gray-700">
+                            {value.totalSupply} items
+                          </span>
                         </div>
                       </div>
-                      <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
+                      <span className="font-medium text-sm text-gray-700">
+                        {value.openSeaMetadata.floorPrice} ETH
+                      </span>
                     </div>
                   );
                 })}
-                <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+                <span className="font-bold text-sm text-gray-600 p-3">
+                  ACCOUNTS
+                </span>
               </div>
             )}
-
-
 
             <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
               <svg
@@ -627,14 +594,16 @@ export default function Header01() {
             {enteredWord.length == 0 ? (
               <span></span>
             ) : (
-              <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+              <span
+                className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
+                onClick={clearInput}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                   width={26}
                   height={26}
                   className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
-
                 >
                   <path fill="none" d="M0 0h24v24H0z" />
                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
@@ -680,10 +649,11 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between "
                         >
                           <span
-                            className={`font-display ${isChildrenPageActive(page.path, pathname)
+                            className={`font-display ${
+                              isChildrenPageActive(page.path, pathname)
                                 ? "text-accent dark:text-accent"
                                 : "text-jacarta-700"
-                              } text-sm dark:text-white`}
+                            } text-sm dark:text-white`}
                           >
                             {page.name}
                           </span>
@@ -731,10 +701,11 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                         >
                           <span
-                            className={`font-display ${isChildrenPageActive(page.path, pathname)
-                              ? "!text-accent !dark:text-accent"
-                              : "text-jacarta-700 dark:text-white"
-                              } text-sm `}
+                            className={`font-display ${
+                              isChildrenPageActive(page.path, pathname)
+                                ? "!text-accent !dark:text-accent"
+                                : "text-jacarta-700 dark:text-white"
+                            } text-sm `}
                           >
                             {page.name}
                           </span>
@@ -863,146 +834,14 @@ export default function Header01() {
                   </Link>
                 </li>
                 <li className="group">
-                  <div>
-                    {session ? (
-                      <button onClick={() => signOut()}>Logout</button>
-                    ) : address ? (
-                      <button onClick={() => loginWithWallet()}>Login</button>
-                    ) : (
-                      <ConnectWallet />
-                    )}
-                    <pre>Connected Wallet: {address}</pre>
-                    <button onClick={() => getRaffle()}>getRaffle</button>
-                  </div>
+                    <AuthenticationButton/>
                 </li>
               </ul>
             </nav>
             {/* End menu for desktop */}
 
-            {address ? (
-              <div className="hidden items-center lg:flex xl:ml-12">
-                <p className="pt-2 pl-4 text-xs w-24 text-jacarta-900 inline dark:text-white font-bold">
-                  Next: <span>40 EXP</span>{" "}
-                  <progress className="pt-2" max="100" value="70"></progress>
-                </p>
-                {/* <WalletButton /> */}
-
-                {/* End metamask Wallet */}
-
-                <div className="js-nav-dropdown group-dropdown relative">
-                  <button className="dropdown-toggle border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width={24}
-                      height={24}
-                      className="fill-jacarta-700 h-4 w-4 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-                    >
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path d="M11 14.062V20h2v-5.938c3.946.492 7 3.858 7 7.938H4a8.001 8.001 0 0 1 7-7.938zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6z" />
-                    </svg>
-                  </button>
-                  <div className="dropdown-menu dark:bg-jacarta-800 group-dropdown-hover:opacity-100 group-dropdown-hover:visible !-right-4 !top-[85%] !left-auto z-10 min-w-[14rem] whitespace-nowrap rounded-xl bg-white transition-all will-change-transform before:absolute before:-top-3 before:h-3 before:w-full lg:absolute lg:grid lg:!translate-y-4 lg:py-4 lg:px-2 lg:shadow-2xl hidden lg:invisible lg:opacity-0">
-                    <div>
-                      <button className="js-copy-clipboard font-display text-jacarta-700 my-4 flex select-none items-center whitespace-nowrap px-5 leading-none dark:text-white">
-                        <span>{address}</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          width={24}
-                          height={24}
-                          className="dark:fill-jacarta-300 fill-jacarta-500 ml-auto mb-px h-4 w-4"
-                        >
-                          <path fill="none" d="M0 0h24v24H0z" />
-                          <path d="M7 7V3a1 1 0 0 1 1-1h13a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-4v3.993c0 .556-.449 1.007-1.007 1.007H3.007A1.006 1.006 0 0 1 2 20.993l.003-12.986C2.003 7.451 2.452 7 3.01 7H7zm2 0h6.993C16.549 7 17 7.449 17 8.007V15h3V4H9v3zM4.003 9L4 20h11V9H4.003z" />
-                        </svg>
-                      </button>
-                    </div>
-                    <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">
-                      <span className="dark:text-jacarta-200 text-sm font-medium tracking-tight">
-                        Balance
-                      </span>
-                      <div className="flex items-center">
-                        <svg className="icon icon-ETH -ml-1 mr-1 h-[1.125rem] w-[1.125rem]">
-                          <use xlinkHref="/icons.svg#icon-ETH" />
-                        </svg>
-                        <span className="text-green text-lg font-bold">
-                          10 ETH
-                        </span>
-                      </div>
-                      <div>
-                        <hr className="divider" />
-                      </div>
-                    </div>
-                    <Link
-                      href="/user/avatar_6"
-                      className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width={24}
-                        height={24}
-                        className="fill-jacarta-700 h-4 w-4 transition-colors dark:fill-white"
-                      >
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M11 14.062V20h2v-5.938c3.946.492 7 3.858 7 7.938H4a8.001 8.001 0 0 1 7-7.938zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6z" />
-                      </svg>
-                      <span className="font-display text-jacarta-700 mt-1 text-sm dark:text-white">
-                        My Profile
-                      </span>
-                    </Link>
-                    <Link
-                      href="/profile/user_avatar"
-                      className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width={24}
-                        height={24}
-                        className="fill-jacarta-700 h-4 w-4 transition-colors dark:fill-white"
-                      >
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M9.954 2.21a9.99 9.99 0 0 1 4.091-.002A3.993 3.993 0 0 0 16 5.07a3.993 3.993 0 0 0 3.457.261A9.99 9.99 0 0 1 21.5 8.876 3.993 3.993 0 0 0 20 12c0 1.264.586 2.391 1.502 3.124a10.043 10.043 0 0 1-2.046 3.543 3.993 3.993 0 0 0-3.456.261 3.993 3.993 0 0 0-1.954 2.86 9.99 9.99 0 0 1-4.091.004A3.993 3.993 0 0 0 8 18.927a3.993 3.993 0 0 0-3.457-.26A9.99 9.99 0 0 1 2.5 15.121 3.993 3.993 0 0 0 4 11.999a3.993 3.993 0 0 0-1.502-3.124 10.043 10.043 0 0 1 2.046-3.543A3.993 3.993 0 0 0 8 5.071a3.993 3.993 0 0 0 1.954-2.86zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                      </svg>
-                      <span className="font-display text-jacarta-700 mt-1 text-sm dark:text-white">
-                        Edit Profile
-                      </span>
-                    </Link>
-                    <button
-                      onClick={() => signOut()}
-                      className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width={24}
-                        height={24}
-                        className="fill-jacarta-700 h-4 w-4 transition-colors dark:fill-white"
-                      >
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zM7 11V8l-5 4 5 4v-3h8v-2H7z" />
-                      </svg>
-                      <span className="font-display text-jacarta-700 mt-1 text-sm dark:text-white">
-                        Sign out
-                      </span>
-                    </button>
-                  </div>
-                </div>
-                <DarkMode />
-              </div>
-            ) : address ? (
-              <button
-              // onClick={() =>
-              //   auth.signInWithPassword({
-              //     email: "example@email.com",
-              //     password: "example-password",
-              //   })
-              // }
-              >
-                <RiLoginBoxLine className="hover:opacity-70 text-2xl ml-2 h-full" />
-              </button>
+            {session ? (
+              <ProfileSheet/>
             ) : null}
             {/* End header right content (metamask and other) for desktop */}
           </div>
@@ -1015,7 +854,6 @@ export default function Header01() {
               aria-label="open mobile search bar"
               onClick={handleOpenSearchBar}
             >
-
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -1026,7 +864,6 @@ export default function Header01() {
                 <path fill="none" d="M0 0h24v24H0z" />
                 <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
               </svg>
-
             </button>
             <Link
               href="/profile/user_avatar"
@@ -1044,78 +881,6 @@ export default function Header01() {
                 <path d="M11 14.062V20h2v-5.938c3.946.492 7 3.858 7 7.938H4a8.001 8.001 0 0 1 7-7.938zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6z" />
               </svg>
             </Link>
-            <Sheet>
-              <SheetTrigger>
-                {" "}
-                <Image
-                  className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
-                  src="/images/bdco-skull-white-28x40.svg"
-                  height={12}
-                  width={12}
-                  alt="chaticon"
-                />
-              </SheetTrigger>
-              <SheetContent size={"full"} className="p-0">
-                <SheetHeader className=" fixed left-0 top-0 h-12 pt-1 w-full flex bg-accent">
-                  <button
-                    className="js-mobile-toggle p border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
-                    aria-label="open chats"
-                    onClick={() => setToggle(true)}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      width={24}
-                      height={24}
-                      className="fill-jacarta-700 h-4 w-4 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-                    >
-                      <path fill="none" d="M0 0h24v24H0z" />
-                      <path d="M18 18v2H6v-2h12zm3-7v2H3v-2h18zm-3-7v2H6V4h12z" />
-                    </svg>
-                  </button>
-                </SheetHeader>
-                <div className=" mt-12">
-                  <Sheet>
-                    <SheetTrigger
-                      asChild
-                      onClick={(e) => {
-                        e.defaultPrevented = false;
-                        console.log(e);
-                      }}
-                    >
-                      <div></div>
-                      {/* <div className="w-full bg-purple">Hello</div> */}
-                    </SheetTrigger>
-
-                    <SheetContent
-                      className="w-full bg-purple-base p-0"
-                      size={"full"}
-                    >
-                      <SheetHeader className="w-full bg-purple-100 py-3 flex-row">
-                        <button
-                          className="js-mobile-toggle p border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
-                          aria-label="open chats"
-                          onClick={() => setToggle(true)}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            width={24}
-                            height={24}
-                            className="fill-jacarta-700 h-4 w-4 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-                          >
-                            <path fill="none" d="M0 0h24v24H0z" />
-                            <path d="M18 18v2H6v-2h12zm3-7v2H3v-2h18zm-3-7v2H6V4h12z" />
-                          </svg>
-                        </button>
-                        <p className="pl-3">ETHLON HUSK</p>
-                      </SheetHeader>
-                      <ChatUI />
-                    </SheetContent>
-                  </Sheet>
-                </div>
-              </SheetContent>
-            </Sheet>
 
             <DarkMode />
             <button
@@ -1142,40 +907,67 @@ export default function Header01() {
           {searchBarOpen && (
             <div className="fixed w-full left-0 top-0 bg-black bg-opacity-50 h-full">
               <div className="">
-                <form action="search" className="relative h-full w-full lg:hidden">
-                  <input className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]" type="search" placeholder="Search" onChange={handleFilter}
-                    value={enteredWord} />
+                <form
+                  action="search"
+                  className="relative h-full w-full lg:hidden"
+                >
+                  <input
+                    className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]"
+                    type="search"
+                    placeholder="Search"
+                    onChange={handleFilter}
+                    value={enteredWord}
+                  />
                   {collectionsData.length !== 0 && (
                     <div className="scroll dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
-                      <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+                      <span className="font-bold text-sm text-gray-600 p-3">
+                        COLLECTIONS
+                      </span>
                       {collectionsData.slice(0, 5).map((value) => {
                         return (
-                          <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                          <div
+                            key={value.address}
+                            className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer"
+                          >
                             <div className="flex gap-3 items-top">
-                              <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                              <img
+                                src={value.openSeaMetadata.imageUrl}
+                                alt="Image"
+                                className="rounded-lg w-9 h-9"
+                              />
                               <div className="flex flex-col">
-                                <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
-                                <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                                <span className="font-bold dark:text-white md:text-base text-sm">
+                                  {value.openSeaMetadata.collectionName}
+                                </span>
+                                <span className="font-medium text-xs text-gray-700">
+                                  {value.totalSupply} items
+                                </span>
                               </div>
                             </div>
-                            <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
+                            <span className="font-medium sm:text-sm text-gray-700 text-xs">
+                              {value.openSeaMetadata.floorPrice} ETH
+                            </span>
                           </div>
                         );
                       })}
-                      <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+                      <span className="font-bold text-sm text-gray-600 p-3">
+                        ACCOUNTS
+                      </span>
                     </div>
                   )}
                   {enteredWord.length == 0 ? (
                     <span></span>
                   ) : (
-                    <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+                    <span
+                      className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
+                      onClick={clearInput}
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 20 20"
                         width={26}
                         height={26}
                         className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
-
                       >
                         <path fill="none" d="M0 0h24v24H0z" />
                         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
@@ -1183,7 +975,10 @@ export default function Header01() {
                     </span>
                   )}
 
-                  <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer" onClick={handleCloseSearchBar}>
+                  <span
+                    className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl cursor-pointer"
+                    onClick={handleCloseSearchBar}
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 24 24"
@@ -1202,14 +997,14 @@ export default function Header01() {
           )}
         </div>
         {/* End flex item */}
-
       </header>
       {/* main desktop menu end */}
 
       {/* start mobile menu and it's other materials  */}
       <div
-        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${toggle ? "nav-menu--is-open" : "hidden"
-          }`}
+        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${
+          toggle ? "nav-menu--is-open" : "hidden"
+        }`}
       >
         <div className="t-0 dark:bg-jacarta-800 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 lg:hidden">
           <div className="dark:hidden">
@@ -1342,8 +1137,9 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === home.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === home.id ? "block" : "hidden"
+                }`}
               >
                 {home?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -1352,10 +1148,11 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                     >
                       <span
-                        className={`font-display ${isChildrenPageActive(pathname, page.path)
-                          ? "text-accent dark:text-accent"
-                          : "text-jacarta-700"
-                          } text-sm dark:text-white`}
+                        className={`font-display ${
+                          isChildrenPageActive(pathname, page.path)
+                            ? "text-accent dark:text-accent"
+                            : "text-jacarta-700"
+                        } text-sm dark:text-white`}
                       >
                         {page.name}
                       </span>
@@ -1397,8 +1194,9 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === page.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === page.id ? "block" : "hidden"
+                }`}
               >
                 {page?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -1453,8 +1251,9 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === explore.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === explore.id ? "block" : "hidden"
+                }`}
                 aria-labelledby="navDropdown-1"
               >
                 {explore?.pages?.map((page) => (
@@ -1503,8 +1302,9 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === resource.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === resource.id ? "block" : "hidden"
+                }`}
                 aria-labelledby="navDropdown-4"
               >
                 {resource?.pages?.map((page) => (
@@ -1514,10 +1314,11 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                     >
                       <span
-                        className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, pathname)
-                          ? "text-accent dark:text-accent"
-                          : ""
-                          }`}
+                        className={`font-display text-jacarta-700 text-sm dark:text-white ${
+                          isChildrenPageActive(page.path, pathname)
+                            ? "text-accent dark:text-accent"
+                            : ""
+                        }`}
                       >
                         {page.name}
                       </span>

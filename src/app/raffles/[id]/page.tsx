@@ -28,7 +28,7 @@ export default async function Page() {
   const supaData: raffles | null = await prisma.raffles.findUnique({
     where: { id: 2 },
   });
-  console.log("data:", supaData);
+  // console.log("data:", supaData);
   // const supaData: any = await getData(raffleId);
   if (supaData) {
     const {

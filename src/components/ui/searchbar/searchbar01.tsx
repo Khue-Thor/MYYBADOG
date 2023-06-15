@@ -18,10 +18,6 @@ const SearchBar01 = () => {
   const [enteredWord, setEnteredWord] = useState([]);
   const [collectionsData, setCollectionsData] = useState([]);
 
-  useEffect(() => {
-    getCollections();
-  }, []);
-
   async function getCollections() {
     // Fetch collections data and update state
     try {
@@ -36,8 +32,8 @@ const SearchBar01 = () => {
       };
 
       // TODO: Need to refresh with the proper query
-      const query = "bad";
-      // console.log(`enteredWord ${enteredWord}`);
+      const query = enteredWord;
+      // console.log(`${enteredWord}`);
 
       // const res = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`, options);
       const res = await fetch(`/api/search/collection/${query}`, options);
@@ -51,15 +47,30 @@ const SearchBar01 = () => {
       setFilteredData(data.contracts);
     } catch (error) {
       console.error(error);
+      setFilteredData([]);
     }
   }
+
+  useEffect(() => {
+    if (enteredWord.length >= 1) {
+      getCollections();
+    }
+  }, [enteredWord]);
+
+
+
 
   const handleFilter = (e) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
     const newFilter = filteredData.filter((value) => {
-      return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+      // Check if collectionName is not null before applying toLowerCase()
+      if (value.openSeaMetadata.collectionName !== null) {
+        return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+      }
+      return false; // Skip the current value if collectionName is null
     });
+
     if (searchWord === "") {
       setCollectionsData([])
     } else {

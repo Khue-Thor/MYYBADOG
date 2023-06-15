@@ -88,7 +88,7 @@ const SearchBar01 = () => {
 
 
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
-        <div className="overflow-scroll dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full h-[420px] pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+        <div className="overflow-scroll dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value) => {
             return (

@@ -63,8 +63,7 @@ export default function Header01() {
       }
     });
   });
-
-  const route = useRouter();
+  
   const pathname = usePathname();
   /* -------------------------------------------------------------------------- */
   /*                            daynamic navigations                            */

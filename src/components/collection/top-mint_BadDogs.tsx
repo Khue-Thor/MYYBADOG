@@ -98,7 +98,7 @@ const TopMintBDogs = async () => {
 								<div>
 									<Link href={`/collection/${blockchain}/${item.contract_address}`} className="block">
 										<span className="font-display text-jacarta-700 hover:text-accent font-semibold dark:text-white">
-											{item.collection_name}
+											BDC{item.name}
 										</span>
 									</Link>
 									{/* <span className="dark:text-jacarta-300 text-sm">{Math.round(mint_num * mint_volume.value)} {mint_volume.crypto_unit}</span> */}

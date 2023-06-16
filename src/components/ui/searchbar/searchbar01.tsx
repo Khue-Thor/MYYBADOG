@@ -60,10 +60,10 @@ const SearchBar01 = () => {
 
 
 
-  const handleFilter = (e) => {
+  const handleFilter = (e: any) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
-    const newFilter = filteredData.filter((value) => {
+    const newFilter = filteredData.filter((value: any) => {
       // Check if collectionName is not null before applying toLowerCase()
       if (value.openSeaMetadata.collectionName !== null) {
         return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
@@ -101,7 +101,7 @@ const SearchBar01 = () => {
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
         <div className="overflow-scroll dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
-          {collectionsData.slice(0, 5).map((value) => {
+          {collectionsData.slice(0, 5).map((value: any) => {
             return (
               <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                 <div className="flex gap-3 items-top">

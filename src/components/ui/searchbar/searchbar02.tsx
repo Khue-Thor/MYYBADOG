@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-const SearchBar02 = ({ handleCloseSearchBar }) => {
+const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const router = useRouter()
@@ -57,12 +57,12 @@ const SearchBar02 = ({ handleCloseSearchBar }) => {
     }
   }, [enteredWord]);
 
-  
+
   // filter and autocomplete for the search bar
-  const handleFilter = (e) => {
+  const handleFilter = (e: any) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
-    const newFilter = filteredData.filter((value) => {
+    const newFilter = filteredData.filter((value: any) => {
       // Check if collectionName is not null before applying toLowerCase()
       if (value.openSeaMetadata.collectionName !== null) {
         return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
@@ -89,7 +89,7 @@ const SearchBar02 = ({ handleCloseSearchBar }) => {
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
         <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
-          {collectionsData.slice(0, 5).map((value) => {
+          {collectionsData.slice(0, 5).map((value: any) => {
             return (
               <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                 <div className="flex gap-3 items-top">

@@ -31,7 +31,7 @@ async function getTopMintData() {
 		}),
 		next: {
 			revalidate: 3600,
-		},
+		}
 	};
 
 	const res = await fetch(
@@ -93,7 +93,7 @@ const TopMint = async () => {
 										<img src={image} alt={collection_name} className="rounded-2lg h-12 w-12" />
 										<div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
 											{/*  // Index of current item */}
-											{index + 1} 
+											{index + 1}
 										</div>
 										{icon && (
 											<div
@@ -126,7 +126,7 @@ const TopMint = async () => {
 						);
 					})}
 				</div>
-				<Link href="/collection/avatar_1" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
+				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
 					View All Drops
 				</Link>
 			</div>

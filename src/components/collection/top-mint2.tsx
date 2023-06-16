@@ -57,7 +57,7 @@ async function getTopMintData() {
 	return res.json();
 }
 
-const TopMint2 = async () => {
+const TopMint1 = async () => {
 	const data = await getTopMintData();
 	// console.log(data);
 
@@ -70,19 +70,20 @@ const TopMint2 = async () => {
 				key={"TopMint1"}
 			>
 				<h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-					{"Top Mint2"}
+					{"Top Minted"}
 				</h2>
 
 				<div className="flex flex-col space-y-5">
 					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
+						{/* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */ }
 						// console.log(index);
 						return (
-							// @ts-expect-error Server Component
+							// @ts-expect-error Server Component 
 							<TopMintItem key={index} index={index} data={item} />
 						)
 					})}
 				</div>
-				<Link href="/collection/avatar_1" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
+				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
 					View All Drops
 				</Link>
 			</div>
@@ -92,4 +93,4 @@ const TopMint2 = async () => {
 	);
 };
 
-export default TopMint2;
+export default TopMint1;

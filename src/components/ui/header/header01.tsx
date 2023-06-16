@@ -182,7 +182,7 @@ export default function Header01() {
       {
         id: uuidv4(),
         name: "Collection",
-        path: "/collection/avatar_1",
+        path: "/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688",
       },
       {
         id: uuidv4(),
@@ -492,8 +492,8 @@ export default function Header01() {
                         >
                           <span
                             className={`font-display ${isChildrenPageActive(page.path, pathname)
-                              ? "text-accent dark:text-accent"
-                              : "text-jacarta-700"
+                                ? "text-accent dark:text-accent"
+                                : "text-jacarta-700"
                               } text-sm dark:text-white`}
                           >
                             {page.name}

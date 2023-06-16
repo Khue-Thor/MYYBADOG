@@ -1,7 +1,7 @@
 import React from "react";
 import { HeadLine } from "@/components/component";
 // import Browse_category_carousel from "../carousel/Browse_category_carousel";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 interface BrowseCategoryProps {
   bgWhite?: boolean;

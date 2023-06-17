@@ -1,18 +1,19 @@
 "use client"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter()
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const router = useRouter()
 
-  const onSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const onSearch = (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    const encodedSearchQueary = encodeURI(searchQuery);
-    router.push(`/search?q=${encodedSearchQueary}`)
-    console.log("current query", encodedSearchQueary);
-  }
+  //   const encodedSearchQueary = encodeURI(searchQuery);
+  //   router.push(`/search?q=${encodedSearchQueary}`)
+  //   console.log("current query", encodedSearchQueary);
+  // }
 
   const [filteredData, setFilteredData] = useState([]);
   const [enteredWord, setEnteredWord] = useState([]);
@@ -60,20 +61,18 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
   // filter and autocomplete for the search bar
   const handleFilter = (e: any) => {
-    const searchWord = e.target.value;
+    const searchWord = e.target.value.toLowerCase(); // Convert search word to lowercase
     setEnteredWord(searchWord);
+
     const newFilter = filteredData.filter((value: any) => {
-      // Check if collectionName is not null before applying toLowerCase()
       if (value.openSeaMetadata.collectionName !== null) {
-        return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+        const collectionName = value.openSeaMetadata.collectionName.toLowerCase(); // Convert collection name to lowercase
+        return collectionName.includes(searchWord);
       }
-      return false; // Skip the current value if collectionName is null
+      return false;
     });
-    if (searchWord === "") {
-      setCollectionsData([])
-    } else {
-      setCollectionsData(newFilter);
-    }
+
+    setCollectionsData(newFilter); // Always set the filtered data, even if searchWord is empty
   };
   // filter and autocomplete for the search bar end***
 
@@ -91,16 +90,18 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
             return (
-              <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
-                <div className="flex gap-3 items-top">
-                  <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
-                  <div className="flex flex-col">
-                    <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
-                    <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+              <Link href={`/collection/eth-mainnet/${value.address}`} key={value.address} onClick={handleCloseSearchBar}>
+                <div className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                  <div className="flex gap-3 items-top">
+                    <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                    <div className="flex flex-col">
+                      <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
+                      <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                    </div>
                   </div>
+                  <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
                 </div>
-                <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
-              </div>
+              </Link>
             );
           })}
           <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>

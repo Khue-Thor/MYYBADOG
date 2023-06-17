@@ -1,22 +1,22 @@
 "use client"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const SearchBar01 = () => {
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter()
-
-  const onSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const encodedSearchQueary = encodeURI(searchQuery);
-    router.push(`/search?q=${encodedSearchQueary}`)
-    console.log("current query", encodedSearchQueary);
-  }
-
+  
   const [filteredData, setFilteredData] = useState([]);
   const [enteredWord, setEnteredWord] = useState([]);
   const [collectionsData, setCollectionsData] = useState([]);
+
+  // const router = useRouter()
+
+  // const onSearch = (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   const encodedSearchQueary = encodeURI(searchQuery);
+  //   router.push(`/search?q=${encodedSearchQueary}`)
+  //   console.log("current query", encodedSearchQueary);
+  // }
 
   async function getCollections() {
     // Fetch collections data and update state
@@ -52,10 +52,46 @@ const SearchBar01 = () => {
   }
 
   useEffect(() => {
-    if (enteredWord.length >= 1) {
+    if (enteredWord.length >= 2) {
       getCollections();
+    } else {
+      setCollectionsData([]);
     }
   }, [enteredWord]);
+
+  const handleFilter = (e: any) => {
+    const searchWord = e.target.value.toLowerCase(); // Convert search word to lowercase
+    setEnteredWord(searchWord);
+
+    const newFilter = filteredData.filter((value: any) => {
+      if (value.openSeaMetadata.collectionName !== null) {
+        const collectionName = value.openSeaMetadata.collectionName.toLowerCase(); // Convert collection name to lowercase
+        return collectionName.includes(searchWord);
+      }
+      return false;
+    });
+
+    setCollectionsData(newFilter);
+    setFilteredData(newFilter);
+  };
+
+  // const handleFilter = (e: any) => {
+  //   const searchWord = e.target.value;
+  //   setEnteredWord(searchWord);
+
+  //   const regex = new RegExp(searchWord, 'i'); // 'i' flag for case-insensitive search
+
+  //   const newFilter = filteredData.filter((value: any) => {
+  //     if (value.openSeaMetadata.collectionName !== null) {
+  //       const collectionName = value.openSeaMetadata.collectionName;
+  //       return regex.test(collectionName);
+  //     }
+  //     return false;
+  //   });
+
+  //   setCollectionsData(newFilter);
+  // };
+
 
 
 
@@ -77,21 +113,6 @@ const SearchBar01 = () => {
   //     setCollectionsData(newFilter);
   //   }
   // };
-
-  const handleFilter = (e: any) => {
-    const searchWord = e.target.value.toLowerCase(); // Convert search word to lowercase
-    setEnteredWord(searchWord);
-
-    const newFilter = filteredData.filter((value: any) => {
-      if (value.openSeaMetadata.collectionName !== null) {
-        const collectionName = value.openSeaMetadata.collectionName.toLowerCase(); // Convert collection name to lowercase
-        return collectionName.includes(searchWord);
-      }
-      return false;
-    });
-
-    setCollectionsData(newFilter); // Always set the filtered data, even if searchWord is empty
-  };
 
 
   const clearInput = () => {
@@ -119,7 +140,8 @@ const SearchBar01 = () => {
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
             return (
-              <div key={value.address} className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+              <Link href={`/collection/eth-mainnet/${value.address}`} key={value.address} onClick={clearInput}>
+              <div  className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                 <div className="flex gap-3 items-top">
                   <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
                   <div className="flex flex-col">
@@ -128,7 +150,7 @@ const SearchBar01 = () => {
                   </div>
                 </div>
                 <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
-              </div>
+              </div></Link>
             );
           })}
           <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>

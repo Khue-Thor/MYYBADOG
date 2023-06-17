@@ -85,7 +85,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
     <form action="search" className="relative h-full w-full lg:hidden">
       <input className="bg-white dark:bg-jacarta-800 w-full border-none text-black dark:text-white pr-10 pl-20 h-[60px]" type="search" placeholder="Search" onChange={handleFilter}
         value={enteredWord} />
-      {enteredWord.length >= 3 && collectionsData.length !== 0 && (
+      {enteredWord.length >= 3 && collectionsData.length !== 0 ? (
         <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
@@ -106,7 +106,11 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           })}
           <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
         </div>
-      )}
+      ) : enteredWord.length >= 3 ? (
+        <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
+          <p className="font-bold text-sm text-gray-600 p-3">No records</p>
+        </div>
+      ) : null}
       {enteredWord.length == 0 ? (
         <span></span>
       ) : (

@@ -18,6 +18,9 @@ export async function GET(
     headers: {
       accept: 'application/json',
     },
+    next: {
+      revalidate: 86400, // 24 hrs in sec
+    },
   };
   try {
     const response = await fetch(

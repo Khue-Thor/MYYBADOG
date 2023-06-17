@@ -7,6 +7,12 @@ import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
 import { CollectionItemSkeleton } from '../CollectionItemSkeleton';
 
+interface params {
+  params: {
+    contract_address: string;
+  }
+}
+
 type Item = {
   id: number;
   image: string;
@@ -51,9 +57,10 @@ const options: RequestInit = {
   }
 }
 
-const FilterCategoryItem = () => {
+const FilterCategoryItem = ({ params }: params) => {
   const [isLoading, setIsLoading] = useState(true);
-  const params = usePathname();
+  const { contract_address } = params;
+  const urlParams = usePathname();
   const dispatch = useDispatch();
   const { startToken, limit } = useSelector<RootState, RootState["counter"]>(
     (state) => state.counter
@@ -61,9 +68,9 @@ const FilterCategoryItem = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState<Item | null>(initialItem);
 
-  const id = params.split("/")[4];
-  const contract_address = params.split("/")[3].replace(`/${id}`, "");
-  const blockchain = params
+  const id = urlParams.split("/")[4];
+  // const contract_address = urlParams.split("/")[3].replace(`/${id}`, "");
+  const blockchain = urlParams
     .split("/")[2]
     .replace(`/${contract_address}/${id}`, "");
 

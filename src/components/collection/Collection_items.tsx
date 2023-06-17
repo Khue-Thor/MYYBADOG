@@ -6,9 +6,16 @@ import Activity_item from "./Activity_item";
 import Image from "next/legacy/image";
 import FilterCategoryItem from "../categories/filterCategoryItem";
 
+interface params {
+  params: {
+    contract_address: string;
+  }
+}
 
-const Collection_items = () => {
+
+const Collection_items = ({ params }: params) => {
   const [itemsTabs, setItemsTabs] = useState(1);
+  const { contract_address } = params;
   // const [categoryItemData, setCategoryItemData] =
   //   useState(trendingCategoryData);
 
@@ -68,7 +75,9 @@ const Collection_items = () => {
 
             <TabPanel>
               <div>
-                <FilterCategoryItem />
+                <FilterCategoryItem params={{
+                  contract_address
+                }} />
               </div>
             </TabPanel>
             <TabPanel>

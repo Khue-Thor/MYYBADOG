@@ -119,8 +119,6 @@ const SearchBar01 = () => {
         </div>
       )}
 
-
-
       <span className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl">
         <svg
           xmlns="http://www.w3.org/2000/svg"

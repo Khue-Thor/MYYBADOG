@@ -247,7 +247,9 @@ const Collection = async ({ params }: params) => {
 
       {/* <!-- end profile --> */}
     </div>
-    <Collection_items />
+    <Collection_items params={{
+      contract_address: contractAddress,
+    }} />
   </>;
 };
 

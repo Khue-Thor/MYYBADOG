@@ -131,9 +131,8 @@ const TopMintItem = async (props: {
   const { image } = dataCollection.nfts[0];
   const icon = false; // TODO: Turn off all verification checkmark icon for now
   // const image = `https://www.gravatar.com/avatar/${contract_address}`;  // TODO: change to collection pfp
-  const linkPath = `/collection/${
-    blockchain === "ETH" ? "eth-mainnet" : blockchain
-  }/${contract_address}`;
+  const linkPath = `/collection/${blockchain === "ETH" ? "eth-mainnet" : blockchain
+    }/${contract_address}`;
   return (
     <>
       {/* <!-- Top Mint Item --> */}
@@ -142,7 +141,7 @@ const TopMintItem = async (props: {
         className="border-jacarta-100 dark:bg-jacarta-700 rounded-2xl flex border bg-white py-4 px-7 transition-shadow hover:shadow-lg dark:border-transparent"
       >
         <figure className="mr-4 shrink-0">
-          <Link href={linkPath} className="relative block">
+          <Link href={linkPath} className="relative block" prefetch={false}>
             <Image
               src={image.thumbnailUrl || "/public/images/404.png"}
               alt={collection_name || "NFTimage"}
@@ -174,7 +173,7 @@ const TopMintItem = async (props: {
           </Link>
         </figure>
         <div>
-          <Link href={linkPath} className="block">
+          <Link href={linkPath} className="block" prefetch={false}>
             <span className="font-display text-jacarta-700 hover:text-accent font-semibold dark:text-white">
               {collection_name}
             </span>

@@ -83,7 +83,7 @@ const TopMint1 = async () => {
 						)
 					})}
 				</div>
-				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
+				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight" prefetch={false}>
 					View All Drops
 				</Link>
 			</div>

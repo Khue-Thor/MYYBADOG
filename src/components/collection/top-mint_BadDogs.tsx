@@ -70,7 +70,7 @@ const TopMintBDogs = async () => {
 								className="border-jacarta-100 dark:bg-jacarta-700 rounded-2xl flex border bg-white py-4 px-7 transition-shadow hover:shadow-lg dark:border-transparent"
 							>
 								<figure className="mr-4 shrink-0">
-									<Link href={`/${blockchain}/${item.contract_address}/${item.token_id}`} className="relative block">
+									<Link href={`/${blockchain}/${item.contract_address}/${item.token_id}`} className="relative block" prefetch={false}>
 										<img src={image} alt={item.collection_name} className="rounded-2lg h-12 w-12" />
 										<div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
 											{/*  // Index of current item */}
@@ -96,7 +96,7 @@ const TopMintBDogs = async () => {
 									</Link>
 								</figure>
 								<div>
-									<Link href={`/${blockchain}/${item.contract_address}/${item.token_id}`} className="block">
+									<Link href={`/${blockchain}/${item.contract_address}/${item.token_id}`} className="block" prefetch={false}>
 										<span className="font-display text-jacarta-700 hover:text-accent font-semibold dark:text-white">
 											Genesis BDC{item.name}
 										</span>
@@ -108,7 +108,7 @@ const TopMintBDogs = async () => {
 						);
 					})}
 				</div>
-				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight">
+				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight" prefetch={false}>
 					View All
 				</Link>
 			</div>

@@ -71,7 +71,7 @@ const TopMintBDogs = async () => {
 							>
 								<figure className="mr-4 shrink-0">
 									<Link href={`/${blockchain}/${item.contract_address}/${item.token_id}`} className="relative block">
-										<Image src={image} alt={item.collection_name} className="rounded-2lg h-12 w-12" />
+										<Image width={48} height={48} src={image} alt={item.collection_name} className="rounded-2lg h-12 w-12" />
 										<div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
 											{/*  // Index of current item */}
 											{index + 1}

@@ -93,7 +93,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           {collectionsData.slice(0, 5).map((value: any) => {
             return (
               <Link key={value.address} href={`/collection/eth-mainnet/${value.contractAddress}`}>
-                <a>
                   <div className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                     <div className="flex gap-3 items-top">
                       <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
@@ -104,7 +103,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                     </div>
                     <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
                   </div>
-                </a>
               </Link>
             );
           })}

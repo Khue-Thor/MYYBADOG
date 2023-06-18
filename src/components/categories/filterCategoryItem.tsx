@@ -97,7 +97,6 @@ const FilterCategoryItem = ({ params }: params) => {
   const fetchOneItem = async (token: number) => {
     try {
       const response = await fetch(`/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`, options)
-      console.log('response', response);
 
       const item = await response.json();
 
@@ -128,7 +127,6 @@ const FilterCategoryItem = ({ params }: params) => {
   //  this cleans up state on unmount to prevent errors when collection comes with null props
   useEffect(() => {
     return () => {
-      console.log('unmounting');
       if (startToken === 1) {
         dispatch(incrementStartToken(0))
       }

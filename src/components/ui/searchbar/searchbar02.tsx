@@ -92,7 +92,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
             return (
-              <Link key={value.address} href={`/collection/eth-mainnet/${value.contractAddress}`}>
+              <Link key={value.address} href={`/collection/eth-mainnet/${value.address}`}>
                 <div className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">
                     <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />

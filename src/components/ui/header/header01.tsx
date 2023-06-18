@@ -26,6 +26,7 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import SearchBar01 from "../searchbar/searchbar01";
+import SearchBar02 from "../searchbar/searchbar02";
 import ChatUI from "@/components/chat/chatui";
 
 import { items_offer_data } from "@/data/items_tabs_data";

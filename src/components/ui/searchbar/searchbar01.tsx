@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const SearchBar01 = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -57,9 +58,6 @@ const SearchBar01 = () => {
     }
   }, [enteredWord]);
 
-
-
-
   const handleFilter = (e: any) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
@@ -97,22 +95,24 @@ const SearchBar01 = () => {
         value={enteredWord}
       />
 
-
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
         <div className="overflow-scroll dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
+            console.log(value);
             return (
-              <div key={value.address} className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
-                <div className="flex gap-3 items-top">
-                  <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
-                  <div className="flex flex-col">
-                    <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
-                    <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+              <Link key={value.address} href={`/collection/eth-mainnet/${value.address}`}>
+                <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                  <div className="flex gap-3 items-top">
+                    <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                    <div className="flex flex-col">
+                      <span className="font-bold dark:text-white text-base w-[150px]">{value.openSeaMetadata.collectionName}</span>
+                      <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                    </div>
                   </div>
+                  <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
                 </div>
-                <span className="font-medium text-sm text-gray-700">{value.openSeaMetadata.floorPrice} ETH</span>
-              </div>
+              </Link>
             );
           })}
           <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>

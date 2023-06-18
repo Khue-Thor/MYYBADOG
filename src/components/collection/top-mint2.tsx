@@ -57,7 +57,7 @@ async function getTopMintData() {
   return res.json();
 }
 
-const TopMint2 = async () => {
+const TopMint1 = async () => {
   const data = await getTopMintData();
   // console.log(data);
 
@@ -70,7 +70,7 @@ const TopMint2 = async () => {
         key={"TopMint1"}
       >
         <h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-          {"Top Mint2"}
+          {"Top 1-5"}
         </h2>
 
         <div className="flex flex-col space-y-5">
@@ -89,7 +89,7 @@ const TopMint2 = async () => {
           )}
         </div>
         <Link
-          href="/collection/avatar_1"
+          href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688"
           className="text-accent mt-8 block text-center text-sm font-bold tracking-tight"
         >
           View All Drops
@@ -101,4 +101,4 @@ const TopMint2 = async () => {
   );
 };
 
-export default TopMint2;
+export default TopMint1;

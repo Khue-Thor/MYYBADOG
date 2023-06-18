@@ -1,5 +1,5 @@
 import React from "react";
-import { Bar } from "react-chartjs-2";
+// import { Bar } from "react-chartjs-2";
 
 type Props = {
   classes?: string;
@@ -46,71 +46,71 @@ const PriceHistory: React.FC<Props> = ({ classes }) => {
 
           {/* <!-- Chart --> */}
           <div className="chart-container relative h-80 w-full">
-            <Bar
-              data={{
-                labels: [
-                  "January",
-                  "February",
-                  "March",
-                  "April",
-                  "May",
-                  "June",
-                ],
-                datasets: [
-                  {
-                    type: "bar", //supposed to be 'line'? but throws error
-                    label: "Avg. price",
-                    backgroundColor: "#10B981",
-                    borderColor: "#10B981",
-                    data: [54.73, 64, 53, 96, 130, 100, 102.88],
-                  },
-                  {
-                    type: "bar",
-                    label: "Sales",
-                    backgroundColor: "#E7E8EC",
-                    data: [25, 20, 40, 130, 75, 48, 12],
-                  },
-                ],
-              }}
-              options={{
-                maintainAspectRatio: false,
-                responsive: true,
-                interaction: {
-                  intersect: false,
-                  mode: "index",
-                },
-                scales: {
-                  x: {
-                    grid: {
-                      display: false,
-                    },
-                  },
-                  y: {
-                    ticks: {
-                      stepSize: 50,
-                    },
-                  },
-                },
-                plugins: {
-                  legend: { display: false },
-                  decimation: {
-                    enabled: true,
-                  },
-                  tooltip: {
-                    usePointStyle: true,
-                    position: "nearest",
-                    backgroundColor: "#131740",
-                    titleAlign: "center",
-                    bodyAlign: "center",
-                    footerAlign: "center",
-                    padding: 12,
-                    displayColors: false,
-                    yAlign: "bottom",
-                  },
-                },
-                animation: false,
-              }}
-            />
+            {/*<Bar*/}
+            {/*  data={{*/}
+            {/*    labels: [*/}
+            {/*      "January",*/}
+            {/*      "February",*/}
+            {/*      "March",*/}
+            {/*      "April",*/}
+            {/*      "May",*/}
+            {/*      "June",*/}
+            {/*    ],*/}
+            {/*    datasets: [*/}
+            {/*      {*/}
+            {/*        type: "line",*/}
+            {/*        label: "Avg. price",*/}
+            {/*        backgroundColor: "#10B981",*/}
+            {/*        borderColor: "#10B981",*/}
+            {/*        data: [54.73, 64, 53, 96, 130, 100, 102.88],*/}
+            {/*      },*/}
+            {/*      {*/}
+            {/*        type: "bar",*/}
+            {/*        label: "Sales",*/}
+            {/*        backgroundColor: "#E7E8EC",*/}
+            {/*        data: [25, 20, 40, 130, 75, 48, 12],*/}
+            {/*      },*/}
+            {/*    ],*/}
+            {/*  }}*/}
+            {/*  options={{*/}
+            {/*    maintainAspectRatio: false,*/}
+            {/*    responsive: true,*/}
+            {/*    interaction: {*/}
+            {/*      intersect: false,*/}
+            {/*      mode: "index",*/}
+            {/*    },*/}
+            {/*    scales: {*/}
+            {/*      x: {*/}
+            {/*        grid: {*/}
+            {/*          display: false,*/}
+            {/*        },*/}
+            {/*      },*/}
+            {/*      y: {*/}
+            {/*        ticks: {*/}
+            {/*          stepSize: 50,*/}
+            {/*        },*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    plugins: {*/}
+            {/*      legend: { display: false },*/}
+            {/*      decimation: {*/}
+            {/*        enabled: true,*/}
+            {/*      },*/}
+            {/*      tooltip: {*/}
+            {/*        usePointStyle: true,*/}
+            {/*        position: "nearest",*/}
+            {/*        backgroundColor: "#131740",*/}
+            {/*        titleAlign: "center",*/}
+            {/*        bodyAlign: "center",*/}
+            {/*        footerAlign: "center",*/}
+            {/*        padding: 12,*/}
+            {/*        displayColors: false,*/}
+            {/*        yAlign: "bottom",*/}
+            {/*      },*/}
+            {/*    },*/}
+            {/*    animation: false,*/}
+            {/*  }}*/}
+            {/*/>*/}
           </div>
         </div>
       </div>

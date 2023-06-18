@@ -1,68 +1,167 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { incrementStartToken, updateTrendingCategoryItemData } from '../../redux/counterSlice';
-import { usePathname } from 'next/navigation';
-import Collection_category_filter from '../collection/collection_category_filter';
-import CategoryItem from './categoryItem';
-import { RootState } from '@/redux/store';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
+import { usePathname } from "next/navigation";
+import Collection_category_filter from "../collection/collection_category_filter";
+import CategoryItem from "./categoryItem";
+import { RootState } from "@/redux/store";
+import OneCategoryItem from "./oneCategoryItem";
+import { format } from "path";
+
+type Item = {
+  id: number;
+  image: string;
+  title: string;
+  price: string;
+  bidLimit: string;
+  bidCount: string;
+  likes: string;
+  creator: string;
+  owner: {
+    name: string;
+    image: string;
+  };
+  contractAddress: string;
+  blockchain: string;
+};
+
+const initialItem = {
+  id: 0,
+  image: "",
+  title: "",
+  price: "",
+  bidLimit: "",
+  bidCount: "",
+  likes: "",
+  creator: "",
+  owner: {
+    name: "",
+    image: "",
+  },
+  contractAddress: "",
+  blockchain: "",
+};
 
 const FilterCategoryItem = () => {
-	const params = usePathname();
-	const dispatch = useDispatch();
-	const { startToken, limit } = useSelector<RootState, RootState['counter']>((state) => state.counter);
+  const params = usePathname();
+  const dispatch = useDispatch();
+  const { startToken, limit } = useSelector<RootState, RootState["counter"]>(
+    (state) => state.counter
+  );
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResult, setSearchResult] = useState<Item | null>(initialItem);
 
+  const id = params.split("/")[4];
+  const contract_address = params.split("/")[3].replace(`/${id}`, "");
+  const blockchain = params
+    .split("/")[2]
+    .replace(`/${contract_address}/${id}`, "");
 
-	const id = params.split('/')[3];
-	const contract_address = params.split('/')[2].replace(`/${id}`, '');
-	const blockchain = 'eth-mainnet';
+  const formatItem = (item: any) => ({
+    id: item.tokenId,
+    image: item.image.cachedUrl,
+    title: item.name || `#${item.tokenId}`,
+    price: "SetPrice" + " ETH",
+    sortPrice: String(Math.floor(Math.random() * 100) + 1),
+    bidLimit: String(Math.floor(Math.random() * 10) + 1),
+    bidCount: String(Math.floor(Math.random() * 10) + 1),
+    likes: String(Math.floor(Math.random() * 100) + 1),
+    creator: "Creator",
+    owner: {
+      name: "owner",
+      image: "",
+    },
+    addDate: new Date().toISOString(),
+    category: "Replace with item category",
+    contractAddress: contract_address,
+    blockchain: blockchain,
+  });
 
-	const fetchTrendingCategoryData = async () => {
-		const urlV3 = `https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
-		const options = {
-			method: 'GET',
-			headers: {
-				accept: 'application/json',
-			}
-		};
+  const fetchOneItem = async (token: number) => {
+    const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    };
+    try {
+      const response = await fetch(
+        `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${token}&limit=${token}`,
+        options
+      );
+      const data = await response.json();
+      return formatItem(data.nfts[0]);
+    } catch (error) {
+      return null;
+    }
+  };
 
-		const response = await fetch(`${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`, options);
-		const data = await response.json();
-		const list = data.nfts;
+  const fetchTrendingCategoryData = async () => {
+    const urlV3 = `https://${blockchain}.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`;
+    const options = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    };
 
-		const formattedList = list.map((item: any) => ({
-			id: item.tokenId,
-			image: item.image.cachedUrl,
-			title: item.name,
-			price: 'SetPrice' + ' ETH',
-			sortPrice: Math.floor(Math.random() * 100) + 1,
-			bidLimit: Math.floor(Math.random() * 10) + 1,
-			bidCount: Math.floor(Math.random() * 10) + 1,
-			likes: Math.floor(Math.random() * 100) + 1,
-			creator: 'Creator',
-			owner: {
-				name: 'owner',
-				image: ''
-			},
-			addDate: new Date().toISOString(),
-			category: 'Replace with item category'
-		}));
-		// if (startToken === 1) {
-		// 	dispatch(incrementStartToken(+list[0].tokenId))
-		// }
-		dispatch(updateTrendingCategoryItemData(formattedList));
-	};
+    const response = await fetch(
+      `${urlV3}/getNFTsForContract?contractAddress=${contract_address}&withMetadata=true&startToken=${startToken}&limit=${limit}`,
+      options
+    );
+    const data = await response.json();
+    const list = data.nfts || [];
 
-	useEffect(() => {
-		fetchTrendingCategoryData();
-	}, [startToken]);
+    const formattedList = list?.map((item: any) => formatItem(item));
+    // if (startToken === 1) {
+    // 	dispatch(incrementStartToken(+list[0].tokenId))
+    // }
+    dispatch(updateTrendingCategoryItemData(formattedList));
+  };
 
-	return (
-		<div>
-			{/* <!-- Filter --> */}
-			<Collection_category_filter />
-			<CategoryItem />
-		</div>
-	);
+  useEffect(() => {
+    fetchTrendingCategoryData();
+  }, [startToken]);
+
+  useEffect(() => {
+    if (searchInput.length > 0) {
+      fetchOneItem(+searchInput).then((item) => {
+        setSearchResult(item);
+      });
+    } else {
+      setSearchResult(null);
+    }
+  }, [searchInput]);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
+  return (
+    <div className="flex flex-col justify-center items-center">
+      {/* <!-- Filter --> */}
+      {/* <Collection_category_filter /> */}
+      <input
+        type="search"
+        className="text-center text-jacarta-700 placeholder-jacarta-500 mb-10 focus:ring-accent border-jacarta-100 w-1/4 rounded-2xl border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
+        placeholder="Search for tokenId"
+        value={searchInput}
+        onChange={handleSearch}
+      />
+      <button
+        type="submit"
+        className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
+      ></button>
+      <div className="flex flex-col justify-center items-center">
+        {searchInput.length > 0 ? (
+          <OneCategoryItem item={searchResult} />
+        ) : (
+          <CategoryItem />
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default FilterCategoryItem;

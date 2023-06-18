@@ -1,3 +1,5 @@
+import querystring from "querystring";
+
 export type NFTMetaData = {
   contract: {
     address: string;
@@ -64,7 +66,7 @@ export async function getNFTMetadata({
     `${builtV3URL(
       blockchain
     )}/getNFTMetadata?contractAddress=${contractAddress}&tokenId=${tokenId}&refreshCache=false`,
-    { method: 'GET', headers: { accept: 'application/json' } }
+    { method: "GET", headers: { accept: "application/json" } }
   );
   return res.json();
 }
@@ -73,6 +75,49 @@ type GetNFTsForContractParam = {
   blockchain: string;
   contractAddress: string;
   limit: number;
+};
+
+type GetOneNFTForContractParam = {
+  blockchain: string;
+  contractAddress: string;
+  startToken: number;
+};
+
+export type NFTSale = {
+  marketplace: string;
+  marketplaceAddress: string;
+  contractAddress: string;
+  tokenId: string;
+  quantity: string;
+  buyerAddress: string;
+  sellerAddress: string;
+  taker: "BUYER" | "SELLER";
+  sellerFee: {
+    amount: string;
+    tokenAddress: string;
+    symbol: string;
+    decimals: number;
+  };
+  protocolFee: {
+    amount: string;
+    tokenAddress: string;
+    symbol: string;
+    decimals: number;
+  };
+  royaltyFee: {
+    amount: string;
+    tokenAddress: string;
+    symbol: string;
+    decimals: number;
+  };
+  blockNumber: number;
+  logIndex: number;
+  bundleIndex: number;
+  transactionHash: string;
+};
+
+type NFTSales = {
+  nftSales: NFTSale[];
 };
 
 export async function getNFTsForContract({
@@ -84,7 +129,22 @@ export async function getNFTsForContract({
     `${builtV3URL(
       blockchain
     )}/getNFTsForContract?contractAddress=${contractAddress}&withMetadata=true&limit=${limit}`,
-    { method: 'GET', headers: { accept: 'application/json' } }
+    { method: "GET", headers: { accept: "application/json" } }
+  );
+  const data = await res.json();
+  return data.nfts;
+}
+
+export async function getOneNFTForContract({
+  blockchain,
+  contractAddress,
+  startToken,
+}: GetOneNFTForContractParam): Promise<NFTMetaData[]> {
+  const res = await fetch(
+    `${builtV3URL(
+      blockchain
+    )}/getNFTsForContract?contractAddress=${contractAddress}&withMetadata=true&startToken=${startToken}&limit=${startToken}`,
+    { method: "GET", headers: { accept: "application/json" } }
   );
   const data = await res.json();
   return data.nfts;
@@ -115,8 +175,34 @@ export async function computeRarity({
     `${builtV3URL(
       blockchain
     )}/computeRarity?contractAddress=${contractAddress}&tokenId=${tokenId}`,
-    { method: 'GET', headers: { accept: 'application/json' } }
+    { method: "GET", headers: { accept: "application/json" } }
   );
   const data = await res.json();
   return data;
+}
+
+type GetNFTSalesParam = {
+  blockchain: string;
+  contractAddress?: string;
+  tokenId?: string;
+  limit?: number;
+};
+
+export async function getNFTSales({
+  blockchain,
+  contractAddress,
+  tokenId,
+  limit,
+}: GetNFTSalesParam): Promise<NFTSale[]> {
+  const res = await fetch(
+    `${builtV3URL(blockchain)}/getNFTSales?${querystring.stringify({
+      order: "asc",
+      ...(contractAddress && { contractAddress }),
+      ...(contractAddress && tokenId && { tokenId }),
+      ...(limit && { limit }),
+    })}`,
+    { method: "GET", headers: { accept: "application/json" } }
+  );
+  const data = await res.json();
+  return data.nftSales;
 }

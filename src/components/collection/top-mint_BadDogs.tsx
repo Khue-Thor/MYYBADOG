@@ -1,4 +1,6 @@
 // import Image from 'next/image';
+import { NFT, getColectionNfts } from '@/api/nftgo';
+import Image from 'next/image';
 import Link from 'next/link';
 
 type MintVolumeType = {
@@ -23,37 +25,16 @@ interface TopMintCollectionRecord {
 }
 
 async function getTopMintData() {
-	const options: RequestInit = {
-		method: "GET",
-		headers: new Headers({
-			accept: "application/json",
-			"X-API-KEY": process.env.NFT_GO_API_KEY as string,
-		}),
-		next: {
-			revalidate: 3600,
-		}
-	};
+	try {
+		const badDogsContract = '0x934910077f5185f1e62f821c167b38a864156688'
+		const res = await getColectionNfts(badDogsContract, 0, 5)
+		return res
+	} catch (error) {
 
-	const res = await fetch(
-		"https://data-api.nftgo.io/eth/v1/market/rank/top-mints/24h?sort_by=mint_num&is_listed=false&asc=false&offset=0&limit=5",
-		options
-	);
-	// .then(response => response.json())
-	// .then(response => console.log(response))
-	// .catch(err => console.error(err));
-
-	// console.log(res);
-
-	// TODO: Handle the error
-	if (Number(res.status) != 200) {
-		// This will activate the closest 'error.js' Error Boundary
-		throw new Error("Failed to fetch data");
 	}
-
-	return res.json();
 }
 
-const TopMint = async () => {
+const TopMintBDogs = async () => {
 	const data = await getTopMintData();
 	// console.log(data);
 
@@ -66,15 +47,15 @@ const TopMint = async () => {
 				key={"TopMint1"}
 			>
 				<h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
-					{"Top Mint"}
+					{"Top BadDogs"}
 				</h2>
 
 				<div className="flex flex-col space-y-5">
-					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
+					{data && data.map((item: NFT, index: number) => {
 						// const { id, image, title, icon, amount, postTime } = item;
-						const { collection_name, contract_address, blockchain, mint_num, minter_num, first_mint_time, fomo, mint_volume } = item;
 						const icon = false; // TODO: Turn off all verification checkmark icon for now
-						const image = `https://www.gravatar.com/avatar/${contract_address}`;  // TODO: change to collection pfp
+						const image = item.image || '../../../public/images/404.png';  // TODO: change to collection pfp3
+						const blockchain = 'eth-mainnet'
 						// const id="1"; // Counter for rank
 						// const itemLink = image
 						// 	.split('/')
@@ -85,12 +66,12 @@ const TopMint = async () => {
 
 						return (
 							<div
-								key={contract_address}
+								key={index}
 								className="border-jacarta-100 dark:bg-jacarta-700 rounded-2xl flex border bg-white py-4 px-7 transition-shadow hover:shadow-lg dark:border-transparent"
 							>
 								<figure className="mr-4 shrink-0">
-									<Link href={`/collection/${contract_address}`} className="relative block">
-										<img src={image} alt={collection_name} className="rounded-2lg h-12 w-12" />
+									<Link href={`/collection/${blockchain}/${item.contract_address}`} className="relative block">
+										<img src={image} alt={item.collection_name} className="rounded-2lg h-12 w-12" />
 										<div className="dark:border-jacarta-600 bg-jacarta-700 absolute -left-3 top-1/2 flex h-6 w-6 -translate-y-2/4 items-center justify-center rounded-full border-2 border-white text-xs text-white">
 											{/*  // Index of current item */}
 											{index + 1}
@@ -115,12 +96,13 @@ const TopMint = async () => {
 									</Link>
 								</figure>
 								<div>
-									<Link href={`/collection/${contract_address}`} className="block">
+									<Link href={`/collection/${blockchain}/${item.contract_address}`} className="block">
 										<span className="font-display text-jacarta-700 hover:text-accent font-semibold dark:text-white">
-											{collection_name}
+											{item.collection_name}
 										</span>
 									</Link>
-									<span className="dark:text-jacarta-300 text-sm">{Math.round(mint_num * mint_volume.value)} {mint_volume.crypto_unit}</span>
+									{/* <span className="dark:text-jacarta-300 text-sm">{Math.round(mint_num * mint_volume.value)} {mint_volume.crypto_unit}</span> */}
+									<span className="dark:text-jacarta-300 text-sm">{item.last_sale.price.value.toFixed(2)} {item.last_sale.price.crypto_unit}</span>
 								</div>
 							</div>
 						);
@@ -136,4 +118,4 @@ const TopMint = async () => {
 	);
 };
 
-export default TopMint;
+export default TopMintBDogs;

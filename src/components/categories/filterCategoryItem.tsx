@@ -76,7 +76,8 @@ const FilterCategoryItem = ({ params }: params) => {
 
   const formatItem = (item: any) => ({
     id: item.tokenId,
-    image: item.image.cachedUrl,
+    // image: item.image.cachedUrl,
+    image: item.image.thumbnailUrl,
     title: item.name || `#${item.tokenId}`,
     price: "SetPrice" + " ETH",
     sortPrice: String(Math.floor(Math.random() * 100) + 1),

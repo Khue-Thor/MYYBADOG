@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -91,16 +92,18 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
             return (
-              <div key={value.address} className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
-                <div className="flex gap-3 items-top">
-                  <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
-                  <div className="flex flex-col">
-                    <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
-                    <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+              <Link key={value.address} href={`/collection/eth-mainnet/${value.address}`}>
+                <div className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                  <div className="flex gap-3 items-top">
+                    <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />
+                    <div className="flex flex-col">
+                      <span className="font-bold dark:text-white md:text-base text-sm">{value.openSeaMetadata.collectionName}</span>
+                      <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                    </div>
                   </div>
+                  <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
                 </div>
-                <span className="font-medium sm:text-sm text-gray-700 text-xs">{value.openSeaMetadata.floorPrice} ETH</span>
-              </div>
+              </Link>
             );
           })}
           <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>

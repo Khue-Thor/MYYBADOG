@@ -102,6 +102,7 @@ const Hero_6 = async () => {
                           <Link
                             href={`/${chain}/${contract_address}/${token_id}`}
                             className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
+                            prefetch={false}
                           >
                             <Image
                               src={image || "/public/images/404.png"}
@@ -154,6 +155,7 @@ const Hero_6 = async () => {
                     <div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
                       <figure className="relative">
                         <Link
+                          prefetch={false}
                           href={`/${chain}/${contract_address}/${token_id}`}
                           className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
                         >
@@ -209,6 +211,7 @@ const Hero_6 = async () => {
                       <div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
                         <figure className="relative">
                           <Link
+                            prefetch={false}
                             href={`/${chain}/${contract_address}/${token_id}`}
                             className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
                           >

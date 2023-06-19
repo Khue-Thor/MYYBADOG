@@ -14,15 +14,12 @@ import {
       }),
 
     ],
+    secret:process.env.NEXTAUTH_SECRET,
     callbacks: {
-      async session({ session,user, token }) {
-        console.log("calling back");
-        console.log(session);
-        console.log(user);
+      async session({ session, user, token }) {
         const sessionWithAddress = authSession({ session, token });
-        // Make sure to return the session with the address
         return sessionWithAddress;
-      }
+      }  
     }
   };
   const handler= NextAuth(authOptions);

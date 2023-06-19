@@ -10,6 +10,7 @@ import { buyModalShow, incrementLimit, incrementStartToken } from "../../redux/c
 import { RootState } from '@/redux/store';
 import Tippy from '../Tippy';
 
+
 const CategoryItem = () => {
   const { sortedtrendingCategoryItemData } = useSelector<RootState, RootState['counter']>(
     (state) => state.counter
@@ -24,7 +25,6 @@ const CategoryItem = () => {
 
   const loadMoreItems = () => {
     let startTokenValue = 0;
-    console.log(sortedtrendingCategoryItemData[0]);
 
     if (sortedtrendingCategoryItemData.length === 32) {
       startTokenValue = +sortedtrendingCategoryItemData[sortedtrendingCategoryItemData.length - 1].id
@@ -35,7 +35,6 @@ const CategoryItem = () => {
   }
 
   useEffect(() => {
-
     if (entry?.isIntersecting) {
       loadMoreItems()
     }
@@ -46,6 +45,7 @@ const CategoryItem = () => {
     <div>
       <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
         {sortedtrendingCategoryItemData.map((item: any, index: number) => {
+
           if (sortedtrendingCategoryItemData.length === index + 1) {
             const {
               id,
@@ -60,11 +60,12 @@ const CategoryItem = () => {
               contractAddress,
               blockchain,
             } = item;
+            const linkPath = `/${blockchain}/${contractAddress}/${id}`
             return (
               <article ref={ref} key={id}>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                   <figure className="relative">
-                    <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                    <Link href={linkPath} prefetch={false}>
                       {
                         <img
                           src={image || '/public/images/404.png'}
@@ -79,7 +80,7 @@ const CategoryItem = () => {
 
                     <div className="absolute left-3 -bottom-3">
                       <div className="flex -space-x-2">
-                        <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                        <Link href={linkPath} prefetch={false}>
 
                           <Tippy content={<span>creator: {creator.name}</span>}>
                             {
@@ -93,7 +94,7 @@ const CategoryItem = () => {
                           </Tippy>
 
                         </Link>
-                        <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                        <Link href={linkPath} prefetch={false}>
 
                           <Tippy content={<span>creator: {owner.name}</span>}>
                             {
@@ -112,7 +113,7 @@ const CategoryItem = () => {
                     </div>
                   </figure>
                   <div className="mt-7 flex items-center justify-between">
-                    <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                    <Link href={linkPath} prefetch={false}>
 
                       <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
                         {title}
@@ -139,7 +140,7 @@ const CategoryItem = () => {
                     >
                       Buy now
                     </button>
-                    <Link href={`/${blockchain}/${contractAddress}/${id}`} className="group flex items-center">
+                    <Link href={linkPath} className="group flex items-center" prefetch={false}>
 
                       <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
                         <use xlinkHref="/icons.svg#icon-history"></use>
@@ -168,11 +169,12 @@ const CategoryItem = () => {
             contractAddress,
             blockchain
           } = item;
+          const linkPath = `/${blockchain}/${contractAddress}/${id}`
           return (
             <article key={id}>
               <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                 <figure className="relative">
-                  <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                  <Link href={linkPath} prefetch={false}>
                     {
                       image &&
                       <img
@@ -188,7 +190,7 @@ const CategoryItem = () => {
 
                   <div className="absolute left-3 -bottom-3">
                     <div className="flex -space-x-2">
-                      <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                      <Link href={linkPath} prefetch={false}>
 
                         <Tippy content={<span>creator: {creator.name}</span>}>
                           {
@@ -202,7 +204,7 @@ const CategoryItem = () => {
                         </Tippy>
 
                       </Link>
-                      <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                      <Link href={linkPath} prefetch={false}>
 
                         <Tippy content={<span>creator: {owner.name}</span>}>
                           {
@@ -221,7 +223,7 @@ const CategoryItem = () => {
                   </div>
                 </figure>
                 <div className="mt-7 flex items-center justify-between">
-                  <Link href={`/${blockchain}/${contractAddress}/${id}`}>
+                  <Link href={linkPath} prefetch={false}>
 
                     <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
                       {title}
@@ -248,7 +250,7 @@ const CategoryItem = () => {
                   >
                     Buy now
                   </button>
-                  <Link href={`/${blockchain}/${contractAddress}/${id}`} className="group flex items-center">
+                  <Link href={linkPath} className="group flex items-center">
 
                     <svg className="icon icon-history group-hover:fill-accent dark:fill-jacarta-200 fill-jacarta-500 mr-1 mb-[3px] h-4 w-4">
                       <use xlinkHref="/icons.svg#icon-history"></use>

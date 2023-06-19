@@ -28,7 +28,6 @@ export async function GET(
       options
     );
     const data = await response.json();
-    console.log('data', data);
 
     return NextResponse.json(data.nfts[0]);
   } catch (error) {

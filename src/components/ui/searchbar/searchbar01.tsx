@@ -101,7 +101,7 @@ const SearchBar01 = () => {
           {collectionsData.slice(0, 5).map((value: any) => {
             console.log(value);
             return (
-              <Link key={value.address} href={`/collection/eth-mainnet/${value.address}`}>
+              <Link key={value.address} href={`/collection/eth-mainnet/${value.address}`} prefetch={false} onClick={clearInput}>
                 <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">
                     <img src={value.openSeaMetadata.imageUrl} alt="Image" className="rounded-lg w-9 h-9" />

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
+import { incrementStartToken, updateTrendingCategoryItemData } from "../../redux/counterSlice";
 import { usePathname } from "next/navigation";
 import CategoryItem from "./categoryItem";
 import { RootState } from "@/redux/store";
@@ -75,10 +75,9 @@ const FilterCategoryItem = ({ params }: params) => {
     .replace(`/${contract_address}/${id}`, "");
 
   const formatItem = (item: any) => ({
-    id: item.tokenId,
-    // image: item.image.cachedUrl,
-    image: item.image.thumbnailUrl,
-    title: item.name || `#${item.tokenId}`,
+    id: item.tokenId || '1',
+    image: item.image.cachedUrl || "",
+    title: item.name || `#${item.tokenId}` || "",
     price: "SetPrice" + " ETH",
     sortPrice: String(Math.floor(Math.random() * 100) + 1),
     bidLimit: String(Math.floor(Math.random() * 10) + 1),
@@ -98,7 +97,6 @@ const FilterCategoryItem = ({ params }: params) => {
   const fetchOneItem = async (token: number) => {
     try {
       const response = await fetch(`/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`, options)
-      console.log('response', response);
 
       const item = await response.json();
 
@@ -125,6 +123,15 @@ const FilterCategoryItem = ({ params }: params) => {
   useEffect(() => {
     fetchTrendingCategoryData();
   }, [startToken]);
+
+  //  this cleans up state on unmount to prevent errors when collection comes with null props
+  useEffect(() => {
+    return () => {
+      if (startToken === 1) {
+        dispatch(incrementStartToken(0))
+      }
+    }
+  }, [])
 
   useEffect(() => {
     if (searchInput.length > 0) {

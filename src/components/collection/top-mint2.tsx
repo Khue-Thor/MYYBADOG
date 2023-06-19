@@ -73,27 +73,20 @@ const TopMint1 = async () => {
           {"Top Minted"}
         </h2>
 
-        <div className="flex flex-col space-y-5">
-          {data.top_mint_collection_items.map(
-            (item: TopMintCollectionRecord, index: number) => {
-              {
-                /* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */
-              }
-              // console.log(index);
-              return (
-                // @ts-expect-error Server Component
-                <TopMintItem key={index} index={index} data={item} />
-              );
-            }
-          )}
-        </div>
-        <Link
-          href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688"
-          className="text-accent mt-8 block text-center text-sm font-bold tracking-tight"
-        >
-          View All Drops
-        </Link>
-      </div>
+				<div className="flex flex-col space-y-5">
+					{data.top_mint_collection_items.map((item: TopMintCollectionRecord, index: number) => {
+						{/* { data.top_mint_collection_items.forEach((item: TopMintCollectionRecord, index: number) => { */ }
+						// console.log(index);
+						return (
+							// @ts-expect-error Server Component 
+							<TopMintItem key={index} index={index} data={item} />
+						)
+					})}
+				</div>
+				<Link href="/collection/eth-mainnet/0x934910077f5185f1e62f821c167b38a864156688" className="text-accent mt-8 block text-center text-sm font-bold tracking-tight" prefetch={false}>
+					View All Drops
+				</Link>
+			</div>
 
       {/* <!-- end today's top mint --> */}
     </>

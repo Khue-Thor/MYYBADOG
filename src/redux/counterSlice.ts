@@ -28,6 +28,10 @@ export const counterSlice = createSlice({
       state.mblMenu = true;
     },
     incrementStartToken: (state, action) => {
+      if (action.payload === 0) {
+        state.startToken = 1;
+        return;
+      }
       state.startToken += action.payload;
     },
     incrementLimit: (state, action) => {
@@ -72,11 +76,17 @@ export const counterSlice = createSlice({
       state.propartiesModalValue = false;
     },
     updateTrendingCategoryItemData: (state, action) => {
+      // if token is 1 means new page, so we clear data before loading new data
+      if (state.startToken === 1) {
+        state.trendingCategoryItemData = [];
+        state.sortedtrendingCategoryItemData = [];
+      }
       const newData = action.payload;
-
+      // remove duplicate items
       const existingItems = state.trendingCategoryItemData.filter(
         (item) => !newData.some((newItem: TypeItem) => newItem.id === item.id)
       );
+      // add new items, maintaining the old ones
       state.trendingCategoryItemData = [...existingItems, ...newData];
       state.sortedtrendingCategoryItemData = [
         ...state.trendingCategoryItemData,

@@ -38,16 +38,35 @@ export default function AuthenticationButton() {
       window.alert(error);
     }
   }
-  //function used to test APIs
-  const getRaffle = async () => {
-    const id = 161;
+  //get user from supabase to see if wallet address already exists
+  const getUser = async () => {
     try {
-      const res = await fetch("/api/raffles", {
-        method: "PUT",
+      const res = await fetch("/findUser", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: id }),
+        body: JSON.stringify({ address: address }),
+      });
+      if (!res.ok) {
+        // This will activate the closest `error.js` Error Boundary
+        throw new Error("Failed to fetch data");
+      }
+      const jsonRes = await res.json();
+      return jsonRes;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const createUser = async () => {
+    try {
+      const res = await fetch("/api/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ address: address }),
       });
       if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
@@ -78,7 +97,7 @@ export default function AuthenticationButton() {
             {" "}
             Web2 Login <RiLoginBoxLine />
           </button>
-          <button onClick={() => getRaffle()}>Test</button>
+          <button onClick={() => getUser()}>Test</button>
         </>
       ) : (
         <ConnectWallet

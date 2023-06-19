@@ -131,6 +131,9 @@ const options = {
     accept: 'application/json',
     'X-API-KEY': process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
   }),
+  next: {
+    revalidate: 86400, // 24 hrs in sec
+  },
 };
 
 export async function getColectionMetrics(

@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css'; // optional
+import Tippy from '../Tippy';
 
 const Social_dropdown = () => {
   return <>

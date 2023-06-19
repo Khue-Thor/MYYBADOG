@@ -5,7 +5,7 @@ import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
 // import { raffles } from "@prisma/client";
 import { authOptions }  from "@/lib/auth";
-import prisma from "@/components/lib/prisma";
+import {prisma} from "@/components/lib/prisma";
 // import { authOptions } from "../api/auth/[...nextauth]";
 
 

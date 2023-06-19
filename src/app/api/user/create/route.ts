@@ -4,73 +4,53 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
 import { users } from "@prisma/client";
+import {prisma} from "@/lib/prisma";
 import { authOptions }  from "@/lib/auth";
-import prisma from "@/components/lib/prisma";
+import { fixBigInt } from "@/utils/bigIntFixer";
 // import { authOptions } from "../api/auth/[...nextauth]";
 
-
-export async function GET(req:Request) {
-    console.log("IN GET REQUEST FOR USER")
-    const { payload:{user:address} }= await req.json();
-
-  const user: users | null = await prisma.users.findUnique({
-    where: { address: address as string },
-  });
-  if (user) {
-    console.log(user);
-  }
-
-
-  if (!user) {
-    return NextResponse.json({error: "Data not found." },{status:401 })
-  }
-
-  return NextResponse.json({user_data:user},{ status:200 })
-};
 
 //              ~~~~~ POST FUNCTION~~~~~
 
 
 export async function POST(req:NextRequest) {
-  const { payload }= await req.json();
-  const { address, error: verifyErr } = await verifyLogin(
-    process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
-    payload,
-  );
+  const { address }= await req.json();
+  console.log("IN create fxn")
+ // const { address, error: verifyErr } = await verifyLogin(
+ //   process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
+ //   payload,
+ // );
+ const init = {
+           data: {
+             address: address as string,
+             username: '',
+             badges: [],
+             level: 0,
+             quests: [],
+             friends: [],
+             inventory: []
+           }
+         }
 
 //   const session = await getServerSession(authOptions);
+     try{
+       const createUser = await prisma.users.create(init);
+       if (createUser) {
+        //This needs to be logged.
+        const userCreated = await fixBigInt(createUser);
+         console.log("User created with Data:", userCreated);
+         return NextResponse.json({data:userCreated},{ status:200 })
+       }else{
+         return NextResponse.json({error: "Failed to register user." },{status:400 })
+       }
+       
+     }
+   catch(err){
+     console.log(err)
+   }
+  }
+  
 
-
-    if (!address) {
-      return NextResponse.json({error: verifyErr },{status:401 });
-    }else{
-      try{
-        const createUser = await prisma.users.create({
-            data: {
-              address: address as string,
-              username: '',
-              badges: [],
-              level: 0,
-              quests: [],
-              friends: [],
-              inventory: []
-            }
-          });
-        if (createUser) {
-          console.log(createUser);
-          return NextResponse.json({data:createUser},{ status:200 })
-        }else{
-          return NextResponse.json({error: "Failed to register user." },{status:400 })
-        }
-        
-      }
-    catch(err){
-      console.log(err)
-    }
-   
-    }    
-    
-  };
 
   export async function PUT(req:NextRequest,res:NextResponse) {
     const {id} = await req.json();

@@ -26,6 +26,12 @@ export default function AuthenticationButton() {
     try {
       // Prompt the user to sign a login with wallet message
       const payload = await auth?.login();
+      const userData = await getUser();
+      const userExists = userData ? true : false;
+
+      if (!userExists) {
+        await createUser(payload.payload.address);
+      }
 
       // Then send the payload to next auth as login credentials
       // using the "credentials" provider method
@@ -33,21 +39,20 @@ export default function AuthenticationButton() {
         payload: JSON.stringify(payload),
         redirect: false,
       });
-      console.log("Signed in", session);
     } catch (error) {
       window.alert(error);
     }
   }
   //get user from supabase to see if wallet address already exists
   const getUser = async () => {
+    const options: RequestInit = {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    };
     try {
-      const res = await fetch("/findUser", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ address: address }),
-      });
+      const res = await fetch(`/api/user/find?address=${address}`, options);
       if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
         throw new Error("Failed to fetch data");
@@ -59,18 +64,22 @@ export default function AuthenticationButton() {
     }
   };
 
-  const createUser = async () => {
+  const createUser = async (address: string) => {
     try {
-      const res = await fetch("/api/user", {
+      const options: RequestInit = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          accept: "application/json",
         },
-        body: JSON.stringify({ address: address }),
-      });
+        body: JSON.stringify({ address: address.toString() }),
+      };
+      const res = await fetch("/api/user/create", options);
       if (!res.ok) {
         // This will activate the closest `error.js` Error Boundary
-        throw new Error("Failed to fetch data");
+        throw new Error(
+          ("Something went wrong when creating user with wallet:" +
+            address) as string
+        );
       }
       const jsonRes = await res.json();
       return jsonRes;
@@ -97,7 +106,6 @@ export default function AuthenticationButton() {
             {" "}
             Web2 Login <RiLoginBoxLine />
           </button>
-          <button onClick={() => getUser()}>Test</button>
         </>
       ) : (
         <ConnectWallet

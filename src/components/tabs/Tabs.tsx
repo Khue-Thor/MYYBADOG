@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import OfferTab from "./OfferTab";
 import Properties from "./Properties";
-import ActivityTab from "./ActivityTab";
+import ActivityTab from "./ActivityTab/ActivityTab";
 import PriceHistory from "./PriceHistory";
 import { Rarity } from "@/api/alchemy";
 import DetailsTab from "@/components/tabs/DetailsTab";
@@ -96,7 +96,11 @@ const ItemsTabs: React.FC<Props> = ({
             />
           </TabPanel>
           <TabPanel>
-            <ActivityTab />
+            <ActivityTab
+              blockchain={blockchain}
+              contractAddress={contractAddress}
+              tokenId={tokenId}
+            />
           </TabPanel>
           <TabPanel>
             <PriceHistory classes="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 rounded-t-2lg rounded-b-2lg rounded-tl-none border bg-white p-6" />

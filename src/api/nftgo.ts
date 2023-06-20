@@ -77,9 +77,53 @@ interface ColectionMetrics {
   };
 }
 
+export interface NFT {
+  blockchain: string;
+  collection_name: string;
+  collection_slug: string;
+  collection_opensea_slug: string;
+  contract_type: string | null;
+  contract_address: string;
+  token_id: string;
+  name: string;
+  description: string;
+  image: string;
+  animation_url: string | null;
+  owner_addresses: string[];
+  traits: {
+    type: string;
+    value: string;
+    percentage: number | null;
+  }[];
+  rarity: string | null;
+  suspicious: boolean | null;
+  last_sale: {
+    tx_hash: string;
+    price_token: number;
+    token_symbol: string;
+    token_contract_address: string;
+    price_usd: number;
+    price: {
+      quantity: number;
+      value: number;
+      crypto_unit: string;
+      usd: number;
+    };
+    tx_url: string;
+    time: number;
+  };
+}
+
+interface NFTResponse {
+  total: number;
+  nfts: NFT[];
+}
+
 const urlBuilder = (contractAdress: string) => {
   return `https://data-api.nftgo.io/eth/v1/collection/${contractAdress}`;
 };
+
+('https://data-api.nftgo.io/eth/v1/collection/0x934910077f5185f1e62f821c167b38a864156688/nfts?offset=0&limit=10');
 
 const options = {
   method: 'GET',
@@ -87,6 +131,9 @@ const options = {
     accept: 'application/json',
     'X-API-KEY': process.env.NEXT_PUBLIC_NFT_GO_API_KEY as string,
   }),
+  next: {
+    revalidate: 86400, // 24 hrs in sec
+  },
 };
 
 export async function getColectionMetrics(
@@ -96,6 +143,22 @@ export async function getColectionMetrics(
     `${urlBuilder(contractAddress)}/metrics`,
     options
   );
+  if (request.status !== 200) {
+    throw new Error('Network response was not ok');
+  }
   const data = await request.json();
   return data;
+}
+
+export async function getColectionNfts(
+  contractAddress: string,
+  offset: number,
+  limit: number
+): Promise<NFT[]> {
+  const request = await fetch(
+    `${urlBuilder(contractAddress)}/nfts?offset=${offset}&limit=${limit}`,
+    options
+  );
+  const data = await request.json();
+  return data.nfts;
 }

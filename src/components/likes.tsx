@@ -1,7 +1,7 @@
 "use client";
 
-import Tippy from "@tippyjs/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import Tippy from './Tippy';
 
 interface Props {
   like: string | number;

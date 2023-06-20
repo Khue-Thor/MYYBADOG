@@ -43,7 +43,9 @@ _Note: While implementing data fetching import the data model directly from **"@
 **_Example usage:_**
 
 ```ts
-import { PrismaClient, Prisma, raffles } from "@prisma/client";
+import { raffles } from "@prisma/client";
+//Prisma object is imported globally to use one client instead of instantiating every time
+import { prisma } from "@/lib/prisma";
 
 const supaData: raffles | null = await prisma.raffles.findUnique({
   where: { id: 1 },

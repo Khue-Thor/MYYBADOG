@@ -18,7 +18,7 @@ export default function CategoryItemPlaceholder({ params }: params) {
           alt="item 5"
           className="dark:border-jacarta-700 w-1/4 h-1/4 mb-5 rounded-full border-2 border-white"
         />
-        <div className="text-black font-extrabold">{`Couldn't load metadata`}</div>
+        <div className="font-display dark:text-jacarta-200 text-sm font-semibold">{`Couldn't load metadata`}</div>
       </div>
     </div>
   )

@@ -258,7 +258,11 @@ export default async function NFTItemPage({ params }: Props) {
         </div>
       </section>
       {/* <!-- end item --> */}
-      <Suspense fallback={<div>Loading NFTs from this collection...</div>}>
+      <Suspense
+        fallback={
+          <div className="container">Loading NFTs from this collection...</div>
+        }
+      >
         {/*@ts-expect-error Async Server Component*/}
         <MoreItems
           blockchain={blockchain}

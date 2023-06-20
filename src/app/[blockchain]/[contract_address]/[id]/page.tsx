@@ -5,7 +5,12 @@ import AuctionsDropdown from "@/components/dropdown/AuctionsDropdown";
 import ItemsCountdownTimer from "@/components/ItemsCountdownTimer";
 import ItemsTabs from "@/components/tabs/Tabs";
 import MoreItems from "@/app/[blockchain]/[contract_address]/[id]/MoreItems";
-import { getNFTMetadata, getNFTsForContract, NFTMetaData } from "@/api/alchemy";
+import {
+  getNFTMetadata,
+  getNFTsForContract,
+  getOwnersForNFT,
+  NFTMetaData,
+} from "@/api/alchemy";
 import NFTImage from "@/app/[blockchain]/[contract_address]/[id]/NFTImage";
 import PlaceBidButton from "@/app/[blockchain]/[contract_address]/[id]/PlaceBidButton";
 import Tippy from "@/components/Tippy";
@@ -24,11 +29,18 @@ export default async function NFTItemPage({ params }: Props) {
     limit: 10,
   });
 
-  const nftMetadata = await getNFTMetadata({
-    blockchain,
-    contractAddress: contract_address,
-    tokenId: id,
-  });
+  const [nftMetadata, owners] = await Promise.all([
+    getNFTMetadata({
+      blockchain,
+      contractAddress: contract_address,
+      tokenId: id,
+    }),
+    getOwnersForNFT({
+      blockchain,
+      contractAddress: contract_address,
+      tokenId: id,
+    }),
+  ]);
   const data: NFTMetaData & { likes: number; auctionTimer: number } = {
     ...nftMetadata,
     likes: 129,
@@ -181,7 +193,9 @@ export default async function NFTItemPage({ params }: Props) {
                     </span>
                     <Link href="/user/avatar_6" className="text-accent block">
                       {/*Todo insert owner name*/}
-                      {/*<span className="text-sm font-bold">{ownerName}</span>*/}
+                      <span className="text-sm font-bold overflow-hidden text-ellipsis block w-32">
+                        {owners[0]}
+                      </span>
                     </Link>
                   </div>
                 </div>

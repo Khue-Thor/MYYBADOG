@@ -11,10 +11,9 @@ export async function GET(
     const request = await fetch(
       `https:/nft-cdn.alchemy.com/eth-mainnet/${url}`
     );
-    const blob = await request.blob();
-    console.log(blob.type);
+    const type = request.headers.get('content-type') || '';
 
-    return NextResponse.json(blob.type.includes('video'));
+    return NextResponse.json(type.includes('video'));
   } catch (error) {
     return NextResponse.json(error);
   }

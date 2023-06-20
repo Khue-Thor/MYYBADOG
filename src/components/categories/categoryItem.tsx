@@ -10,6 +10,7 @@ import { buyModalShow, incrementLimit, incrementStartToken } from "../../redux/c
 import { RootState } from '@/redux/store';
 import Tippy from '../Tippy';
 import { Data } from '@/api/nftscan';
+import CategoryItemPlaceholder from './category-item-placeholder';
 
 interface params {
   params: {
@@ -23,9 +24,10 @@ const CategoryItem = ({ params }: params) => {
     (state) => state.counter
   );
   const dispatch = useDispatch();
-  const [isVideo, setIsVideo] = useState(true);
+  const [isVideo, setIsVideo] = useState(false);
 
   const isVideoUrl = async (url: string) => {
+    if (!url) return;
     const id = url.split('/').pop();
     const request = await fetch(`/api/collection/isvideo/${id}`);
     const isVideo = await request.json();
@@ -34,7 +36,7 @@ const CategoryItem = ({ params }: params) => {
 
   useEffect(() => {
     isVideoUrl(sortedtrendingCategoryItemData[0].image)
-  }, [])
+  }, [sortedtrendingCategoryItemData])
 
   const lastPostRef = useRef<HTMLElement>(null)
   const { ref, entry } = useIntersection({
@@ -92,13 +94,13 @@ const CategoryItem = ({ params }: params) => {
                           className="w-full h-[230px] rounded-[0.625rem] object-cover"
                           controls
                         />
-                      ) : (
+                      ) : image ? (
                         <img
                           src={image}
                           alt="item 5"
                           className="w-full h-[230px] rounded-[0.625rem] object-cover"
                         />
-                      )}
+                      ) : <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />}
 
                     </Link>
 
@@ -207,13 +209,13 @@ const CategoryItem = ({ params }: params) => {
                         className="w-full h-[230px] rounded-[0.625rem] object-cover"
                         controls
                       />
-                    ) : (
+                    ) : image ? (
                       <img
                         src={image}
                         alt="item 5"
                         className="w-full h-[230px] rounded-[0.625rem] object-cover"
                       />
-                    )}
+                    ) : <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />}
 
                   </Link>
 

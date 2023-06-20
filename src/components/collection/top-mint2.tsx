@@ -57,7 +57,7 @@ async function getTopMintData() {
   return res.json();
 }
 
-const TopMint1 = async () => {
+const TopMint2 = async () => {
   const data = await getTopMintData();
   // console.log(data);
 
@@ -101,4 +101,4 @@ const TopMint1 = async () => {
   );
 };
 
-export default TopMint1;
+export default TopMint2;

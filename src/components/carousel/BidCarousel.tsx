@@ -12,6 +12,7 @@ import Likes from "../likes";
 import useModalStore from "@/store/modalStore";
 import { NFTMetaData } from "@/api/alchemy";
 import React from "react";
+import defaultNFTImage from "@/public/images/case-studies/case_study_4.jpg";
 
 type Props = {
   nfts: NFTMetaData[];
@@ -64,32 +65,22 @@ const BidsCarousel: React.FC<Props> = ({
         {data.map((item) => {
           return (
             <SwiperSlide className="text-white" key={item.tokenId}>
-              <article>
-                <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg text-jacarta-500">
-                  <figure>
-                    <Link
-                      href={`/${blockchain}/${contractAddress}/${item.tokenId}`}
-                    >
-                      <div className="w-full">
-                        <Image
-                          src={item.image.pngUrl}
-                          alt={item.name || ""}
-                          height={230}
-                          width={230}
-                          className="rounded-[0.625rem] w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    </Link>
+              <Link href={`/${blockchain}/${contractAddress}/${item.tokenId}`}>
+                <article className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg text-jacarta-500">
+                  <figure className="w-full relative h-[230px]">
+                    <Image
+                      src={item.image.pngUrl || defaultNFTImage}
+                      alt={item.name || ""}
+                      fill
+                      sizes="(max-width: 575px) 100vw, (max-width: 768px) 50vw, (max-width: 1025px) 33vw, 25vw"
+                      className="rounded-[0.625rem] w-full object-cover"
+                      loading="lazy"
+                    />
                   </figure>
                   <div className="mt-4 flex items-center justify-between">
-                    <Link
-                      href={`${blockchain}/${contractAddress}/${item.tokenId}`}
-                    >
-                      <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
-                        {item.name}
-                      </span>
-                    </Link>
+                    <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
+                      {item.name}
+                    </span>
                     <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                       <Tippy content={<span>ETH</span>}>
                         <img
@@ -127,8 +118,8 @@ const BidsCarousel: React.FC<Props> = ({
                       classes="flex items-center space-x-1"
                     />
                   </div>
-                </div>
-              </article>
+                </article>
+              </Link>
             </SwiperSlide>
           );
         })}

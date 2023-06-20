@@ -1,12 +1,30 @@
 import Link from "next/link";
-import React from "react";
-import { Rarity } from "@/api/alchemy";
+import React, { useEffect, useState } from "react";
+import { computeRarity, Rarity } from "@/api/alchemy";
 
 type Props = {
-  rarities: Rarity[];
+  blockchain: string;
+  contractAddress: string;
+  tokenId: string;
 };
 
-const Properties: React.FC<Props> = ({ rarities }) => {
+const Properties: React.FC<Props> = ({
+  blockchain,
+  contractAddress,
+  tokenId,
+}) => {
+  const [rarities, setRarities] = useState<Rarity[]>([]);
+
+  useEffect(() => {
+    computeRarity({
+      blockchain,
+      contractAddress,
+      tokenId,
+    }).then((data) => {
+      setRarities(data.rarities);
+    });
+  }, [blockchain, contractAddress, tokenId]);
+
   return (
     <>
       {/* <!-- Properties --> */}

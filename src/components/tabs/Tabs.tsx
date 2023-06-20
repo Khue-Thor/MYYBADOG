@@ -5,11 +5,9 @@ import OfferTab from "./OfferTab";
 import Properties from "./Properties";
 import ActivityTab from "./ActivityTab/ActivityTab";
 import PriceHistory from "./PriceHistory";
-import { Rarity } from "@/api/alchemy";
 import DetailsTab from "@/components/tabs/DetailsTab";
 
 type Props = {
-  rarities: Rarity[];
   contractAddress: string;
   tokenId: string;
   tokenType: string;
@@ -17,7 +15,6 @@ type Props = {
 };
 
 const ItemsTabs: React.FC<Props> = ({
-  rarities,
   contractAddress,
   tokenType,
   tokenId,
@@ -85,7 +82,11 @@ const ItemsTabs: React.FC<Props> = ({
             <OfferTab />
           </TabPanel>
           <TabPanel>
-            <Properties rarities={rarities} />
+            <Properties
+              blockchain={blockchain}
+              contractAddress={contractAddress}
+              tokenId={tokenId}
+            />
           </TabPanel>
           <TabPanel>
             <DetailsTab

@@ -5,15 +5,11 @@ import AuctionsDropdown from "@/components/dropdown/AuctionsDropdown";
 import ItemsCountdownTimer from "@/components/ItemsCountdownTimer";
 import ItemsTabs from "@/components/tabs/Tabs";
 import MoreItems from "@/app/[blockchain]/[contract_address]/[id]/MoreItems";
-import {
-  computeRarity,
-  getNFTMetadata,
-  getNFTsForContract,
-  NFTMetaData,
-} from "@/api/alchemy";
+import { getNFTMetadata, getNFTsForContract, NFTMetaData } from "@/api/alchemy";
 import NFTImage from "@/app/[blockchain]/[contract_address]/[id]/NFTImage";
 import PlaceBidButton from "@/app/[blockchain]/[contract_address]/[id]/PlaceBidButton";
 import Tippy from "@/components/Tippy";
+import React, { Suspense } from "react";
 
 type Props = {
   params: { id: string; blockchain: string; contract_address: string };
@@ -22,24 +18,17 @@ type Props = {
 export default async function NFTItemPage({ params }: Props) {
   const { id, blockchain, contract_address } = params;
 
-  const [nftMetadata, nftsForContract, { rarities }] = await Promise.all([
-    getNFTMetadata({
-      blockchain,
-      contractAddress: contract_address,
-      tokenId: id,
-    }),
-    getNFTsForContract({
-      blockchain,
-      contractAddress: contract_address,
-      limit: 10,
-    }),
-    computeRarity({
-      blockchain,
-      contractAddress: contract_address,
-      tokenId: id,
-    }),
-    await new Promise((resolve) => setTimeout(resolve, 3000)),
-  ]);
+  const getNFTsForContractPromise = getNFTsForContract({
+    blockchain,
+    contractAddress: contract_address,
+    limit: 10,
+  });
+
+  const nftMetadata = await getNFTMetadata({
+    blockchain,
+    contractAddress: contract_address,
+    tokenId: id,
+  });
   const data: NFTMetaData & { likes: number; auctionTimer: number } = {
     ...nftMetadata,
     likes: 129,
@@ -261,7 +250,6 @@ export default async function NFTItemPage({ params }: Props) {
             {/* <!-- end details --> */}
           </div>
           <ItemsTabs
-            rarities={rarities}
             blockchain={blockchain}
             contractAddress={contract_address}
             tokenId={id}
@@ -270,12 +258,14 @@ export default async function NFTItemPage({ params }: Props) {
         </div>
       </section>
       {/* <!-- end item --> */}
-
-      <MoreItems
-        blockchain={blockchain}
-        contractAddress={contract_address}
-        nfts={nftsForContract}
-      />
+      <Suspense fallback={<div>Loading NFTs from this collection...</div>}>
+        {/*@ts-expect-error Async Server Component*/}
+        <MoreItems
+          blockchain={blockchain}
+          contractAddress={contract_address}
+          getNFTsForContractPromise={getNFTsForContractPromise}
+        />
+      </Suspense>
     </>
   );
 }

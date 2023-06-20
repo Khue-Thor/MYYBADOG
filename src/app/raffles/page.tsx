@@ -14,7 +14,7 @@ import Testimonial from "@/components/blog/testimonial";
 import BidsCarousel from "@/components/ui/carousel/bids-carousel";
 import HeadLine from "@/components/headline";
 import { supabase } from "@/lib/client";
-import prisma from "@/components/lib/prisma";
+import {prisma} from "@/components/lib/prisma";
 const inter = Inter({ subsets: ["latin"] });
 
 async function getData() {

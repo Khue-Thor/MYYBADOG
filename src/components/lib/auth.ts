@@ -4,7 +4,7 @@ import {
   } from "@thirdweb-dev/auth/next-auth";
   import NextAuth from "next-auth";
   import type { NextAuthOptions } from 'next-auth'
-  import { nonceExists } from "./nonce";
+  // import { nonceExists } from "./nonce";
   
  const authOptions:NextAuthOptions = {
     session:{

@@ -54,7 +54,7 @@ const TopMintBDogs = async () => {
 					{data && data.map((item: NFT, index: number) => {
 						// const { id, image, title, icon, amount, postTime } = item;
 						const icon = false; // TODO: Turn off all verification checkmark icon for now
-						const image = item.image || '../../../public/images/404.png';  // TODO: change to collection pfp3
+						const image = item.image || '/images/404.png';  // TODO: change to collection pfp3
 						const blockchain = 'eth-mainnet'
 						// const id="1"; // Counter for rank
 						// const itemLink = image

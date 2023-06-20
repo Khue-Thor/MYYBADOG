@@ -16,7 +16,7 @@ export default function AuthenticationButton() {
   const { data: session } = useSession();
 
   const logOutAll = () => {
-    if (session && address) {
+    if (session) {
       signOut();
       disconnect();
     }

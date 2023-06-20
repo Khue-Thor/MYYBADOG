@@ -21,18 +21,18 @@ import {
       ThirdwebAuthProvider({
         domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN || "",
            // Enforce that the user's login message has these exact values
-      // authOptions: {
-      //   validateNonce: async (nonce: string) => {
-      //     // Check in database or storage if nonce exists
-      //     const nonceExists:boolean = await nonceExists(nonce)
-      //     if (nonceExists) {
-      //       throw new Error("Nonce has already been used!");
-      //     }
-
-      //     // Otherwise save nonce in database or storage for later validation
-      //     await dbExample.saveNonce(nonce);
-      //   }
-      // }
+      authOptions: {
+        validateNonce: async (nonce: string) => {
+          // Check in database or storage if nonce exists
+          // const nonceExists:boolean = await nonceExists(nonce)
+          // if (nonceExists) {
+          //   throw new Error("Nonce has already been used!");
+          // }
+          console.log(nonce);
+          // // Otherwise save nonce in database or storage for later validation
+          // await dbExample.saveNonce(nonce);
+        }
+      }
 
       }),
 

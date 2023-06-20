@@ -4,12 +4,14 @@ import BidsCarousel from "@/components/carousel/BidCarousel";
 import { NFTMetaData } from "@/api/alchemy";
 
 type Props = {
-  nfts: NFTMetaData[];
   blockchain: string;
   contractAddress: string;
+  getNFTsForContractPromise: Promise<NFTMetaData[]>;
 };
 
-const MoreItems: React.FC<Props> = ({ nfts, blockchain, contractAddress }) => {
+const MoreItems = async ({ blockchain, contractAddress, getNFTsForContractPromise }: Props) => {
+  const nftsForContract = await getNFTsForContractPromise
+
   return (
     <section className="dark:bg-jacarta-800 bg-light-base py-24">
       {/* <!-- Hot Bids --> */}
@@ -22,7 +24,7 @@ const MoreItems: React.FC<Props> = ({ nfts, blockchain, contractAddress }) => {
         <div className="relative">
           {/* <!-- Slider --> */}
           <BidsCarousel
-            nfts={nfts}
+            nfts={nftsForContract}
             blockchain={blockchain}
             contractAddress={contractAddress}
           />

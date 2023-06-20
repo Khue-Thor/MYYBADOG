@@ -7,6 +7,7 @@ import Header01 from "@/components/ui/header/header01";
 import Footer from "../components/ui/footer";
 import "@/styles/custom.css";
 import BidsModal from "@/components/modal/BidsModal";
+import { Session } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,36 +18,24 @@ export const metadata = {
 
 interface RootLayoutProps {
   children: React.ReactNode;
+  session: Session;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  // header start
-  let header;
-  // if (
-  //   route.asPath === "/home/home_3" ||
-  //   route.asPath === "/home/home_9" ||
-  //   route.asPath === "/maintenance" ||
-  //   route.asPath === "/home/home_12"
-  // ) {
-  //   header = <Header02 />;
-  // } else if (route.asPath === "/platform_status") {
-  //   header = <Header03 />;
-  // } else if (route.asPath === "/home/home_8") {
-  //   header = <Header04 />;
-  // } else {
-  //   header = <Header01 />;
-  // }
-  // header end
-
+export default function RootLayout({
+  children,
+  session,
+}: {
+  children: RootLayoutProps;
+  session: Session;
+}) {
   return (
     <ServerThemeProvider attribute="class">
       <html lang="en" suppressHydrationWarning>
         <head />
         <body className={inter.className}>
-          <Header01 />
-          <Providers>
-            {/* {header} */}
-            {children}
+          <Providers session={session}>
+            <Header01 />
+            <>{children}</>
           </Providers>
           <Footer />
           <BidsModal />

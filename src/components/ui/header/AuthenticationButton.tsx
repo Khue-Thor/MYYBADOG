@@ -27,7 +27,7 @@ export default function AuthenticationButton() {
       // Prompt the user to sign a login with wallet message
       const payload = await auth?.login();
       const userData = await getUser();
-      const userExists = userData ? true : false;
+      const userExists = userData.message ? false : true;
 
       if (!userExists) {
         await createUser(payload.payload.address);

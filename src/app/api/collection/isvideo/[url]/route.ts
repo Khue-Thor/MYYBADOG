@@ -9,7 +9,7 @@ export async function GET(
     console.log(`https:/nft-cdn.alchemy.com/eth-mainnet/${url} `);
 
     const request = await fetch(
-      `https:/nft-cdn.alchemy.com/eth-mainnet/${url}`
+      `https:/nft-cdn.alchemy.com/eth-mainnet/${url}`, {method: 'HEAD'}
     );
     const type = request.headers.get('content-type') || '';
 

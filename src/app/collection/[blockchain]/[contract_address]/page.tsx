@@ -280,6 +280,21 @@ const Collection = async ({ params }: params) => {
                     </Link>
                   </div>
                 </div>
+                {profile.instagram && <div className="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white">
+                  {/* <Likes data={} /> */}
+                  <div
+                    className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
+                  // onClick={() => handleLikes()}
+                  >
+                    <Link href={`https://www.instagram.com/${profile.instagram}`} target="_blank"
+                      rel="noopener noreferrer"
+                      className="group cursor-pointer">
+                      <svg className="icon group-hover:fill-accent fill-jacarta-300 h-5 w-5 dark:group-hover:fill-white">
+                        <use xlinkHref={`/icons.svg#icon-instagram`}></use>
+                      </svg>
+                    </Link>
+                  </div>
+                </div>}
 
                 <Social_dropdown />
 
@@ -294,6 +309,7 @@ const Collection = async ({ params }: params) => {
     </div>
     <Collection_items params={{
       contract_address: contractAddress,
+      profile: profile,
     }} />
   </>;
 };

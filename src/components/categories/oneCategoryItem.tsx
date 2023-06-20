@@ -6,6 +6,9 @@ import Likes from "../likes";
 import Auctions_dropdown from "../dropdown/Auctions_dropdown";
 import { useDispatch } from "react-redux";
 import { buyModalShow } from "../../redux/counterSlice";
+import CategoryItemPlaceholder from './category-item-placeholder';
+import { type } from 'os';
+import { Data } from '@/api/nftscan';
 
 type Item = {
   id: number;
@@ -23,8 +26,16 @@ type Item = {
   contractAddress: string;
   blockchain: string;
 }
+
+type params = {
+  params: {
+    profile: Data
+    item: Item | null
+  }
+}
 // use item im param
-const OneCategoryItem = ({ item }: { item: Item | null }) => {
+const OneCategoryItem = ({ params }: params) => {
+  const { item } = params;
   const dispatch = useDispatch();
   if (!item) return null;
   const {
@@ -49,16 +60,15 @@ const OneCategoryItem = ({ item }: { item: Item | null }) => {
             <figure className="relative">
               <Link href={`/${blockchain}/${contractAddress}/${id}`}>
                 {
-                  image &&
-                  <img
-                    src={image || '/public/images/404.png'}
-                    alt="item 5"
-                    className="w-full h-[230px] rounded-[0.625rem] object-cover"
-                  />
+                  image ?
+                    <img
+                      src={image || '/public/images/404.png'}
+                      alt="item 5"
+                      className="w-full h-[230px] rounded-[0.625rem] object-cover"
+                    />
+                    : <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />
                 }
-
               </Link>
-
               <Likes like={likes} />
 
               <div className="absolute left-3 -bottom-3">

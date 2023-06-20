@@ -5,10 +5,12 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Activity_item from "./Activity_item";
 import Image from "next/legacy/image";
 import FilterCategoryItem from "../categories/filterCategoryItem";
+import { Data } from '@/api/nftscan';
 
 interface params {
   params: {
     contract_address: string;
+    profile: Data
   }
 }
 
@@ -76,7 +78,8 @@ const Collection_items = ({ params }: params) => {
             <TabPanel>
               <div>
                 <FilterCategoryItem params={{
-                  contract_address
+                  contract_address,
+                  profile: params.profile
                 }} />
               </div>
             </TabPanel>

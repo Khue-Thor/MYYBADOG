@@ -15,6 +15,7 @@ const nextConfig = {
       'i.seadn.io',
       'logo.nftscan.com',
       'openseauserdata.com',
+      'clonex-assets.rtfkt.com',
     ],
     remotePatterns: [
       {

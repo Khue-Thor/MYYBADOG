@@ -9,9 +9,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { buyModalShow, incrementLimit, incrementStartToken } from "../../redux/counterSlice";
 import { RootState } from '@/redux/store';
 import Tippy from '../Tippy';
+import { Data } from '@/api/nftscan';
+import { profile } from 'console';
+import CategoryItemPlaceholder from './category-item-placeholder';
+
+interface params {
+  params: {
+    profile: Data
+  }
+}
 
 
-const CategoryItem = () => {
+const CategoryItem = ({ params }: params) => {
   const { sortedtrendingCategoryItemData } = useSelector<RootState, RootState['counter']>(
     (state) => state.counter
   );
@@ -60,18 +69,22 @@ const CategoryItem = () => {
               contractAddress,
               blockchain,
             } = item;
+
             const linkPath = `/${blockchain}/${contractAddress}/${id}`
             return (
               <article ref={ref} key={id}>
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                   <figure className="relative">
                     <Link href={linkPath} prefetch={false}>
-                      {
+                      {image ?
                         <img
-                          src={image || '/public/images/404.png'}
+                          src={image}
                           alt="item 5"
                           className="w-full h-[230px] rounded-[0.625rem] object-cover"
                         />
+                        : (
+                          <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />
+                        )
                       }
 
                     </Link>
@@ -175,13 +188,15 @@ const CategoryItem = () => {
               <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                 <figure className="relative">
                   <Link href={linkPath} prefetch={false}>
-                    {
-                      image &&
+                    {image ?
                       <img
-                        src={image || '/public/images/404.png'}
+                        src={image}
                         alt="item 5"
                         className="w-full h-[230px] rounded-[0.625rem] object-cover"
                       />
+                      : (
+                        <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />
+                      )
                     }
 
                   </Link>

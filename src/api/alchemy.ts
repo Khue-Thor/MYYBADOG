@@ -206,3 +206,25 @@ export async function getNFTSales({
   const data = await res.json();
   return data.nftSales;
 }
+
+type GetOwnersForNFTParam = {
+  blockchain: string;
+  contractAddress: string;
+  tokenId: string;
+};
+
+export async function getOwnersForNFT({
+  blockchain,
+  contractAddress,
+  tokenId,
+}: GetOwnersForNFTParam): Promise<string[]> {
+  const res = await fetch(
+    `${builtV3URL(blockchain)}/getOwnersForNFT?${querystring.stringify({
+      contractAddress,
+      tokenId,
+    })}`,
+    { method: "GET", headers: { accept: "application/json" } }
+  );
+  const data = await res.json();
+  return data.owners as string[];
+}

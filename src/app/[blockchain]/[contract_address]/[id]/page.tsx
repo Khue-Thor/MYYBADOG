@@ -76,8 +76,11 @@ export default async function NFTItemPage({ params }: Props) {
               <div className="mb-3 flex">
                 {/* <!-- Collection --> */}
                 <div className="flex items-center">
-                  <Link href="#" className="text-accent mr-2 text-sm font-bold">
-                    CryptoGuysNFT
+                  <Link
+                    href="#"
+                    className="text-accent mr-2 text-sm font-bold overflow-hidden text-ellipsis block w-32"
+                  >
+                    {data.contract.contractDeployer}
                   </Link>
                   <span
                     className="dark:border-jacarta-600 bg-green inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"

@@ -29,6 +29,9 @@ export async function GET(req: Request) {
   const user: users | null = await prisma.users.findUnique({
     where: { address: address as string},
   });
+  if(!user){
+    return NextResponse.json({message:"User does not exist in database."},{ status:200 })
+  }
 
   const userWithoutId = exclude(user,["id"]);
   const parsedUser = await fixBigInt(userWithoutId);

@@ -1,6 +1,6 @@
-
+'use client'
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { useIntersection } from "@mantine/hooks";
 import Link from "next/link";
 import Likes from "../likes";
@@ -10,8 +10,6 @@ import { buyModalShow, incrementLimit, incrementStartToken } from "../../redux/c
 import { RootState } from '@/redux/store';
 import Tippy from '../Tippy';
 import { Data } from '@/api/nftscan';
-import { profile } from 'console';
-import CategoryItemPlaceholder from './category-item-placeholder';
 
 interface params {
   params: {
@@ -25,6 +23,18 @@ const CategoryItem = ({ params }: params) => {
     (state) => state.counter
   );
   const dispatch = useDispatch();
+  const [isVideo, setIsVideo] = useState(true);
+
+  const isVideoUrl = async (url: string) => {
+    const id = url.split('/').pop();
+    const request = await fetch(`/api/collection/isvideo/${id}`);
+    const isVideo = await request.json();
+    setIsVideo(isVideo);
+  };
+
+  useEffect(() => {
+    isVideoUrl(sortedtrendingCategoryItemData[0].image)
+  }, [])
 
   const lastPostRef = useRef<HTMLElement>(null)
   const { ref, entry } = useIntersection({
@@ -76,16 +86,19 @@ const CategoryItem = ({ params }: params) => {
                 <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                   <figure className="relative">
                     <Link href={linkPath} prefetch={false}>
-                      {image ?
+                      {isVideo ? (
+                        <video
+                          src={image}
+                          className="w-full h-[230px] rounded-[0.625rem] object-cover"
+                          controls
+                        />
+                      ) : (
                         <img
                           src={image}
                           alt="item 5"
                           className="w-full h-[230px] rounded-[0.625rem] object-cover"
                         />
-                        : (
-                          <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />
-                        )
-                      }
+                      )}
 
                     </Link>
 
@@ -188,16 +201,19 @@ const CategoryItem = ({ params }: params) => {
               <div className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl block border bg-white p-[1.1875rem] transition-shadow hover:shadow-lg">
                 <figure className="relative">
                   <Link href={linkPath} prefetch={false}>
-                    {image ?
+                    {isVideo ? (
+                      <video
+                        src={image}
+                        className="w-full h-[230px] rounded-[0.625rem] object-cover"
+                        controls
+                      />
+                    ) : (
                       <img
                         src={image}
                         alt="item 5"
                         className="w-full h-[230px] rounded-[0.625rem] object-cover"
                       />
-                      : (
-                        <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />
-                      )
-                    }
+                    )}
 
                   </Link>
 

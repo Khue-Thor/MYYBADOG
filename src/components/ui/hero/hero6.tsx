@@ -103,10 +103,9 @@ const Hero_6 = async () => {
                             href={`/${chain}/${contract_address}/${token_id}`}
                             prefetch={false}
                             className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
-                            prefetch={false}
                           >
                             <Image
-                              src={image || "/public/images/404.png"}
+                              src={image || "/images/404.png"}
                               alt={name}
                               className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"
                               height="470"
@@ -156,13 +155,12 @@ const Hero_6 = async () => {
                     <div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
                       <figure className="relative">
                         <Link
-                          prefetch={false}
                           href={`/${chain}/${contract_address}/${token_id}`}
                           prefetch={false}
                           className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
                         >
                           <Image
-                            src={image || "/public/images/404.png"}
+                            src={image || "/images/404.png"}
                             alt={name}
                             className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"
                             height="470"
@@ -213,13 +211,12 @@ const Hero_6 = async () => {
                       <div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
                         <figure className="relative">
                           <Link
-                            prefetch={false}
                             href={`/${chain}/${contract_address}/${token_id}`}
                             prefetch={false}
                             className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
                           >
                             <Image
-                              src={image || "/public/images/404.png"}
+                              src={image || "/images/404.png"}
                               alt={name}
                               className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"
                               height="470"

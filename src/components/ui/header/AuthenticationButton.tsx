@@ -10,7 +10,7 @@ import { RiLoginBoxLine } from "react-icons/ri";
 
 export default function AuthenticationButton() {
   // const shortenedAddress = address.substring(0, 17).concat("...");
-  const address = useAddress();
+  const address = useAddress() || "";
   const disconnect = useDisconnect();
   const auth = useAuth();
   const { data: session } = useSession();

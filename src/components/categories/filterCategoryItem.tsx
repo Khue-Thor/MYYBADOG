@@ -6,10 +6,12 @@ import CategoryItem from "./categoryItem";
 import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
 import { CollectionItemSkeleton } from '../CollectionItemSkeleton';
+import { Data } from '@/api/nftscan';
 
 interface params {
   params: {
     contract_address: string;
+    profile: Data
   }
 }
 
@@ -170,9 +172,9 @@ const FilterCategoryItem = ({ params }: params) => {
           <CollectionItemSkeleton />
         ) : (
           searchInput.length > 0 ? (
-            <OneCategoryItem item={searchResult} />
+            <OneCategoryItem params={{ item: searchResult, profile: params.profile }} />
           ) : (
-            <CategoryItem />
+            <CategoryItem params={{ profile: params.profile }} />
           )
         )}
       </div>

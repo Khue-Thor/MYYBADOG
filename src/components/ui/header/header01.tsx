@@ -447,7 +447,7 @@ export default function Header01() {
   return (
     <>
       {/* main desktop menu sart*/}
-      <header className="js-page-header fixed top-0 z-20 w-full bg-purple-base transition-colors">
+      <header className="js-page-header sticky top-0 z-20 w-full bg-purple-base transition-colors">
         <div className="flex items-center px-3 py-2 xl:px-10 ">
           <Link className="px-4 shrink-0" href="/">
             <div>

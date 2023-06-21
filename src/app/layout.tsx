@@ -34,8 +34,10 @@ export default function RootLayout({
         <head />
         <body className={inter.className}>
           <Providers session={session}>
-            <Header01 />
-            <>{children}</>
+            <div>
+              <Header01 />
+              <>{children}</>
+            </div>
           </Providers>
           <Footer />
           <BidsModal />

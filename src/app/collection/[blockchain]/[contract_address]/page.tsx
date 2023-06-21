@@ -167,7 +167,10 @@ const Collection = async ({ params }: params) => {
               src={profile.banner_url || "/images/404.png"}
               alt="banner"
               fill
-              style={{ width: "100%" }}
+              sizes="100vw"
+              style={{
+                objectFit: "cover", // cover, contain, none
+              }}
               priority={true}
             />
           )}

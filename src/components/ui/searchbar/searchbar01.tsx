@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { getRanking, rankingData } from '@/api/nftscan';
 const SearchBar01 = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
   const router = useRouter()
 
   const onSearch = (e: React.FormEvent) => {
@@ -16,8 +18,9 @@ const SearchBar01 = () => {
   }
 
   const [filteredData, setFilteredData] = useState([]);
-  const [enteredWord, setEnteredWord] = useState([]);
+  const [enteredWord, setEnteredWord] = useState('');
   const [collectionsData, setCollectionsData] = useState([]);
+  const [initialData, setInitialData] = useState<rankingData[]>([])
 
   async function getCollections() {
     // Fetch collections data and update state
@@ -52,8 +55,18 @@ const SearchBar01 = () => {
     }
   }
 
+  async function getInitialCollections() {
+    // fetch initial trending data to display before user searches
+    const data = await getRanking('volume_total');
+    setInitialData(data);
+  }
+
+
   useEffect(() => {
-    if (enteredWord.length >= 1) {
+    getInitialCollections();
+  }, []);
+  useEffect(() => {
+    if (enteredWord.length >= 3) {
       getCollections();
     }
   }, [enteredWord]);
@@ -61,45 +74,78 @@ const SearchBar01 = () => {
   const handleFilter = (e: any) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
+  };
+
+  useEffect(() => {
     const newFilter = filteredData.filter((value: any) => {
       // Check if collectionName is not null before applying toLowerCase()
       if (value.openSeaMetadata.collectionName !== null) {
-        return value.openSeaMetadata.collectionName.toLowerCase().includes(searchWord.toLowerCase());
+        return value.openSeaMetadata.collectionName.toLowerCase().includes(enteredWord.toLowerCase());
       }
       return false; // Skip the current value if collectionName is null
     });
+    if (enteredWord.length >= 3) {
+      setShowSearch(false)
+    }
 
-    if (searchWord === "") {
+    if (enteredWord === "") {
       setCollectionsData([])
     } else {
       setCollectionsData(newFilter);
     }
-  };
+  }, [filteredData]);
+
+  const handleClick = () => {
+    setShowSearch(true);
+  }
 
   const clearInput = () => {
     setCollectionsData([]);
-    setEnteredWord([]);
+    setEnteredWord('');
+    setShowSearch(false);
   };
 
   return (
     <form
       action="search"
       className="relative hidden ml-3 basis-3/12 lg:block xl:ml-[8%]"
-
     >
       <input
         type="search"
         className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 xl:w-[430px] w-[380px] rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
         placeholder="Search"
         onChange={handleFilter}
+        onClick={handleClick}
         value={enteredWord}
       />
+      {showSearch && enteredWord.length < 3 && initialData.length > 1 && (
+        <div className="dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+          <span className='font-bold text-sm text-gray-600 p-3'>Featured</span>
+          <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
+          {initialData.slice(0, 5).map((value: rankingData) => {
+            return (
+              <Link key={value.contract_address} href={`/collection/eth-mainnet/${value.contract_address}`} prefetch={false} onClick={clearInput}>
+                <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                  <div className="flex gap-3 items-top">
+                    <img src={value.logo_url} alt="Image" className="rounded-lg w-9 h-9" />
+                    <div className="flex flex-col">
+                      <span className="font-bold dark:text-white text-base w-[150px]">{value.contract_name}</span>
+                      <span className='font-medium text-xs text-gray-700'>{value.items_total} items</span>
+                    </div>
+                  </div>
+                  <span className="font-medium text-sm text-gray-700">{value.floor_price} ETH</span>
+                </div>
+              </Link>
+            );
+          })}
+          <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
+        </div>
+      )}
 
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
         <div className="dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className='font-bold text-sm text-gray-600 p-3'>COLLECTIONS</span>
           {collectionsData.slice(0, 5).map((value: any) => {
-            console.log(value);
             return (
               <Link key={value.address} href={`/collection/eth-mainnet/${value.address}`} prefetch={false} onClick={clearInput}>
                 <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">

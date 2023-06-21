@@ -91,7 +91,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/tarms" className="hover:text-accent dark:hover:text-white">
+                <Link href="/privacy" className="hover:text-accent dark:hover:text-white">
                   Privacy policy
                 </Link>
               </li>

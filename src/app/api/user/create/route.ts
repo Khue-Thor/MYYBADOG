@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
-import { users } from "@prisma/client";
 import {prisma} from "@/lib/prisma";
 import { authOptions }  from "@/lib/auth";
 import { fixBigInt } from "@/utils/bigIntFixer";

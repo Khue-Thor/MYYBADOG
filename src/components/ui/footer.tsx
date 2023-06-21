@@ -86,7 +86,7 @@ const Footer = () => {
 
             <ul className="dark:text-jacarta-400 flex flex-wrap space-x-4 text-sm">
               <li>
-                <Link href="/tarms" className="hover:text-accent dark:hover:text-white">
+                <Link href="/terms" className="hover:text-accent dark:hover:text-white">
                   Terms and conditions
                 </Link>
               </li>

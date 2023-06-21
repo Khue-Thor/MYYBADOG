@@ -4,22 +4,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getRanking, rankingData } from '@/api/nftscan';
 const SearchBar01 = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
-  const router = useRouter();
 
-  const onSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const encodedSearchQueary = encodeURI(searchQuery);
-    router.push(`/search?q=${encodedSearchQueary}`);
-    console.log('current query', encodedSearchQueary);
-  };
-
-  const [filteredData, setFilteredData] = useState([]);
   const [enteredWord, setEnteredWord] = useState('');
   const [collectionsData, setCollectionsData] = useState([]);
   const [initialData, setInitialData] = useState<rankingData[]>([]);
+  const [failedSearch, setFailedSearch] = useState(false);
 
   async function getCollections() {
     // Fetch collections data and update state
@@ -29,27 +19,27 @@ const SearchBar01 = () => {
         headers: {
           accept: 'application/json',
         },
-        next: {
-          revalidate: 86400, // 24 hrs in sec
-        },
       };
 
       // TODO: Need to refresh with the proper query
-      const query = enteredWord;
-      // console.log(`${enteredWord}`);
+      const encodedWord = encodeURIComponent(enteredWord);
+      const query = `/api/search/collection/${encodedWord}`;
 
-      // const res = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v3/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}/searchContractMetadata?query=bored`, options);
-      const res = await fetch(`/api/search/collection/${query}`, options);
+      const res = await fetch(query, options);
 
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
 
       const data = await res.json();
-      setFilteredData(data.contracts);
+      if (data.contracts.length === 0) {
+        setFailedSearch(true);
+      } else {
+        setFailedSearch(false);
+      }
+      setCollectionsData(data.contracts);
     } catch (error) {
-      console.error(error);
-      setFilteredData([]);
+      setFailedSearch(true);
     }
   }
 
@@ -71,7 +61,7 @@ const SearchBar01 = () => {
     if (enteredWord.length >= 3) {
       getCollections();
     }
-    if (enteredWord.length < 3) {
+    if (enteredWord.length < 3 && enteredWord.length > 0) {
       setShowSearch(true);
     }
   }, [enteredWord]);
@@ -83,28 +73,12 @@ const SearchBar01 = () => {
 
   const handleClose = () => {
     setShowSearch(false);
+    setFailedSearch(false);
   }
 
   useEffect(() => {
-    const newFilter = filteredData.filter((value: any) => {
-      // Check if collectionName is not null before applying toLowerCase()
-      if (value.openSeaMetadata.collectionName !== null) {
-        return value.openSeaMetadata.collectionName
-          .toLowerCase()
-          .includes(enteredWord.toLowerCase());
-      }
-      return false; // Skip the current value if collectionName is null
-    });
-    if (enteredWord.length >= 3) {
-      setShowSearch(false);
-    }
 
-    if (enteredWord === '') {
-      setCollectionsData([]);
-    } else {
-      setCollectionsData(newFilter);
-    }
-  }, [filteredData]);
+  }, []);
 
   const handleClick = () => {
     setShowSearch(true);
@@ -114,12 +88,14 @@ const SearchBar01 = () => {
     setCollectionsData([]);
     setEnteredWord('');
     setShowSearch(false);
+    setFailedSearch(false);
   };
 
   return (
     <form
       action="search"
       className="relative hidden ml-3 basis-3/12 lg:block xl:ml-[8%]"
+      onSubmit={(e) => e.preventDefault()}
     >
       <input
         type="search"
@@ -232,27 +208,12 @@ const SearchBar01 = () => {
         </svg>
       </span>
 
-      {enteredWord.length == 0 ? (
-        <span></span>
-      ) : (
-        <span
-          className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
-          onClick={clearInput}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            width={26}
-            height={26}
-            className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
-          >
-            <path
-              fill="none"
-              d="M0 0h24v24H0z"
-            />
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-          </svg>
-        </span>
+      {failedSearch && (
+        <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+          <span className="font-bold text-sm text-gray-600 p-3">
+            {`Sorry, we couldn't find any collection with this name`}
+          </span>
+        </div>
       )}
     </form>
   );

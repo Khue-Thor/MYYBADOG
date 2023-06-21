@@ -137,7 +137,7 @@ const SearchBar01 = () => {
           >
             X
           </button>
-          <span className="font-bold text-sm text-gray-600 p-3">Featured</span>
+          <span className="font-bold text-sm text-gray-600 p-3">FEATURED</span>
           <span className="font-bold text-sm text-gray-600 p-3">
             COLLECTIONS
           </span>

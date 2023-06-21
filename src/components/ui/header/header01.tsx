@@ -681,6 +681,9 @@ export default function Header01() {
                 <li className="group">
                   <AuthenticationButton />
                 </li>
+                <li>
+                  <DarkMode />
+                </li>
               </ul>
             </nav>
             {/* End menu for desktop */}

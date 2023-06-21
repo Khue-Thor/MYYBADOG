@@ -91,7 +91,7 @@ export default function AuthenticationButton() {
     <div>
       {session ? (
         <button
-          className="bg-red text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 rounded p-2"
+          className="bg-red text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
           onClick={() => logOutAll()}
         >
           {" "}
@@ -100,7 +100,7 @@ export default function AuthenticationButton() {
       ) : address ? (
         <>
           <button
-            className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 rounded p-2"
+            className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
             onClick={() => loginWithWallet()}
           >
             {" "}

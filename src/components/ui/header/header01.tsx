@@ -684,11 +684,15 @@ export default function Header01() {
                 <li>
                   <DarkMode />
                 </li>
+                {session ? (
+                  <li>
+                    <ProfileSheet />
+                  </li>
+                ) : null}
               </ul>
             </nav>
             {/* End menu for desktop */}
 
-            {session ? <ProfileSheet /> : null}
             {/* End header right content (metamask and other) for desktop */}
           </div>
           {/* header menu conent end for desktop */}

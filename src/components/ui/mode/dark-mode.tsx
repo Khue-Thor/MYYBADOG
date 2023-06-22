@@ -25,9 +25,11 @@ export default function DarkMode() {
   return (
     <>
       <button
-        className="js-dark-mode-trigger dark:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
+        className="js-dark-mode-trigger dark:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
         aria-label="light"
-        onClick={() => (theme === "dark" ? setTheme("light") : setTheme("dark"))}
+        onClick={() =>
+          theme === "dark" ? setTheme("light") : setTheme("dark")
+        }
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

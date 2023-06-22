@@ -6,14 +6,15 @@ import ItemsCountdownTimer from "@/components/ItemsCountdownTimer";
 import ItemsTabs from "@/components/tabs/Tabs";
 import MoreItems from "@/app/[blockchain]/[contract_address]/[id]/MoreItems";
 import {
-  computeRarity,
   getNFTMetadata,
   getNFTsForContract,
+  getOwnersForNFT,
   NFTMetaData,
 } from "@/api/alchemy";
 import NFTImage from "@/app/[blockchain]/[contract_address]/[id]/NFTImage";
 import PlaceBidButton from "@/app/[blockchain]/[contract_address]/[id]/PlaceBidButton";
 import Tippy from "@/components/Tippy";
+import React, { Suspense } from "react";
 
 type Props = {
   params: { id: string; blockchain: string; contract_address: string };
@@ -22,23 +23,23 @@ type Props = {
 export default async function NFTItemPage({ params }: Props) {
   const { id, blockchain, contract_address } = params;
 
-  const [nftMetadata, nftsForContract, { rarities }] = await Promise.all([
+  const getNFTsForContractPromise = getNFTsForContract({
+    blockchain,
+    contractAddress: contract_address,
+    limit: 10,
+  });
+
+  const [nftMetadata, owners] = await Promise.all([
     getNFTMetadata({
       blockchain,
       contractAddress: contract_address,
       tokenId: id,
     }),
-    getNFTsForContract({
-      blockchain,
-      contractAddress: contract_address,
-      limit: 10,
-    }),
-    computeRarity({
+    getOwnersForNFT({
       blockchain,
       contractAddress: contract_address,
       tokenId: id,
     }),
-    await new Promise((resolve) => setTimeout(resolve, 3000)),
   ]);
   const data: NFTMetaData & { likes: number; auctionTimer: number } = {
     ...nftMetadata,
@@ -75,8 +76,11 @@ export default async function NFTItemPage({ params }: Props) {
               <div className="mb-3 flex">
                 {/* <!-- Collection --> */}
                 <div className="flex items-center">
-                  <Link href="#" className="text-accent mr-2 text-sm font-bold">
-                    CryptoGuysNFT
+                  <Link
+                    href="#"
+                    className="text-accent mr-2 text-sm font-bold overflow-hidden text-ellipsis block w-32"
+                  >
+                    {data.contract.contractDeployer}
                   </Link>
                   <span
                     className="dark:border-jacarta-600 bg-green inline-flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
@@ -192,7 +196,9 @@ export default async function NFTItemPage({ params }: Props) {
                     </span>
                     <Link href="/user/avatar_6" className="text-accent block">
                       {/*Todo insert owner name*/}
-                      {/*<span className="text-sm font-bold">{ownerName}</span>*/}
+                      <span className="text-sm font-bold overflow-hidden text-ellipsis block w-32">
+                        {owners[0]}
+                      </span>
                     </Link>
                   </div>
                 </div>
@@ -261,7 +267,6 @@ export default async function NFTItemPage({ params }: Props) {
             {/* <!-- end details --> */}
           </div>
           <ItemsTabs
-            rarities={rarities}
             blockchain={blockchain}
             contractAddress={contract_address}
             tokenId={id}
@@ -270,12 +275,18 @@ export default async function NFTItemPage({ params }: Props) {
         </div>
       </section>
       {/* <!-- end item --> */}
-
-      <MoreItems
-        blockchain={blockchain}
-        contractAddress={contract_address}
-        nfts={nftsForContract}
-      />
+      <Suspense
+        fallback={
+          <div className="container">Loading NFTs from this collection...</div>
+        }
+      >
+        {/*@ts-expect-error Async Server Component*/}
+        <MoreItems
+          blockchain={blockchain}
+          contractAddress={contract_address}
+          getNFTsForContractPromise={getNFTsForContractPromise}
+        />
+      </Suspense>
     </>
   );
 }

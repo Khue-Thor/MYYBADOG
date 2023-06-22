@@ -35,6 +35,8 @@ npx prisma db push
 npx prisma migration diff
 ## Deploy migration to production
 npx prisma migrate deploy
+## Instantiate Prisma Client / Re-establish link
+npx prisma generate
 ```
 
 Refer to [Prisma Docs](https://www.prisma.io/docs/concepts/components/prisma-client/crud) for usage operations.

@@ -10,7 +10,7 @@ import { RiLoginBoxLine } from "react-icons/ri";
 
 export default function AuthenticationButton() {
   // const shortenedAddress = address.substring(0, 17).concat("...");
-  const address = useAddress();
+  const address = useAddress() || "";
   const disconnect = useDisconnect();
   const auth = useAuth();
   const { data: session } = useSession();
@@ -27,7 +27,7 @@ export default function AuthenticationButton() {
       // Prompt the user to sign a login with wallet message
       const payload = await auth?.login();
       const userData = await getUser();
-      const userExists = userData ? true : false;
+      const userExists = userData.message ? false : true;
 
       if (!userExists) {
         await createUser(payload.payload.address);
@@ -91,7 +91,7 @@ export default function AuthenticationButton() {
     <div>
       {session ? (
         <button
-          className="bg-red text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 rounded p-2"
+          className="bg-red text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
           onClick={() => logOutAll()}
         >
           {" "}
@@ -100,7 +100,7 @@ export default function AuthenticationButton() {
       ) : address ? (
         <>
           <button
-            className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 rounded p-2"
+            className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
             onClick={() => loginWithWallet()}
           >
             {" "}

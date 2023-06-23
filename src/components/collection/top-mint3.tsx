@@ -1,7 +1,7 @@
 // import Image from 'next/image';
-import { getTopMint } from "@/utils/urlGetter";
+// import { getTopMint } from "@/utils/urlGetter";
 import Link from "next/link";
-import TopMintItem from "./top-mint-item";
+// import TopMintItem from "./top-mint-item";
 import { getRanking, rankingData } from "@/api/nftscan";
 
 type MintVolumeType = {
@@ -27,7 +27,7 @@ interface TopMintCollectionRecord {
 
 async function getTopMintData() {
   try {
-    const data = await getRanking("volume");
+    const data = await getRanking("volume_total");
     return data;
   } catch (error) {
     return null;
@@ -43,8 +43,7 @@ const TopMint3 = async () => {
       {/* <!-- Today's Top Mint --> */}
       <div
         className="dark:bg-jacarta-800 bg-light-base rounded-2.5xl p-12 lg:w-1/3"
-        // key={parentId}
-        key={"TopMint1"}
+      // key={parentId}
       >
         <h2 className="text-jacarta-700 font-display mb-8 text-center text-3xl font-semibold dark:text-white">
           {"Top Volume"}

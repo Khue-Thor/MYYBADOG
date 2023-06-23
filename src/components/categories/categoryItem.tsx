@@ -1,6 +1,6 @@
 'use client'
 /* eslint-disable @next/next/no-img-element */
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useIntersection } from "@mantine/hooks";
 import Link from "next/link";
 import Likes from "../likes";
@@ -11,6 +11,7 @@ import { RootState } from '@/redux/store';
 import Tippy from '../Tippy';
 import { Data } from '@/api/nftscan';
 import CategoryItemPlaceholder from './category-item-placeholder';
+import Image from 'next/image';
 
 interface params {
   params: {
@@ -62,6 +63,20 @@ const CategoryItem = ({ params }: params) => {
   }, [entry])
 
 
+  interface ImageWithFallbackProps {
+    imageURL: string;
+    fallbackImageURL: string;
+  }
+
+  const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ imageURL, fallbackImageURL }) => {
+    const handleError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+      event.currentTarget.src = fallbackImageURL;
+    };
+
+    return <img src={imageURL} onError={handleError} alt="Image with fallback" className="w-full h-[230px] rounded-[0.625rem] object-cover" />;
+  };
+
+
   return (
     <div>
       <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">
@@ -95,10 +110,10 @@ const CategoryItem = ({ params }: params) => {
                           controls
                         />
                       ) : image ? (
-                        <img
-                          src={image}
-                          alt="item 5"
-                          className="w-full h-[230px] rounded-[0.625rem] object-cover"
+
+                        <ImageWithFallback
+                          imageURL={image as string}
+                          fallbackImageURL="/images/baddogs-error-v2-230x230.png"
                         />
                       ) : <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />}
 
@@ -210,10 +225,9 @@ const CategoryItem = ({ params }: params) => {
                         controls
                       />
                     ) : image ? (
-                      <img
-                        src={image}
-                        alt="item 5"
-                        className="w-full h-[230px] rounded-[0.625rem] object-cover"
+                      <ImageWithFallback
+                        imageURL={image as string}
+                        fallbackImageURL="/images/baddogs-error-v2-230x230.png"
                       />
                     ) : <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />}
 

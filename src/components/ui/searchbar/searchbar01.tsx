@@ -76,10 +76,6 @@ const SearchBar01 = () => {
     setFailedSearch(false);
   }
 
-  useEffect(() => {
-
-  }, []);
-
   const handleClick = () => {
     setShowSearch(true);
   };

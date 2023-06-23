@@ -1,19 +1,22 @@
 import React, { use, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { incrementStartToken, updateTrendingCategoryItemData } from "../../redux/counterSlice";
+import {
+  incrementStartToken,
+  updateTrendingCategoryItemData,
+} from "../../redux/counterSlice";
 import { usePathname } from "next/navigation";
 import CategoryItem from "./categoryItem";
 import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
-import { CollectionItemSkeleton } from '../CollectionItemSkeleton';
-import { Data } from '@/api/nftscan';
-import { NFTMetaData } from '@/api/alchemy';
+import { CollectionItemSkeleton } from "../CollectionItemSkeleton";
+import { Data } from "@/api/nftscan";
+import { NFTMetaData } from "@/api/alchemy";
 
 interface params {
   params: {
     contract_address: string;
-    profile: Data
-  }
+    profile: Data;
+  };
 }
 
 type Item = {
@@ -51,14 +54,14 @@ const initialItem = {
 };
 
 const options: RequestInit = {
-  method: 'GET',
+  method: "GET",
   headers: {
-    accept: 'application/json',
+    accept: "application/json",
   },
   next: {
-    revalidate: 86400, // 24 hrs in sec 
-  }
-}
+    revalidate: 86400, // 24 hrs in sec
+  },
+};
 
 const FilterCategoryItem = ({ params }: params) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -77,8 +80,8 @@ const FilterCategoryItem = ({ params }: params) => {
     .split("/")[2]
     .replace(`/${contract_address}/${id}`, "");
 
-  const formatItem = (item: NFTMetaData) => ({
-    id: item.tokenId || '1',
+  const formatItem = (item: any) => ({
+    id: item.tokenId || "1",
     image: item.image.thumbnailUrl || "",
     title: item.name || `#${item.tokenId}` || "",
     price: "SetPrice" + " ETH",
@@ -99,7 +102,10 @@ const FilterCategoryItem = ({ params }: params) => {
 
   const fetchOneItem = async (token: number) => {
     try {
-      const response = await fetch(`/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`, options)
+      const response = await fetch(
+        `/api/collection/items/singlenft/${blockchain}/${contract_address}/${token}`,
+        options
+      );
 
       const item = await response.json();
 
@@ -114,7 +120,10 @@ const FilterCategoryItem = ({ params }: params) => {
     if (startToken === 1) {
       setIsLoading(true);
     }
-    const data = await fetch(`/api/collection/items/fetch32/${blockchain}/${contract_address}/${startToken}/${limit}`, options)
+    const data = await fetch(
+      `/api/collection/items/fetch32/${blockchain}/${contract_address}/${startToken}/${limit}`,
+      options
+    );
 
     const list = await data.json();
     const formattedList = list?.map((item: any) => formatItem(item));
@@ -131,10 +140,10 @@ const FilterCategoryItem = ({ params }: params) => {
   useEffect(() => {
     return () => {
       if (startToken === 1) {
-        dispatch(incrementStartToken(0))
+        dispatch(incrementStartToken(0));
       }
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     if (searchInput.length > 0) {
@@ -152,7 +161,6 @@ const FilterCategoryItem = ({ params }: params) => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-
       {/* <!-- Filter --> */}
       {/* <Collection_category_filter /> */}
       <input
@@ -167,19 +175,18 @@ const FilterCategoryItem = ({ params }: params) => {
         className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
       ></button>
       <div className="flex flex-col justify-center items-center">
-
         {isLoading ? (
           // Loading skeleton
           <CollectionItemSkeleton />
+        ) : searchInput.length > 0 ? (
+          <OneCategoryItem
+            params={{ item: searchResult, profile: params.profile }}
+          />
         ) : (
-          searchInput.length > 0 ? (
-            <OneCategoryItem params={{ item: searchResult, profile: params.profile }} />
-          ) : (
-            <CategoryItem params={{ profile: params.profile }} />
-          )
+          <CategoryItem params={{ profile: params.profile }} />
         )}
       </div>
-    </div >
+    </div>
   );
 };
 

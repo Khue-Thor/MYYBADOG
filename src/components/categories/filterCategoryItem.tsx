@@ -7,6 +7,7 @@ import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
 import { CollectionItemSkeleton } from '../CollectionItemSkeleton';
 import { Data } from '@/api/nftscan';
+import { NFTMetaData } from '@/api/alchemy';
 
 interface params {
   params: {
@@ -76,9 +77,9 @@ const FilterCategoryItem = ({ params }: params) => {
     .split("/")[2]
     .replace(`/${contract_address}/${id}`, "");
 
-  const formatItem = (item: any) => ({
+  const formatItem = (item: NFTMetaData) => ({
     id: item.tokenId || '1',
-    image: item.image.cachedUrl || "",
+    image: item.image.thumbnailUrl || "",
     title: item.name || `#${item.tokenId}` || "",
     price: "SetPrice" + " ETH",
     sortPrice: String(Math.floor(Math.random() * 100) + 1),

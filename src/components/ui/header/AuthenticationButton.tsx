@@ -2,19 +2,24 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import {
   ConnectWallet,
   useAddress,
+  useUser,
   useAuth,
   useDisconnect,
   useConnect,
+  metamaskWallet,
+  useSigner,
 } from "@thirdweb-dev/react";
 import { RiLoginBoxLine } from "react-icons/ri";
+const metamaskConfig = metamaskWallet();
 
 export default function AuthenticationButton() {
   // const shortenedAddress = address.substring(0, 17).concat("...");
   const address = useAddress() || "";
   const disconnect = useDisconnect();
+  const user = useUser();
   const auth = useAuth();
   const { data: session } = useSession();
-
+  const connect = useConnect();
   const logOutAll = () => {
     if (session) {
       signOut();
@@ -24,10 +29,9 @@ export default function AuthenticationButton() {
 
   async function loginWithWallet() {
     try {
-      // Prompt the user to sign a login with wallet message
       const payload = await auth?.login();
       const userData = await getUser();
-      const userExists = userData.message ? false : true;
+      const userExists = (await userData.message) ? false : true;
 
       if (!userExists) {
         await createUser(payload.payload.address);
@@ -97,20 +101,32 @@ export default function AuthenticationButton() {
           {" "}
           Logout <RiLoginBoxLine />
         </button>
-      ) : address ? (
-        <>
-          <button
-            className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
-            onClick={() => loginWithWallet()}
-          >
-            {" "}
-            Web2 Login <RiLoginBoxLine />
-          </button>
-        </>
       ) : (
+        // : address ? (
+        //   <>
+        //     {/* <button
+        //       className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
+        //       onClick={() => loginWithWallet()}
+        //     >
+        //       {" "}
+        //       Web2 Login <RiLoginBoxLine />
+        //     </button> */}
+        //     <ConnectWallet />
+        //   </>
+        // )
         <ConnectWallet
           className="connect-wallet-btn hover:opacity-60 hover:animate-[wiggle_1s_ease-in-out_infinite] mt-2 text-md"
           btnTitle="Connect Wallet"
+          auth={{
+            loginOptional: true,
+            onLogin: (token: string) => {
+              console.log(token);
+              console.log("Logged in");
+              console.log(address);
+
+              loginWithWallet();
+            },
+          }}
         />
       )}
     </div>

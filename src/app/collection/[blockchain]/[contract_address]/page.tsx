@@ -30,12 +30,16 @@ const Collection = async ({ params }: params) => {
   // const [details, setDetails] = useState<DetailItem[]>([]);
   // const [profile, setProfile] = useState<Data>();
   const contractAddress = params.contract_address;
+  console.log('contractAddress coming from params(url) ->', contractAddress);
+
   // const id = params.id;
   // const blockchain = params.blockchain;
 
   const fetchCollectionData = async () => {
     try {
       const data = await getColectionMetrics(contractAddress);
+      console.log('detailMetricsFromNftGO', data);
+
       return [
         {
           id: "1",
@@ -67,8 +71,10 @@ const Collection = async ({ params }: params) => {
         },
       ];
     } catch (error) {
+      console.log('failedDetailsMetrics NFTGO ->', error);
       try {
         const data = await getCollectionData(contractAddress);
+        console.log('detailMetricsFromNftscan ->', data);
         return [
           {
             id: "1",
@@ -101,6 +107,7 @@ const Collection = async ({ params }: params) => {
           },
         ];
       } catch (error) {
+        console.log('failedDetailsMetrics NFTSCAN ->', error);
         return [
           {
             id: "1",
@@ -133,12 +140,17 @@ const Collection = async ({ params }: params) => {
 
   const fetchBannerAndProfile = async (contractAddress: string) => {
     const data = await getCollectionData(contractAddress);
+    console.log('profileDataFromNftscan (banner/profile) ->', data);
     // setProfile(data);
     return data;
   };
 
   const profile = await fetchBannerAndProfile(contractAddress);
   const details = await fetchCollectionData();
+
+  console.log('details (render details numbers below profile) ->', details);
+  console.log('profile (renders profile image and banner) ->', profile);
+
 
   // useEffect(() => {
   //   // fetchCollectionItems();
@@ -189,8 +201,8 @@ const Collection = async ({ params }: params) => {
                   <Image
                     src={profile.logo_url || "/images/404.png"}
                     alt={profile.name}
-                    layout="fill"
-                    objectFit="contain"
+                    fill
+                    sizes="100vw"
                     className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
                   />
                   <div
@@ -257,7 +269,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <button>
                         {likesImage ? (
@@ -276,7 +288,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`${profile.discord}`}
@@ -294,7 +306,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`https://www.twitter.com/${profile.twitter}`}
@@ -312,7 +324,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`${profile.website}`}
@@ -331,7 +343,7 @@ const Collection = async ({ params }: params) => {
                       {/* <Likes data={} /> */}
                       <div
                         className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                        // onClick={() => handleLikes()}
+                      // onClick={() => handleLikes()}
                       >
                         <Link
                           href={`https://www.instagram.com/${profile.instagram}`}

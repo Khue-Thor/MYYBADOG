@@ -491,6 +491,7 @@ export default function Header01() {
                       <li key={page.id}>
                         <Link
                           href={page.path}
+                          prefetch={false}
                           className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between "
                         >
                           <span
@@ -543,6 +544,7 @@ export default function Header01() {
                       <li key={page.id}>
                         <Link
                           href={page.path}
+                          prefetch={false}
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                         >
                           <span
@@ -598,6 +600,7 @@ export default function Header01() {
                       <li key={page.id}>
                         <Link
                           href={page.path}
+                          prefetch={false}
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                         >
                           <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
@@ -645,6 +648,7 @@ export default function Header01() {
                       <li key={page.id}>
                         <Link
                           href={page?.path}
+                          prefetch={false}
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                         >
                           <span
@@ -664,7 +668,7 @@ export default function Header01() {
 
                 {/* create */}
                 <li className="group">
-                  <Link href="/create">
+                  <Link href="/create" prefetch={false}>
                     <button className="text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5">
                       <span
                         className={
@@ -717,6 +721,7 @@ export default function Header01() {
             </button>
             <Link
               href="/profile/user_avatar"
+              prefetch={false}
               className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
               aria-label="profile"
             >
@@ -851,6 +856,7 @@ export default function Header01() {
                   <li key={page.id} onClick={() => setToggle(false)}>
                     <Link
                       href={page.path}
+                      prefetch={false}
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                     >
                       <span
@@ -908,6 +914,7 @@ export default function Header01() {
                   <li key={page.id} onClick={() => setToggle(false)}>
                     <Link
                       href={page.path}
+                      prefetch={false}
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                     >
                       <span
@@ -966,6 +973,7 @@ export default function Header01() {
                   <li key={page.id} onClick={() => setToggle(false)}>
                     <Link
                       href="/"
+                      prefetch={false}
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                     >
                       <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
@@ -1017,6 +1025,7 @@ export default function Header01() {
                   <li key={page.id} onClick={() => setToggle(false)}>
                     <Link
                       href={page.path}
+                      prefetch={false}
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                     >
                       <span
@@ -1034,7 +1043,7 @@ export default function Header01() {
               </ul>
             </li>
             <li className="group" onClick={() => setToggle(false)}>
-              <Link href="/create">
+              <Link href="/create" prefetch={false}>
                 <button className="text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5">
                   <span
                     className={

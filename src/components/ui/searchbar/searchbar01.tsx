@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { getRanking, rankingData } from '@/api/nftscan';
 const SearchBar01 = () => {
@@ -11,6 +10,23 @@ const SearchBar01 = () => {
   const [initialData, setInitialData] = useState<rankingData[]>([]);
   const [failedSearch, setFailedSearch] = useState(false);
 
+  async function getCollectionsFallback(options: RequestInit, encodedWord: string) {
+    try {
+      const options: RequestInit = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        },
+        next: {
+          revalidate: 86400, // 24 hrs in sec
+        },
+      };
+
+    } catch (error) {
+
+    }
+  }
+
   async function getCollections() {
     // Fetch collections data and update state
     try {
@@ -18,6 +34,9 @@ const SearchBar01 = () => {
         method: 'GET',
         headers: {
           accept: 'application/json',
+        },
+        next: {
+          revalidate: 86400, // 24 hrs in sec
         },
       };
 

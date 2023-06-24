@@ -154,7 +154,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
       )}
 
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
-        <div className="dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+         <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className="font-bold text-sm text-gray-600 p-3">
             COLLECTIONS
           </span>

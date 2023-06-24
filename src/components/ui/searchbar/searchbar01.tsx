@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getRanking, rankingData } from '@/api/nftscan';
+import Image from "next/image";
 const SearchBar01 = () => {
   const [showSearch, setShowSearch] = useState(false);
 
@@ -122,11 +123,11 @@ const SearchBar01 = () => {
               >
                 <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">
-                    <img
-                      src={value.logo_url}
+                    <Image src={value.logo_url}
                       alt="Image"
-                      className="rounded-lg w-9 h-9"
-                    />
+                      width={9}
+                      height={9}
+                      className="rounded-lg w-9 h-9" />
                     <div className="flex flex-col">
                       <span className="font-bold dark:text-white text-base w-[150px]">
                         {value.contract_name}
@@ -162,11 +163,11 @@ const SearchBar01 = () => {
               >
                 <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">
-                    <img
-                      src={value.openSeaMetadata.imageUrl}
+                    <Image src={value.openSeaMetadata.imageUrl}
                       alt="Image"
-                      className="rounded-lg w-9 h-9"
-                    />
+                      width={9}
+                      height={9}
+                      className="rounded-lg w-9 h-9" />
                     <div className="flex flex-col">
                       <span className="font-bold dark:text-white text-base w-[150px]">
                         {value.openSeaMetadata.collectionName}

@@ -168,11 +168,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
               >
                 <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">
-                    {/* <img
-                      src={value.openSeaMetadata.imageUrl}
-                      alt="Image"
-                      className="rounded-lg w-9 h-9"
-                    /> */}
                     <Image src={value.openSeaMetadata.imageUrl}
                       alt="Image"
                       width={9}
@@ -221,4 +216,4 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
   )
 }
 
-export default SearchBar02
+export default SearchBar02;

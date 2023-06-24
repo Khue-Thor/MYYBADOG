@@ -164,7 +164,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                 key={value.address}
                 href={`/collection/eth-mainnet/${value.address}`}
                 prefetch={false}
-                onClick={clearInput}
+                onClick={handleCloseSearchBar}
               >
                 <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">

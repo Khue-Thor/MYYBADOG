@@ -148,6 +148,24 @@ const SearchBar01 = () => {
         </div>
       )}
 
+      {enteredWord.length == 0 ? (
+        <span></span>
+      ) : (
+        <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            width={26}
+            height={26}
+            className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
+
+          >
+            <path fill="none" d="M0 0h24v24H0z" />
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+          </svg>
+        </span>
+      )}
+
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
         <div className="dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className="font-bold text-sm text-gray-600 p-3">

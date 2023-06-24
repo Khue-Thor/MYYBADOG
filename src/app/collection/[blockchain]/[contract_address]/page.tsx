@@ -30,7 +30,6 @@ const Collection = async ({ params }: params) => {
   // const [details, setDetails] = useState<DetailItem[]>([]);
   // const [profile, setProfile] = useState<Data>();
   const contractAddress = params.contract_address;
-  console.log('contractAddress coming from params(url) ->', contractAddress);
 
   // const id = params.id;
   // const blockchain = params.blockchain;
@@ -38,7 +37,6 @@ const Collection = async ({ params }: params) => {
   const fetchCollectionData = async () => {
     try {
       const data = await getColectionMetrics(contractAddress);
-      console.log('detailMetricsFromNftGO', data);
 
       return [
         {
@@ -74,7 +72,6 @@ const Collection = async ({ params }: params) => {
       console.log('failedDetailsMetrics NFTGO ->', error);
       try {
         const data = await getCollectionData(contractAddress);
-        console.log('detailMetricsFromNftscan ->', data);
         return [
           {
             id: "1",
@@ -140,7 +137,6 @@ const Collection = async ({ params }: params) => {
 
   const fetchBannerAndProfile = async (contractAddress: string) => {
     const data = await getCollectionData(contractAddress);
-    console.log('profileDataFromNftscan (banner/profile) ->', data);
     // setProfile(data);
     return data;
   };
@@ -148,8 +144,6 @@ const Collection = async ({ params }: params) => {
   const profile = await fetchBannerAndProfile(contractAddress);
   const details = await fetchCollectionData();
 
-  console.log('details (render details numbers below profile) ->', details);
-  console.log('profile (renders profile image and banner) ->', profile);
 
 
   // useEffect(() => {

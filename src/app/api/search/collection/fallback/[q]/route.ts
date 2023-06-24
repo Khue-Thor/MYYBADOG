@@ -4,20 +4,14 @@ export async function GET(req: Request, { params }: { params: { q: string } }) {
   try {
     const q = params.q;
 
-    const options: RequestInit = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-      },
-      next: {
-        revalidate: 86400, // 24 hrs in sec
-      },
-    };
+    // next: {
+    //   revalidate: 86400, // 24 hrs in sec
+    // }
 
     const url = 'https://restapi.nftscan.com/api/v2/collections/filters';
     const headers = {
       'Content-Type': 'application/json',
-      'X-API-KEY': process.env.NEXT_PUBLIC_NFTSCAN_API_KEY as string,
+      'X-API-KEY': process.env.NEXT_PUBLIC_NFT_SCAN_API_KEY as string,
     };
     const data = JSON.stringify({
       show_collection: 'false',
@@ -35,8 +29,10 @@ export async function GET(req: Request, { params }: { params: { q: string } }) {
     });
 
     const result = await request.json();
+
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: 'Failed to retrieve' }, { status: 500 });
   }
 }

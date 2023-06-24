@@ -12,18 +12,19 @@ const SearchBar01 = () => {
 
   async function getCollectionsFallback(options: RequestInit, encodedWord: string) {
     try {
-      const options: RequestInit = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-        },
-        next: {
-          revalidate: 86400, // 24 hrs in sec
-        },
-      };
+      const query = `/api/search/collection/${encodedWord}`;
 
+      const res = await fetch(query, options);
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const data = await res.json();
+      setCollectionsData(data.contracts);
+      return data;
     } catch (error) {
-
+      console.log(error);
     }
   }
 
@@ -39,24 +40,40 @@ const SearchBar01 = () => {
           revalidate: 86400, // 24 hrs in sec
         },
       };
-
-      // TODO: Need to refresh with the proper query
       const encodedWord = encodeURIComponent(enteredWord);
-      const query = `/api/search/collection/${encodedWord}`;
-
+      const query = `/api/search/collection/fallback/${encodedWord}`;
       const res = await fetch(query, options);
-
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
 
       const data = await res.json();
-      if (data.contracts.length === 0) {
-        setFailedSearch(true);
-      } else {
-        setFailedSearch(false);
+      console.log('data', data);
+
+      const formattedData = data.data.map((value: any) => {
+        return {
+          totalSupply: value.items_total,
+          address: value.contract_address,
+          openSeaMetadata: {
+            imageUrl: value.logo_url,
+            collectionName: value.name,
+            floorPrice: value.floor_price,
+          }
+        };
+      })
+      setCollectionsData(formattedData);
+      // TODO: Need to refresh with the proper query
+
+      if (formattedData.length === 0) {
+        const fallbackData = await getCollectionsFallback(options, encodedWord);
+        if (fallbackData.length === 0) {
+          setFailedSearch(true);
+          return
+        } else {
+          setFailedSearch(false);
+          return
+        }
       }
-      setCollectionsData(data.contracts);
     } catch (error) {
       setFailedSearch(true);
     }
@@ -167,7 +184,7 @@ const SearchBar01 = () => {
         </div>
       )}
 
-      {enteredWord.length >= 3 && collectionsData.length !== 0 && (
+      {enteredWord.length >= 3 && collectionsData && collectionsData.length !== 0 && (
         <div className="dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className="font-bold text-sm text-gray-600 p-3">
             COLLECTIONS

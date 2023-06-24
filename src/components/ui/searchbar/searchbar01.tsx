@@ -148,7 +148,7 @@ const SearchBar01 = () => {
         </div>
       )}
 
-      {enteredWord.length == 0 ? (
+{enteredWord.length == 0 ? (
         <span></span>
       ) : (
         <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>

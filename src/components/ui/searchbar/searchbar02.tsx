@@ -94,7 +94,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
         value={enteredWord} onClick={handleClick} />
       {showSearch && enteredWord.length < 3 && initialData.length > 1 && (
         <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
-          <span className="absolute top-5 right-4 text-gray-500 hover:text-gray-800 font-bold" onClick={handleClose}>
+          <span className="absolute top-5 right-4 text-gray-500 font-bold hover:text-black" onClick={handleClose}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
@@ -114,7 +114,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           </span>
           {initialData.slice(0, 5).map((value: rankingData) => {
             return (
-              <Link key={value.contract_addres} href={`/collection/eth-mainnet/${value.contract_address}`} prefetch={false} onClick={handleCloseSearchBar}>
+              <Link key={value.contract_address} href={`/collection/eth-mainnet/${value.contract_address}`} prefetch={false} onClick={handleCloseSearchBar}>
                 <div className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                   <div className="flex gap-3 items-top">
                     <Image src={value.logo_url}
@@ -124,7 +124,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                       className="rounded-lg w-9 h-9" />
                     <div className="flex flex-col">
                       <span className="font-bold dark:text-white md:text-base text-sm"> {value.contract_name}</span>
-                      <span className='font-medium text-xs text-gray-700'>{value.totalSupply} items</span>
+                      <span className='font-medium text-xs text-gray-700'>{value.items_total} items</span>
                     </div>
                   </div>
                   <span className="font-medium sm:text-sm text-gray-700 text-xs"> {value.items_total} ETH</span>
@@ -154,7 +154,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
       )}
 
       {enteredWord.length >= 3 && collectionsData.length !== 0 && (
-         <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
+        <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className="font-bold text-sm text-gray-600 p-3">
             COLLECTIONS
           </span>
@@ -206,7 +206,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
         </svg>
       </span>
       {failedSearch && (
-        <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+        <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
           <span className="font-bold text-sm text-gray-600 p-3">
             {`Sorry, we couldn't find any collection with this name`}
           </span>

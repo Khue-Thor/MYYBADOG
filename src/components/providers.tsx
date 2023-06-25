@@ -29,7 +29,7 @@ export function Providers({
             authConfig={{
               // Set this to your domain to prevent phishing attacks
               domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string,
-              authUrl: "/api/thirdweb/auth",
+              authUrl: "/api/thirdweb",
             }}
           >
             {children}

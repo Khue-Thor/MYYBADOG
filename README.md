@@ -53,3 +53,25 @@ const supaData: raffles | null = await prisma.raffles.findUnique({
   where: { id: 1 },
 });
 ```
+
+### How to sync Prisma Migration in development
+[Source Article](https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/team-development)
+
+1. Pull latest files from git for ./prisma/migrations folder
+```
+git pull
+```
+
+2. Run the migrate dev command to apply new migrations
+```
+// (name of the migration e.g. collection-banner-field, tag-model, etc)
+npx prisma migrate dev --name collection-banner-field
+``` 
+
+
+3. Generate the new prisma code
+```
+npx prisma generate
+```
+
+4. Commit the changes to git

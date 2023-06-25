@@ -51,7 +51,7 @@ model Reward {
 
 /// Model to store NFT collection data
 model Collection {
-  id Int @id @default(autoincrement())
+  id BigInt @id @default(autoincrement())
   contract_address String
   name String
   symbol String
@@ -71,7 +71,7 @@ model Collection {
   attributes Json?
   erc_type String
   token_type String
-  deploy_block_number Int
+  deploy_block_number BigInt
   owner String
   contract_deployer String
   verified Boolean
@@ -80,8 +80,8 @@ model Collection {
   rug_verified Boolean
   sus_verified Boolean
   royalty Float?
-  items_total Int
-  amounts_total Int
+  items_total BigInt
+  amounts_total BigInt
   owners_total Int
   opensea_floor_price Float
   floor_price Float
@@ -101,7 +101,7 @@ model Collection {
   volume_change_1d String?
   volume_change_7d String?
   volume_change_30d String?
-  market_cap Int?
+  market_cap BigInt?
   average_price_change_1d String?
   average_price_change_7d String?
   average_price_change_30d String?

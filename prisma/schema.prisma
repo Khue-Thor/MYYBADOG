@@ -29,6 +29,7 @@ model Raffle {
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+/// TODO: Should be renamed to "User" not users
 model users {
   id             BigInt    @id @default(autoincrement())
   address        String    @unique
@@ -46,4 +47,64 @@ model users {
 model Reward {
   id        BigInt @id @default(autoincrement())
   dispensed BigInt @default(0)
+}
+
+/// Model to store NFT collection data
+model Collection {
+  id Int @id @default(autoincrement())
+  contract_address String
+  name String
+  symbol String
+  description String?
+  website String?
+  email String?
+  twitter String?
+  discord String?
+  telegram String?
+  github String?
+  instagram String?
+  medium String?
+  logo_url String?
+  banner_url String?
+  featured_url String?
+  large_image_url String?
+  attributes Json?
+  erc_type String
+  token_type String
+  deploy_block_number Int
+  owner String
+  contract_deployer String
+  verified Boolean
+  opensea_verified Boolean
+  baddogs_verified Boolean
+  rug_verified Boolean
+  sus_verified Boolean
+  royalty Float?
+  items_total Int
+  amounts_total Int
+  owners_total Int
+  opensea_floor_price Float
+  floor_price Float
+  collections_with_same_name Json?
+  price_symbol String
+  volume_total Float?
+  sales_total Int?
+  average_price Float?
+  lowest_price_24h Float?
+  average_price_24h Float?
+  volume_24h Float?
+  sales_24h Int?
+  highest_price Float?
+  volume_1d Float?
+  volume_7d Float?
+  volume_30d Float?
+  volume_change_1d String?
+  volume_change_7d String?
+  volume_change_30d String?
+  market_cap Int?
+  average_price_change_1d String?
+  average_price_change_7d String?
+  average_price_change_30d String?
+  last_ingested_at DateTime?
+  last_updated_at DateTime?
 }

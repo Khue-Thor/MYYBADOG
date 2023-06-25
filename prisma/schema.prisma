@@ -53,9 +53,12 @@ model Reward {
 model Collection {
   id BigInt @id @default(autoincrement())
   contract_address String @unique
+  contract_name String?
   name String
+  slug String?
   symbol String
   description String?
+  version Float?
   website String?
   email String?
   twitter String?
@@ -67,10 +70,13 @@ model Collection {
   logo_url String?
   banner_url String?
   featured_url String?
+  image_url String?
   large_image_url String?
   attributes Json?
   erc_type String
   token_type String
+  chain_identifier String?
+  asset_contract_type String?
   deploy_block_number BigInt
   owner String
   contract_deployer String
@@ -80,10 +86,15 @@ model Collection {
   rug_verified Boolean
   sus_verified Boolean
   royalty Float?
+  is_nsfw Boolean?
+  is_hidden Boolean?
+  is_featured Boolean?
   items_total BigInt
   amounts_total BigInt
   owners_total Int
-  opensea_floor_price Float
+  opensea_floor_price Float?
+  looksrare_floor_price Float?
+  blur_floor_price Float?
   floor_price Float
   collections_with_same_name Json?
   price_symbol String

@@ -52,7 +52,7 @@ model Reward {
 /// Model to store NFT collection data
 model Collection {
   id BigInt @id @default(autoincrement())
-  contract_address String
+  contract_address String @unique
   name String
   symbol String
   description String?
@@ -107,4 +107,5 @@ model Collection {
   average_price_change_30d String?
   last_ingested_at DateTime?
   last_updated_at DateTime?
+  created_at DateTime?
 }

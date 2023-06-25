@@ -87,24 +87,24 @@ model Collection {
   floor_price Float
   collections_with_same_name Json?
   price_symbol String
-  volume_total Float
-  sales_total Int
-  average_price Float
-  lowest_price_24h Float
-  average_price_24h Float
-  volume_24h Float
-  sales_24h Int
-  highest_price Float
-  volume_1d Float
-  volume_7d Float
-  volume_30d Float
-  volume_change_1d String
-  volume_change_7d String
-  volume_change_30d String
-  market_cap Int
-  average_price_change_1d String
-  average_price_change_7d String
-  average_price_change_30d String
+  volume_total Float?
+  sales_total Int?
+  average_price Float?
+  lowest_price_24h Float?
+  average_price_24h Float?
+  volume_24h Float?
+  sales_24h Int?
+  highest_price Float?
+  volume_1d Float?
+  volume_7d Float?
+  volume_30d Float?
+  volume_change_1d String?
+  volume_change_7d String?
+  volume_change_30d String?
+  market_cap Int?
+  average_price_change_1d String?
+  average_price_change_7d String?
+  average_price_change_30d String?
   last_ingested_at DateTime?
   last_updated_at DateTime?
 }

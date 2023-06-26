@@ -74,10 +74,10 @@ const FilterCategoryItem = ({ params }: params) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState<Item | null>(initialItem);
 
-  const id = urlParams.split("/")[4];
+  const id = urlParams?.split("/")[4];
   // const contract_address = urlParams.split("/")[3].replace(`/${id}`, "");
   const blockchain = urlParams
-    .split("/")[2]
+    ?.split("/")[2]
     .replace(`/${contract_address}/${id}`, "");
 
   const formatItem = (item: any) => ({
@@ -147,7 +147,7 @@ const FilterCategoryItem = ({ params }: params) => {
 
   useEffect(() => {
     if (searchInput.length > 0) {
-      fetchOneItem(+searchInput).then((item) => {
+      fetchOneItem(+searchInput).then((item: any) => {
         setSearchResult(item);
       });
     } else {
@@ -165,7 +165,7 @@ const FilterCategoryItem = ({ params }: params) => {
       {/* <Collection_category_filter /> */}
       <input
         type="search"
-        className="text-center text-jacarta-700 placeholder-jacarta-500 mb-10 focus:ring-accent border-jacarta-100 w-1/4 rounded-2xl border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
+        className="text-center text-jacarta-700 placeholder-jacarta-500 mb-10 focus:ring-accent border-jacarta-100 w-1/8 sm:w-1/4 rounded-2xl border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
         placeholder="Search for tokenId"
         value={searchInput}
         onChange={handleSearch}

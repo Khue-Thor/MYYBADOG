@@ -1,0 +1,11 @@
+import { ThirdwebAuth } from "@thirdweb-dev/auth/next";
+import { PrivateKeyWallet } from "@thirdweb-dev/auth/evm";
+
+// Configure ThirdwebAuth with domain and wallet
+export const { ThirdwebAuthHandler, getUser } = ThirdwebAuth({
+    domain: process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN || "",
+    wallet: new PrivateKeyWallet(process.env.THIRDWEB_AUTH_PRIVATE_KEY || ""),
+  });
+export default ThirdwebAuthHandler();
+//   export {handler as GET,handler as POST}
+  

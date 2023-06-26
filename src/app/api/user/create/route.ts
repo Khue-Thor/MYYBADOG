@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
 import {prisma} from "@/lib/prisma";
+
 import { authOptions }  from "@/lib/auth";
 import { fixBigInt } from "@/utils/bigIntFixer";
 // import { authOptions } from "../api/auth/[...nextauth]";
@@ -33,7 +34,7 @@ export async function POST(req:NextRequest) {
 
 //   const session = await getServerSession(authOptions);
      try{
-       const createUser = await prisma.users.create(init);
+       const createUser = await prisma.user.create(init);
        if (createUser) {
         //This needs to be logged.
         const userCreated = await fixBigInt(createUser);

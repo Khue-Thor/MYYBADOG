@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
-import { users } from "@prisma/client";
+import { User } from "@prisma/client";
 import { authOptions }  from "@/lib/auth";
 import {prisma} from "@/lib/prisma";
 import { fixBigInt } from "@/utils/bigIntFixer";
@@ -10,10 +10,10 @@ import { fixBigInt } from "@/utils/bigIntFixer";
 // import { authOptions } from "../api/auth/[...nextauth]";
 
 //function used to exclude fields from the return values
-function exclude<users, Key extends keyof users>(
-  user: users,
+function exclude<User, Key extends keyof User>(
+  user: User,
   keys: Key[]
-): Omit<users, Key> {
+): Omit<User, Key> {
   for (let key of keys) {
     delete user[key]
   }
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const address = searchParams.get('address')
 
-  const user: users | null = await prisma.users.findUnique({
+  const user: User | null = await prisma.user.findUnique({
     where: { address: address as string},
   });
   if(!user){

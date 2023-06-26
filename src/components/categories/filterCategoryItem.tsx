@@ -74,10 +74,10 @@ const FilterCategoryItem = ({ params }: params) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState<Item | null>(initialItem);
 
-  const id = urlParams.split("/")[4];
+  const id = urlParams?.split("/")[4];
   // const contract_address = urlParams.split("/")[3].replace(`/${id}`, "");
   const blockchain = urlParams
-    .split("/")[2]
+    ?.split("/")[2]
     .replace(`/${contract_address}/${id}`, "");
 
   const formatItem = (item: any) => ({
@@ -147,7 +147,7 @@ const FilterCategoryItem = ({ params }: params) => {
 
   useEffect(() => {
     if (searchInput.length > 0) {
-      fetchOneItem(+searchInput).then((item) => {
+      fetchOneItem(+searchInput).then((item: any) => {
         setSearchResult(item);
       });
     } else {

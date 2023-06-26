@@ -67,7 +67,7 @@ export default function Header01() {
     });
   });
 
-  const pathname = usePathname();
+  const pathname = usePathname() || "";
   /* -------------------------------------------------------------------------- */
   /*                            daynamic navigations                            */
   /* -------------------------------------------------------------------------- */

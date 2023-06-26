@@ -42,6 +42,7 @@ export default function AuthenticationButton() {
   async function loginWithWallet() {
     try {
       const payload = await auth?.login();
+      console.log(payload);
       // const options: RequestInit = {
       //   method: "POST",
       //   headers: {

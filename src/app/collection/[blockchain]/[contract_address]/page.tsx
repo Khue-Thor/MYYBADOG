@@ -223,7 +223,6 @@ const Collection = async ({ params }: params) => {
           volume_24h: true,
         },
       });
-      console.log('prisma collection ', collections);
       // processing big ints
       const processedCollections = collections.map((collection: any) => ({
         ...collection,
@@ -233,7 +232,6 @@ const Collection = async ({ params }: params) => {
 
       if (processedCollections.length === 0) {
         const data = await getCollectionData(contractAddress);
-        console.log('profileDataFromNftscan (banner/profile) ->', data);
         // setProfile(data);
         data.volume_24h = String(+data.floor_price * +data.owners_total)
         return data;

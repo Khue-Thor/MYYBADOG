@@ -7,18 +7,14 @@ export async function GET(
 ) {
   try {
     const contract_address = params.contract;
-    console.log('contract_address prisma ', contract_address);
 
     const collection = await prisma.collection.findMany({
-      where: { contract_address },
+      where: { contract_address: contract_address.toLowerCase() },
     });
-    console.log('prisma collection ', collection);
 
     return NextResponse.json(
       { message: 'success', collection },
       { status: 200 }
     );
-  } catch (error) {
-    console.log('error prisma', error);
-  }
+  } catch (error) {}
 }

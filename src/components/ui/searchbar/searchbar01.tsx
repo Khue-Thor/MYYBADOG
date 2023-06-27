@@ -51,7 +51,6 @@ const SearchBar01 = () => {
       }
 
       const data = await res.json();
-      console.log('data', data.data);
 
       setCollectionsData(data.data);
       // TODO: Need to refresh with the proper query

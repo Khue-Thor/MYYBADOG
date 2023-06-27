@@ -5,10 +5,12 @@ import Collection_items from "@/components/collection/Collection_items";
 import Image from "next/image";
 import Link from "next/link";
 import Meta from "@/components/wallet-btn/Meta";
-import { getColectionMetrics } from "@/api/nftgo";
+import { cookies } from 'next/headers'
+// import { getColectionMetrics } from "@/api/nftgo";
 import { getCollectionData } from "@/api/nftscan";
 import formatNumber from "@/utils/formatNumber";
 import { prisma } from '@/components/lib/prisma';
+
 
 interface Collection {
   id: number;
@@ -86,6 +88,10 @@ const Collection = async ({ params }: params) => {
   // const [details, setDetails] = useState<DetailItem[]>([]);
   // const [profile, setProfile] = useState<Data>();
   const contractAddress = params.contract_address;
+  const nextCookies = cookies(); // Get cookies object
+  const themeValue = nextCookies.get('theme')?.value || 'dark' // Find cookie
+  console.log('themeValue', themeValue);
+
 
   // const id = params.id;
   // const blockchain = params.blockchain;
@@ -191,6 +197,7 @@ const Collection = async ({ params }: params) => {
   //   setCollectionItemData(items);
   // }
 
+
   const fetchBannerAndProfile = async (contractAddress: string) => {
     try {
       const collections = await prisma.collection.findMany({
@@ -276,7 +283,8 @@ const Collection = async ({ params }: params) => {
     },
   ];
 
-
+  const missingBannerUrl = themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
+  const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
   // useEffect(() => {
   //   // fetchCollectionItems();
   //   fetchCollectionData();
@@ -301,7 +309,7 @@ const Collection = async ({ params }: params) => {
         <div className="relative h-[300px]">
           {profile && (
             <Image
-              src={profile.banner_url || "/images/404.png"}
+              src={profile.banner_url || missingBannerUrl}
               alt="banner"
               fill
               sizes="100vw"
@@ -324,7 +332,7 @@ const Collection = async ({ params }: params) => {
                 {/* <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white"> */}
                 <figure className="relative h-40 w-40 ">
                   <Image
-                    src={profile.logo_url || "/images/404.png"}
+                    src={profile.logo_url || missingProfileUrl}
                     alt={profile.name}
                     fill
                     sizes="100vw"

@@ -10,8 +10,17 @@ const SearchBar01 = () => {
   const [initialData, setInitialData] = useState<rankingData[]>([]);
   const [failedSearch, setFailedSearch] = useState(false);
 
-  async function getCollectionsFallback(options: RequestInit, encodedWord: string) {
+  async function getCollectionsFallback(encodedWord: string) {
     try {
+      const options: RequestInit = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+        },
+        next: {
+          revalidate: 86400, // 24 hrs in sec
+        },
+      };
       const query = `/api/search/collection/${encodedWord}`;
 
       const res = await fetch(query, options);
@@ -31,41 +40,23 @@ const SearchBar01 = () => {
   async function getCollections() {
     // Fetch collections data and update state
     try {
-      const options: RequestInit = {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-        },
-        next: {
-          revalidate: 86400, // 24 hrs in sec
-        },
-      };
+
       const encodedWord = encodeURIComponent(enteredWord);
       const query = `/api/collection/prisma/name/${encodedWord}`;
-      const res = await fetch(query, options);
+      const res = await fetch(query, { method: 'GET' });
       if (!res.ok) {
         throw new Error('Failed to fetch data');
       }
 
       const data = await res.json();
-      console.log('data', data);
+      console.log('data', data.data);
 
-      const formattedData = data.data.map((value: any) => {
-        return {
-          totalSupply: value.items_total,
-          address: value.contract_address,
-          openSeaMetadata: {
-            imageUrl: value.logo_url,
-            collectionName: value.name,
-            floorPrice: value.floor_price,
-          }
-        };
-      })
-      setCollectionsData(formattedData);
+      setCollectionsData(data.data);
       // TODO: Need to refresh with the proper query
 
-      if (formattedData.length === 0) {
-        const fallbackData = await getCollectionsFallback(options, encodedWord);
+      if (data.data.length === 0) {
+
+        const fallbackData = await getCollectionsFallback(encodedWord);
         if (fallbackData.length === 0) {
           setFailedSearch(true);
           return

@@ -7,14 +7,39 @@ export async function GET(
 ) {
   try {
     const name = params.name;
-    const collection = await prisma.collection.findOne({
-      where: { name },
+    console.log('name prisma', name);
+
+    const collections = await prisma.collection.findMany({
+      where: {
+        name: {
+          contains: name.toLowerCase(),
+        },
+      },
+      select: {
+        items_total: true,
+        contract_address: true,
+        logo_url: true,
+        floor_price: true,
+        name: true,
+      },
     });
-    console.log('prisma collection ', collection);
+
+    const formattedCollections = collections.map((collection: any) => ({
+      totalSupply: String(collection.items_total),
+      address: String(collection.contract_address),
+      openSeaMetadata: {
+        imageUrl: collection.logo_url,
+        collectionName: collection.name,
+        floorPrice: String(collection.floor_price),
+      },
+    }));
+    console.log('prisma collection ', formattedCollections);
 
     return NextResponse.json(
-      { message: 'success', collection },
+      { message: 'success', data: formattedCollections },
       { status: 200 }
     );
-  } catch (error) {}
+  } catch (error) {
+    console.log('error prisma', error);
+  }
 }

@@ -8,6 +8,62 @@ import Meta from "@/components/wallet-btn/Meta";
 import { getColectionMetrics } from "@/api/nftgo";
 import { getCollectionData } from "@/api/nftscan";
 import formatNumber from "@/utils/formatNumber";
+import { prisma } from '@/components/lib/prisma';
+
+interface Collection {
+  id: number;
+  contract_address: string;
+  name: string;
+  symbol: string;
+  description?: string;
+  website?: string;
+  email?: string;
+  twitter?: string;
+  discord?: string;
+  telegram?: string;
+  github?: string;
+  instagram?: string;
+  medium?: string;
+  logo_url?: string;
+  banner_url?: string;
+  featured_url?: string;
+  large_image_url?: string;
+  attributes?: any; // Adjust the type according to the actual structure
+  erc_type: string;
+  token_type: string;
+  owner: string;
+  contract_deployer: string;
+  verified: boolean;
+  opensea_verified: boolean;
+  baddogs_verified: boolean;
+  rug_verified: boolean;
+  sus_verified: boolean;
+  royalty?: number;
+  items_total: number;
+  amounts_total: number;
+  owners_total: number;
+  opensea_floor_price: number;
+  floor_price: number;
+  collections_with_same_name?: any; // Adjust the type according to the actual structure
+  price_symbol: string;
+  average_price: number;
+  lowest_price_24h: number;
+  average_price_24h: number;
+  volume_24h: number;
+  sales_24h: number;
+  highest_price: number;
+  volume_1d: number;
+  volume_7d: number;
+  volume_30d: number;
+  volume_change_1d: string;
+  volume_change_7d: string;
+  volume_change_30d: string;
+  average_price_change_1d: string;
+  average_price_change_7d: string;
+  average_price_change_30d: string;
+  last_ingested_at?: Date;
+  last_updated_at?: Date;
+}
 
 interface DetailItem {
   id: string;
@@ -34,115 +90,184 @@ const Collection = async ({ params }: params) => {
   // const id = params.id;
   // const blockchain = params.blockchain;
 
-  const fetchCollectionData = async () => {
-    try {
-      const data = await getColectionMetrics(contractAddress);
+  // const fetchCollectionData = async () => {
+  //   try {
+  //     const data = await getColectionMetrics(contractAddress);
 
-      return [
-        {
-          id: "1",
-          detailsNumber: data?.total_supply
-            ? formatNumber(+data.total_supply)
-            : "No items",
-          detailsText: "Items",
-        },
-        {
-          id: "2",
-          detailsNumber: data?.holder_num
-            ? formatNumber(+data.holder_num)
-            : "No holders",
-          detailsText: "Owners",
-        },
-        {
-          id: "3",
-          detailsNumber: data.floor_price?.value
-            ? data.floor_price.value.toFixed(2) + " ETH"
-            : "0",
-          detailsText: "Floor Price",
-        },
-        {
-          id: "4",
-          detailsNumber: data.volume_eth?.all
-            ? formatNumber(+data.volume_eth.all) + " ETH"
-            : "0",
-          detailsText: "Volume Traded",
-        },
-      ];
-    } catch (error) {
-      console.log('failedDetailsMetrics NFTGO ->', error);
-      try {
-        const data = await getCollectionData(contractAddress);
-        return [
-          {
-            id: "1",
-            detailsNumber: data?.items_total
-              ? formatNumber(+data.items_total)
-              : "No items",
-            detailsText: "Items",
-          },
-          {
-            id: "2",
-            detailsNumber: data?.owners_total
-              ? formatNumber(+data.owners_total)
-              : "No holders",
-            detailsText: "Owners",
-          },
-          {
-            id: "3",
-            detailsNumber: data.floor_price
-              ? data.floor_price.toFixed(2) + " ETH"
-              : "0",
-            detailsText: "Floor Price",
-          },
-          {
-            id: "4",
-            // ! this needs to be changed to volume traded, for now it's just the floor price * owners
-            detailsNumber: data.floor_price
-              ? formatNumber(+data.floor_price * +data.owners_total) + " ETH"
-              : "0",
-            detailsText: "Volume Traded",
-          },
-        ];
-      } catch (error) {
-        console.log('failedDetailsMetrics NFTSCAN ->', error);
-        return [
-          {
-            id: "1",
-            detailsNumber: "No items",
-            detailsText: "Items",
-          },
-          {
-            id: "2",
-            detailsNumber: "No holders",
-            detailsText: "Owners",
-          },
-          {
-            id: "3",
-            detailsNumber: "0",
-            detailsText: "Floor Price",
-          },
-          {
-            id: "4",
-            detailsNumber: "0",
-            detailsText: "Volume Traded",
-          },
-        ];
-      }
-    }
-  };
+  //     return [
+  //       {
+  //         id: "1",
+  //         detailsNumber: data?.total_supply
+  //           ? formatNumber(+data.total_supply)
+  //           : "No items",
+  //         detailsText: "Items",
+  //       },
+  //       {
+  //         id: "2",
+  //         detailsNumber: data?.holder_num
+  //           ? formatNumber(+data.holder_num)
+  //           : "No holders",
+  //         detailsText: "Owners",
+  //       },
+  //       {
+  //         id: "3",
+  //         detailsNumber: data.floor_price?.value
+  //           ? data.floor_price.value.toFixed(2) + " ETH"
+  //           : "0",
+  //         detailsText: "Floor Price",
+  //       },
+  //       {
+  //         id: "4",
+  //         detailsNumber: data.volume_eth?.all
+  //           ? formatNumber(+data.volume_eth.all) + " ETH"
+  //           : "0",
+  //         detailsText: "Volume Traded",
+  //       },
+  //     ];
+  //   } catch (error) {
+  //     console.log('failedDetailsMetrics NFTGO ->', error);
+  //     try {
+  //       const data = await getCollectionData(contractAddress);
+  //       return [
+  //         {
+  //           id: "1",
+  //           detailsNumber: data?.items_total
+  //             ? formatNumber(+data.items_total)
+  //             : "No items",
+  //           detailsText: "Items",
+  //         },
+  //         {
+  //           id: "2",
+  //           detailsNumber: data?.owners_total
+  //             ? formatNumber(+data.owners_total)
+  //             : "No holders",
+  //           detailsText: "Owners",
+  //         },
+  //         {
+  //           id: "3",
+  //           detailsNumber: data.floor_price
+  //             ? data.floor_price.toFixed(2) + " ETH"
+  //             : "0",
+  //           detailsText: "Floor Price",
+  //         },
+  //         {
+  //           id: "4",
+  //           // ! this needs to be changed to volume traded, for now it's just the floor price * owners
+  //           detailsNumber: data.floor_price
+  //             ? formatNumber(+data.floor_price * +data.owners_total) + " ETH"
+  //             : "0",
+  //           detailsText: "Volume Traded",
+  //         },
+  //       ];
+  //     } catch (error) {
+  //       console.log('failedDetailsMetrics NFTSCAN ->', error);
+  //       return [
+  //         {
+  //           id: "1",
+  //           detailsNumber: "No items",
+  //           detailsText: "Items",
+  //         },
+  //         {
+  //           id: "2",
+  //           detailsNumber: "No holders",
+  //           detailsText: "Owners",
+  //         },
+  //         {
+  //           id: "3",
+  //           detailsNumber: "0",
+  //           detailsText: "Floor Price",
+  //         },
+  //         {
+  //           id: "4",
+  //           detailsNumber: "0",
+  //           detailsText: "Volume Traded",
+  //         },
+  //       ];
+  //     }
+  //   }
+  // };
   // const fetchCollectionItems = async () => {
   //   const items = await getOneNFTForContract({ blockchain, contractAddress, startToken: +id });
   //   setCollectionItemData(items);
   // }
 
   const fetchBannerAndProfile = async (contractAddress: string) => {
-    const data = await getCollectionData(contractAddress);
-    // setProfile(data);
-    return data;
+    try {
+      const collections = await prisma.collection.findMany({
+        where: { contract_address: contractAddress },
+        select: {
+          name: true,
+          symbol: true,
+          description: true,
+          website: true,
+          email: true,
+          twitter: true,
+          discord: true,
+          telegram: true,
+          github: true,
+          instagram: true,
+          medium: true,
+          logo_url: true,
+          banner_url: true,
+          featured_url: true,
+          large_image_url: true,
+          owner: true,
+          contract_deployer: true,
+          verified: true,
+          opensea_verified: true,
+          baddogs_verified: true,
+          items_total: true,
+          amounts_total: true,
+          owners_total: true,
+          floor_price: true,
+          volume_24h: true,
+        },
+      });
+      console.log('prisma collection ', collections);
+
+      const processedCollections = collections.map((collection: any) => ({
+        ...collection,
+        items_total: Number(collection.items_total),
+        amounts_total: Number(collection.amounts_total),
+      }));
+
+      return processedCollections[0] as Collection;
+    } catch (error) {
+      console.log('error prisma', error);
+    }
   };
 
   const profile = await fetchBannerAndProfile(contractAddress);
-  const details = await fetchCollectionData();
+  const details = profile && [
+    {
+      id: "1",
+      detailsNumber: profile.items_total
+        ? formatNumber(+profile.items_total)
+        : "No items",
+      detailsText: "Items",
+    },
+    {
+      id: "2",
+      detailsNumber: profile.owners_total
+        ? formatNumber(+profile.owners_total)
+        : "No holders",
+      detailsText: "Owners",
+    },
+    {
+      id: "3",
+      detailsNumber: profile.floor_price
+        ? profile.floor_price.toFixed(2) + " ETH"
+        : "0",
+      detailsText: "Floor Price",
+    },
+    {
+      id: "4",
+      detailsNumber: profile.volume_24h
+        ? formatNumber(+profile.volume_24h) + " ETH"
+        : "0",
+      detailsText: "Volume Traded",
+    },
+  ];
 
 
 
@@ -236,7 +361,7 @@ const Collection = async ({ params }: params) => {
                 </div>
 
                 <div className="dark:bg-jacarta-800 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex flex-wrap items-center justify-center rounded-xl border bg-white">
-                  {details.map(({ detailsNumber, detailsText }: any, index) => {
+                  {details && details.map(({ detailsNumber, detailsText }: any, index) => {
                     return (
                       <Link
                         href="#"
@@ -367,7 +492,7 @@ const Collection = async ({ params }: params) => {
       <Collection_items
         params={{
           contract_address: contractAddress,
-          profile: profile,
+          profile: profile as any,
         }}
       />
     </>

@@ -7,6 +7,8 @@ export async function GET(
 ) {
   try {
     const contract_address = params.contract;
+    console.log('contract_address prisma ', contract_address);
+
     const collection = await prisma.collection.findOne({
       where: { contract_address },
     });
@@ -16,5 +18,7 @@ export async function GET(
       { message: 'success', collection },
       { status: 200 }
     );
-  } catch (error) {}
+  } catch (error) {
+    console.log('error prisma', error);
+  }
 }

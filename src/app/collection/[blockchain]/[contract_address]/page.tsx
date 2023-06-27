@@ -231,9 +231,17 @@ const Collection = async ({ params }: params) => {
         amounts_total: Number(collection.amounts_total),
       }));
 
+      if (processedCollections.length === 0) {
+        const data = await getCollectionData(contractAddress);
+        console.log('profileDataFromNftscan (banner/profile) ->', data);
+        // setProfile(data);
+        return data;
+      }
+
       return processedCollections[0] as Collection;
     } catch (error) {
-      console.log('error prisma', error);
+      console.log(error);
+
     }
   };
 

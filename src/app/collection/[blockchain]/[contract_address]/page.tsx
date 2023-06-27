@@ -277,7 +277,6 @@ const Collection = async ({ params }: params) => {
   ];
 
 
-
   // useEffect(() => {
   //   // fetchCollectionItems();
   //   fetchCollectionData();
@@ -331,11 +330,11 @@ const Collection = async ({ params }: params) => {
                     sizes="100vw"
                     className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
                   />
-                  <div
-                    className="dark:border-jacarta-600 bg-green absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
-                    data-tippy-content="Verified Collection"
-                  >
-                    {icon && (
+                  {profile.opensea_verified && (
+                    <div
+                      className="dark:border-jacarta-600 bg-green absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
+                      data-tippy-content="Verified Collection"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -346,15 +345,15 @@ const Collection = async ({ params }: params) => {
                         <path fill="none" d="M0 0h24v24H0z"></path>
                         <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
                       </svg>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </figure>
               </div>
               <div className="text-center">
                 <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
                   {profile.name}
                 </h2>
-                <div className="mb-8">
+                <div className="mb-2">
                   <span className="text-jacarta-400 text-sm font-bold">
                     Created by{" "}
                   </span>
@@ -364,6 +363,18 @@ const Collection = async ({ params }: params) => {
                     legacyBehavior
                   >
                     {profile.owner}
+                  </Link>
+                </div>
+                <div className="mb-8">
+                  <span className="text-jacarta-400 text-sm font-bold">
+                    Contract Address{" "}
+                  </span>
+                  <Link
+                    href='#'
+                    className="text-accent text-sm font-bold"
+                    legacyBehavior
+                  >
+                    {profile.contract_address ? profile.contract_address : contractAddress}
                   </Link>
                 </div>
 
@@ -495,7 +506,7 @@ const Collection = async ({ params }: params) => {
         )}
 
         {/* <!-- end profile --> */}
-      </div>
+      </div >
       <Collection_items
         params={{
           contract_address: contractAddress,

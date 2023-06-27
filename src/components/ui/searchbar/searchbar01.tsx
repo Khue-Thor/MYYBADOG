@@ -115,6 +115,7 @@ const SearchBar01 = () => {
     setEnteredWord('');
     setShowSearch(false);
     setFailedSearch(false);
+    setIsLoading(false);
   };
 
   return (
@@ -189,11 +190,30 @@ const SearchBar01 = () => {
                   >
                     <div className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
-                        <img
-                          src={value.openSeaMetadata.imageUrl}
-                          alt="Image"
-                          className="rounded-lg w-9 h-9"
-                        />
+                        <div className="relative">
+                          <img
+                            src={value.openSeaMetadata.imageUrl}
+                            alt="Image"
+                            className="rounded-lg w-12 h-12"
+                          />
+                          {value.openSeaMetadata.safelistRequestStatus && (
+                            <div
+                              className="dark:border-jacarta-600 bg-green absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
+                              data-tippy-content="Verified Collection"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                                className="h-[.875rem] w-[.875rem] fill-white"
+                              >
+                                <path fill="none" d="M0 0h24v24H0z"></path>
+                                <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                              </svg>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex flex-col">
                           <span className="font-bold dark:text-white text-base w-[150px]">
                             {value.openSeaMetadata.collectionName}
@@ -210,6 +230,7 @@ const SearchBar01 = () => {
                   </Link>
                 );
               })}
+
               <span className="font-bold text-sm text-gray-600 p-3">ACCOUNTS</span>
             </div>
           )}

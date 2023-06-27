@@ -235,6 +235,7 @@ const Collection = async ({ params }: params) => {
         const data = await getCollectionData(contractAddress);
         console.log('profileDataFromNftscan (banner/profile) ->', data);
         // setProfile(data);
+        data.volume_24h = String(+data.floor_price * +data.owners_total)
         return data;
       }
 

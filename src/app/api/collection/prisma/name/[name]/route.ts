@@ -13,6 +13,7 @@ export async function GET(
       where: {
         name: {
           contains: name.toLowerCase(),
+          mode: 'insensitive',
         },
       },
       select: {

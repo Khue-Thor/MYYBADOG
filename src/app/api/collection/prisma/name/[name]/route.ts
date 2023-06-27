@@ -15,6 +15,11 @@ export async function GET(
           contains: name.toLowerCase(),
           mode: 'insensitive',
         },
+        floor_price: {
+          gt: 0
+          // lte: 1
+        },
+        is_hidden: false
       },
       select: {
         items_total: true,
@@ -23,6 +28,11 @@ export async function GET(
         floor_price: true,
         name: true,
       },
+      take: 10,
+      orderBy: [
+        { opensea_verified: 'desc' },
+        { floor_price: 'desc' }
+      ]
     });
 
     const formattedCollections = collections.map((collection: any) => ({

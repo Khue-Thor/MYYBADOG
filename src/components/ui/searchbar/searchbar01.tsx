@@ -140,9 +140,6 @@ const SearchBar01 = () => {
           {showSearch && enteredWord.length < 3 && initialData.length > 1 && (
             <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
               <span className="font-bold text-sm text-gray-600 p-3">FEATURED</span>
-              <span className="font-bold text-sm text-gray-600 p-3">
-                COLLECTIONS
-              </span>
               {initialData.slice(0, 5).map((value) => {
                 return (
                   <Link
@@ -174,7 +171,6 @@ const SearchBar01 = () => {
                   </Link>
                 );
               })}
-              <span className="font-bold text-sm text-gray-600 p-3">ACCOUNTS</span>
             </div>
           )}
 

@@ -224,7 +224,7 @@ const Collection = async ({ params }: params) => {
         },
       });
       console.log('prisma collection ', collections);
-
+      // processing big ints
       const processedCollections = collections.map((collection: any) => ({
         ...collection,
         items_total: Number(collection.items_total),

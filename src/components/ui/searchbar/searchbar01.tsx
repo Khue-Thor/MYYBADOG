@@ -41,7 +41,7 @@ const SearchBar01 = () => {
         },
       };
       const encodedWord = encodeURIComponent(enteredWord);
-      const query = `/api/search/collection/fallback/${encodedWord}`;
+      const query = `/api/collection/prisma/name/${encodedWord}`;
       const res = await fetch(query, options);
       if (!res.ok) {
         throw new Error('Failed to fetch data');
@@ -139,7 +139,16 @@ const SearchBar01 = () => {
       />
       {showSearch && enteredWord.length < 3 && initialData.length > 1 && (
         <div className="dark:bg-jacarta-700  bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px]  rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+          <button
+            className="absolute top-5 right-4 text-gray-500 hover:text-gray-800 font-bold"
+            onClick={handleClose}
+          >
+            X
+          </button>
           <span className="font-bold text-sm text-gray-600 p-3">FEATURED</span>
+          <span className="font-bold text-sm text-gray-600 p-3">
+            COLLECTIONS
+          </span>
           {initialData.slice(0, 5).map((value: rankingData) => {
             return (
               <Link
@@ -171,6 +180,7 @@ const SearchBar01 = () => {
               </Link>
             );
           })}
+          <span className="font-bold text-sm text-gray-600 p-3">ACCOUNTS</span>
         </div>
       )}
 
@@ -237,19 +247,6 @@ const SearchBar01 = () => {
           </span>
         </div>
       )}
-      <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          width={26}
-          height={26}
-          className="fill-jacarta-500 h-4 w-4 dark:fill-white cursor-pointer"
-
-        >
-          <path fill="none" d="M0 0h24v24H0z" />
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-        </svg>
-      </span>
     </form>
   );
 };

@@ -9,7 +9,7 @@ export async function GET(
     const contract_address = params.contract;
     console.log('contract_address prisma ', contract_address);
 
-    const collection = await prisma.collection.findOne({
+    const collection = await prisma.collection.findMany({
       where: { contract_address },
     });
     console.log('prisma collection ', collection);

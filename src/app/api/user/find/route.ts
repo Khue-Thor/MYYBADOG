@@ -26,12 +26,14 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url)
     const address = searchParams.get('address')
-
+  if(address === ""){
+    return NextResponse.json({error:"Address not found in query."},{ status:404 })
+  }
   const user: User | null = await prisma.user.findUnique({
     where: { address: address as string},
   });
   if(!user){
-    return NextResponse.json({message:"User does not exist in database."},{ status:200 })
+    return NextResponse.json({error:"User does not exist in database."},{ status:200 })
   }
 
   const userWithoutId = exclude(user,["id"]);

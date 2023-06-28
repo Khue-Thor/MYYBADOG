@@ -13,19 +13,9 @@ import {
   isParentPageActive,
 } from "../../../utils/daynamicNavigation";
 import React, { useEffect, useState } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/shadcn/sheet";
+
 import SearchBar01 from "../searchbar/searchbar01";
 import SearchBar02 from "../searchbar/searchbar02";
-import ChatUI from "@/components/chat/chatui";
-
-import { items_offer_data } from "@/data/items_tabs_data";
 
 import { signOut, useSession } from "next-auth/react";
 import { ConnectWallet, useAddress, useAuth } from "@thirdweb-dev/react";
@@ -682,17 +672,19 @@ export default function Header01() {
                     </button>
                   </Link>
                 </li>
-                <li className="group">
-                  <AuthenticationButton />
-                </li>
-                <li>
-                  <DarkMode />
-                </li>
+
                 {session ? (
                   <li>
                     <ProfileSheet />
                   </li>
-                ) : null}
+                ) : (
+                  <li className="group">
+                    <AuthenticationButton />{" "}
+                  </li>
+                )}
+                <li>
+                  <DarkMode />
+                </li>
               </ul>
             </nav>
             {/* End menu for desktop */}

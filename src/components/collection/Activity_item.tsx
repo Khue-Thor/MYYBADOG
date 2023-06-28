@@ -1,162 +1,181 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
-import { NFTSale } from '@/api/alchemy';
-import { CollectionActivitySkeleton } from '../collection-activity-skeleton';
+import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { NFTSale } from "@/api/alchemy";
+import { CollectionActivitySkeleton } from "../collection-activity-skeleton";
 
 type Item = {
-	tokenId: string,
-	image: string,
-	title: string,
-	price: string,
-	time: string,
-	category: string,
-	contractAddress: string,
-}
+  tokenId: string;
+  image: string;
+  title: string;
+  price: string;
+  time: string;
+  category: string;
+  contractAddress: string;
+};
 
 const emptyItem = {
-	tokenId: '',
-	image: '',
-	title: '',
-	price: '',
-	time: '',
-	category: '',
-	contractAddress: '',
-}
+  tokenId: "",
+  image: "",
+  title: "",
+  price: "",
+  time: "",
+  category: "",
+  contractAddress: "",
+};
 
 const Activity_item = () => {
-	const params = usePathname();
-	const [data, setData] = useState<Item[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
-	// const [inputText, setInputText] = useState('');
-	const [filterVal, setFilterVal] = useState<number | null>(null);
-	function onlyUnique(value: any, index: number, self: any) {
-		return self.indexOf(value) === index;
-	}
+  const params = usePathname();
+  const [data, setData] = useState<Item[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [inputText, setInputText] = useState('');
+  const [filterVal, setFilterVal] = useState<number | null>(null);
+  function onlyUnique(value: any, index: number, self: any) {
+    return self.indexOf(value) === index;
+  }
 
-	const id = params.split('/')[4];
-	const contract_address = params.split('/')[3].replace(`/${id}`, '') as string;
-	const blockchain = params.split('/')[2].replace(`/${contract_address}/${id}`, '');
+  const id = params?.split("/")[4];
+  const contract_address = params
+    ?.split("/")[3]
+    .replace(`/${id}`, "") as string;
+  const blockchain = params
+    ?.split("/")[2]
+    .replace(`/${contract_address}/${id}`, "");
 
-	const [filterData, setfilterData] = useState<string[]>([]);
+  const [filterData, setfilterData] = useState<string[]>([]);
 
-	useEffect(() => {
-		fetchDataAndSetFilters();
-	}, [])
+  useEffect(() => {
+    fetchDataAndSetFilters();
+  }, []);
 
-	const fetchDataAndSetFilters = async () => {
-		setIsLoading(true);
-		const request = await fetch(`/api/collection/activity_item/nftsales/${blockchain}/${contract_address}`)
-		const data = await request.json();
-		const promise = data.map(async (item: NFTSale) => await formatData(item));
-		const formattedData = await Promise.all(promise);
-		setData(formattedData);
-		const filters = formattedData.map((item) => {
-			const { category } = item;
-			return category;
-		});
-		const filteredFilters = filters.filter(onlyUnique);
-		setfilterData(filteredFilters)
-		setIsLoading(false)
-	}
+  const fetchDataAndSetFilters = async () => {
+    setIsLoading(true);
+    const request = await fetch(
+      `/api/collection/activity_item/nftsales/${blockchain}/${contract_address}`
+    );
+    const data = await request.json();
+    const promise = data.map(async (item: NFTSale) => await formatData(item));
+    const formattedData = await Promise.all(promise);
+    setData(formattedData);
+    const filters = formattedData.map((item) => {
+      const { category } = item;
+      return category;
+    });
+    const filteredFilters = filters.filter(onlyUnique);
+    setfilterData(filteredFilters);
+    setIsLoading(false);
+  };
 
-	const formatData = async (data: NFTSale): Promise<Item> => {
-		try {
-			const request = await fetch(`/api/collection/activity_item/getonenftforcontract/${blockchain}/${contract_address}/${data.tokenId}`)
-			const nftMetadata = await request.json();
-			return {
-				tokenId: data.tokenId,
-				image: nftMetadata[0].image.cachedUrl || '',
-				title: nftMetadata[0].name as string || `#${data.tokenId}`,
-				price: String(calculatePrice(+data.sellerFee.amount, +data.protocolFee.amount, +data.royaltyFee.amount)) + ' ETH',
-				time: 'input time of posting',
-				category: 'purchases',
-				contractAddress: nftMetadata[0].contract.address,
-			};
+  const formatData = async (data: NFTSale): Promise<Item> => {
+    try {
+      const request = await fetch(
+        `/api/collection/activity_item/getonenftforcontract/${blockchain}/${contract_address}/${data.tokenId}`
+      );
+      const nftMetadata = await request.json();
+      return {
+        tokenId: data.tokenId,
+        image: nftMetadata[0].image.cachedUrl || "",
+        title: (nftMetadata[0].name as string) || `#${data.tokenId}`,
+        price:
+          String(
+            calculatePrice(
+              +data.sellerFee.amount,
+              +data.protocolFee.amount,
+              +data.royaltyFee.amount
+            )
+          ) + " ETH",
+        time: "input time of posting",
+        category: "purchases",
+        contractAddress: nftMetadata[0].contract.address,
+      };
+    } catch (error) {
+      return emptyItem;
+    }
+  };
 
-		} catch (error) {
-			return emptyItem;
-		}
-	};
+  const calculatePrice = (
+    seller: number,
+    protocol: number,
+    royalty: number
+  ) => {
+    const sum = seller + protocol + royalty;
+    const decimals = 10 ** 18;
+    return sum / decimals;
+  };
 
-	const calculatePrice = (seller: number, protocol: number, royalty: number) => {
-		const sum = seller + protocol + royalty;
-		const decimals = 10 ** 18
-		return sum / decimals;
-	}
+  const handleFilter = (category: string) => {
+    setData(data.filter((item) => item.category === category));
+  };
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  // 	e.preventDefault();
+  // 	const newArray = data.filter((item) => {
+  // 		return item.title.toLowerCase().includes(inputText);
+  // 	});
+  // 	setData(newArray);
+  // 	setInputText('');
+  // };
+  if (isLoading) {
+    return <CollectionActivitySkeleton />;
+  }
 
-	const handleFilter = (category: string) => {
-		setData(data.filter((item) => item.category === category));
-	};
-	// const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-	// 	e.preventDefault();
-	// 	const newArray = data.filter((item) => {
-	// 		return item.title.toLowerCase().includes(inputText);
-	// 	});
-	// 	setData(newArray);
-	// 	setInputText('');
-	// };
-	if (isLoading) {
-		return (
-			<CollectionActivitySkeleton />
-		);
-	}
+  return (
+    <>
+      {/* <!-- Activity Tab --> */}
+      <div className="tab-pane fade">
+        {/* <!-- Records / Filter --> */}
+        <div className="lg:flex">
+          {/* <!-- Records --> */}
+          <div className="mb-10 shrink-0 basis-8/12 space-y-5 lg:mb-0 lg:pr-10">
+            {data.length > 0 &&
+              data.slice(0, 5).map((item, index) => {
+                const { tokenId, image, title, price, time, category } = item;
+                return (
+                  <Link
+                    href={`/${blockchain}/${item.contractAddress}/${tokenId}`}
+                    key={index}
+                    className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl relative flex items-center border bg-white p-8 transition-shadow hover:shadow-lg"
+                  >
+                    <figure className="mr-5 self-start">
+                      <Image
+                        src={image || "/public/images/404.png"}
+                        alt={title}
+                        height={50}
+                        width={50}
+                      />
+                    </figure>
+                    <div>
+                      <h3 className="font-display text-jacarta-700 mb-1 text-base font-semibold dark:text-white">
+                        {title}
+                      </h3>
+                      <span className="dark:text-jacarta-200 text-jacarta-500 mb-3 block text-sm">
+                        {price}
+                      </span>
+                      <span className="text-jacarta-300 block text-xs">
+                        {time}
+                      </span>
+                    </div>
+                    <div className="dark:border-jacarta-600 border-jacarta-100 ml-auto rounded-full border p-3">
+                      <svg className="icon fill-jacarta-700 dark:fill-white h-6 w-6">
+                        <use xlinkHref={`/icons.svg#icon-${category}`}></use>
+                      </svg>
+                    </div>
+                  </Link>
+                );
+              })}
+          </div>
 
-	return <>
-		{/* <!-- Activity Tab --> */}
-		<div className="tab-pane fade">
-			{/* <!-- Records / Filter --> */}
-			<div className="lg:flex">
-				{/* <!-- Records --> */}
-				<div className="mb-10 shrink-0 basis-8/12 space-y-5 lg:mb-0 lg:pr-10">
-					{data.length > 0 && data.slice(0, 5).map((item, index) => {
-						const { tokenId, image, title, price, time, category } = item;
-						return (
-							(<Link
-								href={`/${blockchain}/${item.contractAddress}/${tokenId}`}
-								key={index}
-								className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl relative flex items-center border bg-white p-8 transition-shadow hover:shadow-lg">
-
-								<figure className="mr-5 self-start">
-									<Image
-										src={image || '/public/images/404.png'}
-										alt={title}
-										height={50}
-										width={50}
-									/>
-								</figure>
-								<div>
-									<h3 className="font-display text-jacarta-700 mb-1 text-base font-semibold dark:text-white">
-										{title}
-									</h3>
-									<span className="dark:text-jacarta-200 text-jacarta-500 mb-3 block text-sm">
-										{price}
-									</span>
-									<span className="text-jacarta-300 block text-xs">{time}</span>
-								</div>
-								<div className="dark:border-jacarta-600 border-jacarta-100 ml-auto rounded-full border p-3">
-									<svg className="icon fill-jacarta-700 dark:fill-white h-6 w-6">
-										<use xlinkHref={`/icons.svg#icon-${category}`}></use>
-									</svg>
-								</div>
-
-							</Link>)
-						);
-					})}
-				</div>
-
-				{/* <!-- Filters --> */}
-				<aside className="basis-4/12 lg:pl-5">
-					{/* <form action="search" className="relative mb-12 block" onSubmit={handleSubmit}> */}
-					{/* <input
+          {/* <!-- Filters --> */}
+          <aside className="basis-4/12 lg:pl-5">
+            {/* <form action="search" className="relative mb-12 block" onSubmit={handleSubmit}> */}
+            {/* <input
 							type="search"
 							className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full rounded-2xl border py-[0.6875rem] px-4 pl-10 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
 							placeholder="Search"
 							value={inputText}
 							onChange={(e) => setInputText(e.target.value)}
 						/> */}
-					{/* <button
+            {/* <button
 							type="submit"
 							className="absolute left-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl"
 						>
@@ -173,42 +192,45 @@ const Activity_item = () => {
 						</button>
 					</form> */}
 
-					<h3 className="font-display text-jacarta-500 mb-4 font-semibold dark:text-white">
-						Filters
-					</h3>
-					<div className="flex flex-wrap">
-						{filterData.map((category, i) => {
-							return (
-								<button
-									className={
-										filterVal === i
-											? 'dark:border-jacarta-600 group bg-accent border-jacarta-100 mr-2.5 mb-2.5 inline-flex items-center rounded-xl border px-4 py-3 border-transparent text-white dark:border-transparent'
-											: 'dark:border-jacarta-600 dark:bg-jacarta-700 group dark:hover:bg-accent hover:bg-accent border-jacarta-100 mr-2.5 mb-2.5 inline-flex items-center rounded-xl border bg-white px-4 py-3 hover:border-transparent hover:text-white dark:text-white dark:hover:border-transparent'
-									}
-									key={i}
-									onClick={() => {
-										handleFilter(category);
-										setFilterVal(i);
-									}}
-								>
-									<svg
-										className={
-											filterVal === i
-												? 'icon mr-2 h-4 w-4 fill-white'
-												: 'icon fill-jacarta-700 mr-2 h-4 w-4 group-hover:fill-white dark:fill-white'
-										}
-									>
-										<use xlinkHref={`/icons.svg#icon-${category}`}></use>
-									</svg>
-									<span className="text-2xs font-medium capitalize">{category}</span>
-								</button>
-							);
-						})}
-					</div>
-				</aside>
-			</div>
-		</div>
-	</>;
+            <h3 className="font-display text-jacarta-500 mb-4 font-semibold dark:text-white">
+              Filters
+            </h3>
+            <div className="flex flex-wrap">
+              {filterData.map((category, i) => {
+                return (
+                  <button
+                    className={
+                      filterVal === i
+                        ? "dark:border-jacarta-600 group bg-accent border-jacarta-100 mr-2.5 mb-2.5 inline-flex items-center rounded-xl border px-4 py-3 border-transparent text-white dark:border-transparent"
+                        : "dark:border-jacarta-600 dark:bg-jacarta-700 group dark:hover:bg-accent hover:bg-accent border-jacarta-100 mr-2.5 mb-2.5 inline-flex items-center rounded-xl border bg-white px-4 py-3 hover:border-transparent hover:text-white dark:text-white dark:hover:border-transparent"
+                    }
+                    key={i}
+                    onClick={() => {
+                      handleFilter(category);
+                      setFilterVal(i);
+                    }}
+                  >
+                    <svg
+                      className={
+                        filterVal === i
+                          ? "icon mr-2 h-4 w-4 fill-white"
+                          : "icon fill-jacarta-700 mr-2 h-4 w-4 group-hover:fill-white dark:fill-white"
+                      }
+                    >
+                      <use xlinkHref={`/icons.svg#icon-${category}`}></use>
+                    </svg>
+                    <span className="text-2xs font-medium capitalize">
+                      {category}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </aside>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Activity_item;

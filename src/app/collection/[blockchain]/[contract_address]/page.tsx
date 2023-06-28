@@ -5,9 +5,67 @@ import Collection_items from "@/components/collection/Collection_items";
 import Image from "next/image";
 import Link from "next/link";
 import Meta from "@/components/wallet-btn/Meta";
-import { getColectionMetrics } from "@/api/nftgo";
+import { cookies } from 'next/headers'
+// import { getColectionMetrics } from "@/api/nftgo";
 import { getCollectionData } from "@/api/nftscan";
 import formatNumber from "@/utils/formatNumber";
+import { prisma } from '@/components/lib/prisma';
+
+
+interface Collection {
+  id: number;
+  contract_address: string;
+  name: string;
+  symbol: string;
+  description?: string;
+  website?: string;
+  email?: string;
+  twitter?: string;
+  discord?: string;
+  telegram?: string;
+  github?: string;
+  instagram?: string;
+  medium?: string;
+  logo_url?: string;
+  banner_url?: string;
+  featured_url?: string;
+  large_image_url?: string;
+  attributes?: any; // Adjust the type according to the actual structure
+  erc_type: string;
+  token_type: string;
+  owner: string;
+  contract_deployer: string;
+  verified: boolean;
+  opensea_verified: boolean;
+  baddogs_verified: boolean;
+  rug_verified: boolean;
+  sus_verified: boolean;
+  royalty?: number;
+  items_total: number;
+  amounts_total: number;
+  owners_total: number;
+  opensea_floor_price: number;
+  floor_price: number;
+  collections_with_same_name?: any; // Adjust the type according to the actual structure
+  price_symbol: string;
+  average_price: number;
+  lowest_price_24h: number;
+  average_price_24h: number;
+  volume_24h: number;
+  sales_24h: number;
+  highest_price: number;
+  volume_1d: number;
+  volume_7d: number;
+  volume_30d: number;
+  volume_change_1d: string;
+  volume_change_7d: string;
+  volume_change_30d: string;
+  average_price_change_1d: string;
+  average_price_change_7d: string;
+  average_price_change_30d: string;
+  last_ingested_at?: Date;
+  last_updated_at?: Date;
+}
 
 interface DetailItem {
   id: string;
@@ -30,128 +88,204 @@ const Collection = async ({ params }: params) => {
   // const [details, setDetails] = useState<DetailItem[]>([]);
   // const [profile, setProfile] = useState<Data>();
   const contractAddress = params.contract_address;
-  console.log('contractAddress coming from params(url) ->', contractAddress);
+  const nextCookies = cookies(); // Get cookies object
+  const themeValue = nextCookies.get('theme')?.value || 'dark' // Find cookie
+  console.log('themeValue', themeValue);
+
 
   // const id = params.id;
   // const blockchain = params.blockchain;
 
-  const fetchCollectionData = async () => {
-    try {
-      const data = await getColectionMetrics(contractAddress);
-      console.log('detailMetricsFromNftGO', data);
+  // const fetchCollectionData = async () => {
+  //   try {
+  //     const data = await getColectionMetrics(contractAddress);
 
-      return [
-        {
-          id: "1",
-          detailsNumber: data?.total_supply
-            ? formatNumber(+data.total_supply)
-            : "No items",
-          detailsText: "Items",
-        },
-        {
-          id: "2",
-          detailsNumber: data?.holder_num
-            ? formatNumber(+data.holder_num)
-            : "No holders",
-          detailsText: "Owners",
-        },
-        {
-          id: "3",
-          detailsNumber: data.floor_price?.value
-            ? data.floor_price.value.toFixed(2) + " ETH"
-            : "0",
-          detailsText: "Floor Price",
-        },
-        {
-          id: "4",
-          detailsNumber: data.volume_eth?.all
-            ? formatNumber(+data.volume_eth.all) + " ETH"
-            : "0",
-          detailsText: "Volume Traded",
-        },
-      ];
-    } catch (error) {
-      console.log('failedDetailsMetrics NFTGO ->', error);
-      try {
-        const data = await getCollectionData(contractAddress);
-        console.log('detailMetricsFromNftscan ->', data);
-        return [
-          {
-            id: "1",
-            detailsNumber: data?.items_total
-              ? formatNumber(+data.items_total)
-              : "No items",
-            detailsText: "Items",
-          },
-          {
-            id: "2",
-            detailsNumber: data?.owners_total
-              ? formatNumber(+data.owners_total)
-              : "No holders",
-            detailsText: "Owners",
-          },
-          {
-            id: "3",
-            detailsNumber: data.floor_price
-              ? data.floor_price.toFixed(2) + " ETH"
-              : "0",
-            detailsText: "Floor Price",
-          },
-          {
-            id: "4",
-            // ! this needs to be changed to volume traded, for now it's just the floor price * owners
-            detailsNumber: data.floor_price
-              ? formatNumber(+data.floor_price * +data.owners_total) + " ETH"
-              : "0",
-            detailsText: "Volume Traded",
-          },
-        ];
-      } catch (error) {
-        console.log('failedDetailsMetrics NFTSCAN ->', error);
-        return [
-          {
-            id: "1",
-            detailsNumber: "No items",
-            detailsText: "Items",
-          },
-          {
-            id: "2",
-            detailsNumber: "No holders",
-            detailsText: "Owners",
-          },
-          {
-            id: "3",
-            detailsNumber: "0",
-            detailsText: "Floor Price",
-          },
-          {
-            id: "4",
-            detailsNumber: "0",
-            detailsText: "Volume Traded",
-          },
-        ];
-      }
-    }
-  };
+  //     return [
+  //       {
+  //         id: "1",
+  //         detailsNumber: data?.total_supply
+  //           ? formatNumber(+data.total_supply)
+  //           : "No items",
+  //         detailsText: "Items",
+  //       },
+  //       {
+  //         id: "2",
+  //         detailsNumber: data?.holder_num
+  //           ? formatNumber(+data.holder_num)
+  //           : "No holders",
+  //         detailsText: "Owners",
+  //       },
+  //       {
+  //         id: "3",
+  //         detailsNumber: data.floor_price?.value
+  //           ? data.floor_price.value.toFixed(2) + " ETH"
+  //           : "0",
+  //         detailsText: "Floor Price",
+  //       },
+  //       {
+  //         id: "4",
+  //         detailsNumber: data.volume_eth?.all
+  //           ? formatNumber(+data.volume_eth.all) + " ETH"
+  //           : "0",
+  //         detailsText: "Volume Traded",
+  //       },
+  //     ];
+  //   } catch (error) {
+  //     console.log('failedDetailsMetrics NFTGO ->', error);
+  //     try {
+  //       const data = await getCollectionData(contractAddress);
+  //       return [
+  //         {
+  //           id: "1",
+  //           detailsNumber: data?.items_total
+  //             ? formatNumber(+data.items_total)
+  //             : "No items",
+  //           detailsText: "Items",
+  //         },
+  //         {
+  //           id: "2",
+  //           detailsNumber: data?.owners_total
+  //             ? formatNumber(+data.owners_total)
+  //             : "No holders",
+  //           detailsText: "Owners",
+  //         },
+  //         {
+  //           id: "3",
+  //           detailsNumber: data.floor_price
+  //             ? data.floor_price.toFixed(2) + " ETH"
+  //             : "0",
+  //           detailsText: "Floor Price",
+  //         },
+  //         {
+  //           id: "4",
+  //           // ! this needs to be changed to volume traded, for now it's just the floor price * owners
+  //           detailsNumber: data.floor_price
+  //             ? formatNumber(+data.floor_price * +data.owners_total) + " ETH"
+  //             : "0",
+  //           detailsText: "Volume Traded",
+  //         },
+  //       ];
+  //     } catch (error) {
+  //       console.log('failedDetailsMetrics NFTSCAN ->', error);
+  //       return [
+  //         {
+  //           id: "1",
+  //           detailsNumber: "No items",
+  //           detailsText: "Items",
+  //         },
+  //         {
+  //           id: "2",
+  //           detailsNumber: "No holders",
+  //           detailsText: "Owners",
+  //         },
+  //         {
+  //           id: "3",
+  //           detailsNumber: "0",
+  //           detailsText: "Floor Price",
+  //         },
+  //         {
+  //           id: "4",
+  //           detailsNumber: "0",
+  //           detailsText: "Volume Traded",
+  //         },
+  //       ];
+  //     }
+  //   }
+  // };
   // const fetchCollectionItems = async () => {
   //   const items = await getOneNFTForContract({ blockchain, contractAddress, startToken: +id });
   //   setCollectionItemData(items);
   // }
 
+
   const fetchBannerAndProfile = async (contractAddress: string) => {
-    const data = await getCollectionData(contractAddress);
-    console.log('profileDataFromNftscan (banner/profile) ->', data);
-    // setProfile(data);
-    return data;
+    try {
+      const collections = await prisma.collection.findMany({
+        where: { contract_address: contractAddress },
+        select: {
+          name: true,
+          symbol: true,
+          description: true,
+          website: true,
+          email: true,
+          twitter: true,
+          discord: true,
+          telegram: true,
+          github: true,
+          instagram: true,
+          medium: true,
+          logo_url: true,
+          banner_url: true,
+          featured_url: true,
+          large_image_url: true,
+          owner: true,
+          contract_deployer: true,
+          verified: true,
+          opensea_verified: true,
+          baddogs_verified: true,
+          items_total: true,
+          amounts_total: true,
+          owners_total: true,
+          floor_price: true,
+          volume_24h: true,
+        },
+      });
+      // processing big ints
+      const processedCollections = collections.map((collection: any) => ({
+        ...collection,
+        items_total: Number(collection.items_total),
+        amounts_total: Number(collection.amounts_total),
+      }));
+
+      if (processedCollections.length === 0) {
+        const data = await getCollectionData(contractAddress);
+        // setProfile(data);
+        data.volume_24h = String(+data.floor_price * +data.owners_total)
+        return data;
+      }
+
+      return processedCollections[0] as Collection;
+    } catch (error) {
+      console.log(error);
+
+    }
   };
 
   const profile = await fetchBannerAndProfile(contractAddress);
-  const details = await fetchCollectionData();
+  const details = profile && [
+    {
+      id: "1",
+      detailsNumber: profile.items_total
+        ? formatNumber(+profile.items_total)
+        : "No items",
+      detailsText: "Items",
+    },
+    {
+      id: "2",
+      detailsNumber: profile.owners_total
+        ? formatNumber(+profile.owners_total)
+        : "No holders",
+      detailsText: "Owners",
+    },
+    {
+      id: "3",
+      detailsNumber: profile.floor_price
+        ? profile.floor_price.toFixed(2) + " ETH"
+        : "0",
+      detailsText: "Floor Price",
+    },
+    {
+      id: "4",
+      detailsNumber: profile.volume_24h
+        ? formatNumber(+profile.volume_24h) + " ETH"
+        : "0",
+      detailsText: "Volume Traded",
+    },
+  ];
 
-  console.log('details (render details numbers below profile) ->', details);
-  console.log('profile (renders profile image and banner) ->', profile);
-
-
+  const missingBannerUrl = themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
+  // const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
+  const missingProfileUrl = '/images/baddogs-error-v2-230x230.png'
   // useEffect(() => {
   //   // fetchCollectionItems();
   //   fetchCollectionData();
@@ -176,7 +310,7 @@ const Collection = async ({ params }: params) => {
         <div className="relative h-[300px]">
           {profile && (
             <Image
-              src={profile.banner_url || "/images/404.png"}
+              src={profile.banner_url || missingBannerUrl}
               alt="banner"
               fill
               sizes="100vw"
@@ -199,17 +333,17 @@ const Collection = async ({ params }: params) => {
                 {/* <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white"> */}
                 <figure className="relative h-40 w-40 ">
                   <Image
-                    src={profile.logo_url || "/images/404.png"}
+                    src={profile.logo_url || missingProfileUrl}
                     alt={profile.name}
                     fill
                     sizes="100vw"
                     className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
                   />
-                  <div
-                    className="dark:border-jacarta-600 bg-green absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
-                    data-tippy-content="Verified Collection"
-                  >
-                    {icon && (
+                  {profile.opensea_verified && (
+                    <div
+                      className="dark:border-jacarta-600 bg-green absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
+                      data-tippy-content="Verified Collection"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -220,15 +354,15 @@ const Collection = async ({ params }: params) => {
                         <path fill="none" d="M0 0h24v24H0z"></path>
                         <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
                       </svg>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </figure>
               </div>
               <div className="text-center">
                 <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
                   {profile.name}
                 </h2>
-                <div className="mb-8">
+                <div className="mb-2">
                   <span className="text-jacarta-400 text-sm font-bold">
                     Created by{" "}
                   </span>
@@ -240,9 +374,21 @@ const Collection = async ({ params }: params) => {
                     {profile.owner}
                   </Link>
                 </div>
+                <div className="mb-8">
+                  <span className="text-jacarta-400 text-sm font-bold">
+                    Contract Address{" "}
+                  </span>
+                  <Link
+                    href='#'
+                    className="text-accent text-sm font-bold"
+                    legacyBehavior
+                  >
+                    {profile.contract_address ? profile.contract_address : contractAddress}
+                  </Link>
+                </div>
 
                 <div className="dark:bg-jacarta-800 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex flex-wrap items-center justify-center rounded-xl border bg-white">
-                  {details.map(({ detailsNumber, detailsText }: any, index) => {
+                  {details && details.map(({ detailsNumber, detailsText }: any, index) => {
                     return (
                       <Link
                         href="#"
@@ -369,11 +515,11 @@ const Collection = async ({ params }: params) => {
         )}
 
         {/* <!-- end profile --> */}
-      </div>
+      </div >
       <Collection_items
         params={{
           contract_address: contractAddress,
-          profile: profile,
+          profile: profile as any,
         }}
       />
     </>

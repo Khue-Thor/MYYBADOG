@@ -1,19 +1,22 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import {
   ConnectWallet,
   useAddress,
   useAuth,
-  metamaskWallet,
   useConnectionStatus,
+  useDisconnect,
 } from "@thirdweb-dev/react";
+import { createWalletAddressCookie, deleteCookie } from "./addressCookie";
 import { getUser, createUser } from "@/api/authenticate";
 
 export default function AuthenticationButton() {
   // const shortenedAddress = address.substring(0, 17).concat("...");
+  const [isLoading, setIsLoading] = useState(false);
   const connectionStatus = useConnectionStatus();
   const address = useAddress();
+  const disconnect = useDisconnect();
 
   const auth = useAuth();
   const { data: session } = useSession();
@@ -21,39 +24,48 @@ export default function AuthenticationButton() {
   useEffect(() => {
     if (connectionStatus == "connected" && session == null) {
       loginWithWallet();
+    } else {
+      deleteCookie("wallet-address");
     }
   }, [connectionStatus]);
 
   async function loginWithWallet() {
     try {
+      setIsLoading(true);
       const payload = await auth?.login();
 
       if (connectionStatus == "connected") {
         console.log("user should be logged in =>", payload.payload.address);
-        console.log("user fetch");
+        createWalletAddressCookie(payload.payload.address);
         const userData = await getUser(payload.payload.address);
-        console.log(userData);
-
+        console.log(payload.payload);
         const userExists = !userData.user_data ? false : true;
 
         if (!userExists) {
           console.log("payload:", payload);
-          await createUser(payload.payload.address);
-
-          // Then send the payload to next auth as login credentials
-          // using the "credentials" provider method
-          console.log("sign into nextauth");
-          const data = await signIn("credentials", {
-            payload: JSON.stringify(payload),
-            redirect: false,
-          });
+          const create = await createUser(payload.payload.address);
+          //Check if user was successfully created in database
+          if (create.status == 200) {
+            console.log("sign into nextauth");
+            //  Send the payload to next auth as login credentials
+            // using the "credentials" provider method
+            const data = await signIn("credentials", {
+              payload: JSON.stringify(payload),
+              redirect: false,
+            });
+          } else {
+            throw new Error("Failed to create user in database.");
+          }
         } else if (userExists) {
           const data = await signIn("credentials", {
             payload: JSON.stringify(payload),
             redirect: false,
           });
         }
+      } else {
+        await disconnect();
       }
+      setIsLoading(false);
     } catch (error) {
       window.alert(error);
     }
@@ -61,7 +73,7 @@ export default function AuthenticationButton() {
 
   return (
     <>
-      {session ? null : address ? (
+      {session || isLoading ? null : address ? (
         <button onClick={() => loginWithWallet()}>Login</button>
       ) : (
         <ConnectWallet

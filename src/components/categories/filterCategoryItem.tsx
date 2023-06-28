@@ -165,7 +165,7 @@ const FilterCategoryItem = ({ params }: params) => {
       {/* <Collection_category_filter /> */}
       <input
         type="search"
-        className="text-center text-jacarta-700 placeholder-jacarta-500 mb-10 focus:ring-accent border-jacarta-100 w-1/4 rounded-2xl border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
+        className="text-center text-jacarta-700 placeholder-jacarta-500 mb-10 focus:ring-accent border-jacarta-100 w-1/8 sm:w-1/4 rounded-2xl border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
         placeholder="Search for tokenId"
         value={searchInput}
         onChange={handleSearch}

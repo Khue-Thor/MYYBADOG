@@ -6,7 +6,7 @@ import HeadLine from "@/components/headline";
 import Newsletter from "@/components/blog/newsletter";
 // import Auctions_categories from "./categories/Auctions_categories.jsx";
 // import Feature_collections from "./collectrions/Feature_collections.jsx";
-// import Partners from "./partners/Partners.jsx";
+// import Partners from "./partners/Partners.tsx";
 // import Browse_category from "./categories/Browse_category.jsx";
 import Hero_3 from "@/ui/hero/hero3";
 import ItemsTabs from "@/ui/tab/tabs";

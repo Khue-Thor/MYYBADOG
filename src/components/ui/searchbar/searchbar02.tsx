@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getRanking, rankingData } from '@/api/nftscan';
 import Image from "next/image";
 import LoadingSkeleton from './skeleton';
+import { HiBadgeCheck } from 'react-icons/hi';
 const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
   const [showSearch, setShowSearch] = useState(false);
@@ -133,20 +134,48 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
               </span>
               {initialData.slice(0, 5).map((value: rankingData) => {
                 return (
-                  <Link key={value.contract_address} href={`/collection/eth-mainnet/${value.contract_address}`} prefetch={false} onClick={handleCloseSearchBar}>
-                    <div className="p-1 hover:bg-gray-500 dark:hover:bg-jacarta-600 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                  <Link
+                    key={value.contract_address}
+                    href={`/collection/eth-mainnet/${value.contract_address}`}
+                    prefetch={false}
+                    onClick={clearInput}
+                  >
+                    <div className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
-                        <Image src={value.logo_url}
-                          alt="Image"
-                          width={9}
-                          height={9}
-                          className="rounded-lg w-9 h-9" />
+                        <div className="relative">
+                          <img
+                            src={value.logo_url}
+                            alt="Image"
+                            className="rounded-lg w-12 h-12"
+                          />
+                          {true && (
+                            <div
+                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
+                              data-tippy-content="Verified Collection"
+                            >
+                              <svg
+                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                fill="none"
+                                viewBox="0 0 15 15"
+                                stroke="currentColor"
+                              >
+                                <HiBadgeCheck />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white md:text-base text-sm"> {value.contract_name}</span>
-                          <span className='font-medium text-xs text-gray-700'>{value.items_total} items</span>
+                          <span className="font-bold dark:text-white text-base w-[150px]">
+                            {value.contract_name}
+                          </span>
+                          <span className="font-medium text-xs text-gray-700">
+                            {value.items_total} items
+                          </span>
                         </div>
                       </div>
-                      <span className="font-medium sm:text-sm text-gray-700 text-xs"> {value.items_total} ETH</span>
+                      <span className="font-medium text-sm text-gray-700">
+                        {value.floor_price} ETH
+                      </span>
                     </div>
                   </Link>
                 );
@@ -177,18 +206,16 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                             className="rounded-lg w-9 h-9" />
                           {value.openSeaMetadata.safelistRequestStatus && (
                             <div
-                              className="dark:border-jacarta-600 bg-green absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
+                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
                               data-tippy-content="Verified Collection"
                             >
                               <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width="24"
-                                height="24"
-                                className="h-[.875rem] w-[.875rem] fill-white"
+                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                fill="none"
+                                viewBox="0 0 15 15"
+                                stroke="currentColor"
                               >
-                                <path fill="none" d="M0 0h24v24H0z"></path>
-                                <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                <HiBadgeCheck />
                               </svg>
                             </div>
                           )}

@@ -169,7 +169,6 @@ const SearchBar01 = () => {
                                 fill="none"
                                 viewBox="0 0 15 15"
                                 stroke="currentColor"
-                                stroke-width="2"
                               >
                                 <HiBadgeCheck />
                               </svg>
@@ -226,7 +225,6 @@ const SearchBar01 = () => {
                                 fill="none"
                                 viewBox="0 0 15 15"
                                 stroke="currentColor"
-                                stroke-width="2"
                               >
                                 <HiBadgeCheck />
                               </svg>

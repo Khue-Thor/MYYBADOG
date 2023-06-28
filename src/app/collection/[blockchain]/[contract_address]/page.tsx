@@ -284,7 +284,8 @@ const Collection = async ({ params }: params) => {
   ];
 
   const missingBannerUrl = themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
-  const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
+  // const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
+  const missingProfileUrl = '/images/baddogs-error-v2-230x230.png'
   // useEffect(() => {
   //   // fetchCollectionItems();
   //   fetchCollectionData();

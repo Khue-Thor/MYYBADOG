@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import SearchBar01 from "../searchbar/searchbar01";
 import SearchBar02 from "../searchbar/searchbar02";
 
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { ConnectWallet, useAddress, useAuth } from "@thirdweb-dev/react";
 import AuthenticationButton from "./AuthenticationButton";
 import ProfileSheet from "./ProfileSheet";
@@ -43,9 +43,6 @@ export default function Header01() {
     });
   });
 
-  // const shortenedAddress = address.substring(0, 17).concat("...");
-  const address = useAddress();
-  const auth = useAuth();
   const { data: session } = useSession();
 
   // window resize

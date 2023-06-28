@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { getRanking, rankingData } from '@/api/nftscan';
 import LoadingSkeleton from './skeleton';
+import { HiBadgeCheck } from 'react-icons/hi'
+
 const SearchBar01 = () => {
   const [showSearch, setShowSearch] = useState(false);
 
@@ -33,7 +35,7 @@ const SearchBar01 = () => {
 
       const data = await res.json();
       setCollectionsData(data.contracts);
-      return data;
+      return data.contracts;
     } catch (error) {
       console.log(error);
     }
@@ -151,11 +153,29 @@ const SearchBar01 = () => {
                   >
                     <div className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
-                        <img
-                          src={value.logo_url}
-                          alt="Image"
-                          className="rounded-lg w-9 h-9"
-                        />
+                        <div className="relative">
+                          <img
+                            src={value.logo_url}
+                            alt="Image"
+                            className="rounded-lg w-12 h-12"
+                          />
+                          {true && (
+                            <div
+                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
+                              data-tippy-content="Verified Collection"
+                            >
+                              <svg
+                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                fill="none"
+                                viewBox="0 0 15 15"
+                                stroke="currentColor"
+                                stroke-width="2"
+                              >
+                                <HiBadgeCheck />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex flex-col">
                           <span className="font-bold dark:text-white text-base w-[150px]">
                             {value.contract_name}
@@ -198,18 +218,17 @@ const SearchBar01 = () => {
                           />
                           {value.openSeaMetadata.safelistRequestStatus && (
                             <div
-                              className="dark:border-jacarta-600 bg-green absolute right-0 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
+                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
                               data-tippy-content="Verified Collection"
                             >
                               <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                width="24"
-                                height="24"
-                                className="h-[.875rem] w-[.875rem] fill-white"
+                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                fill="none"
+                                viewBox="0 0 15 15"
+                                stroke="currentColor"
+                                stroke-width="2"
                               >
-                                <path fill="none" d="M0 0h24v24H0z"></path>
-                                <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
+                                <HiBadgeCheck />
                               </svg>
                             </div>
                           )}

@@ -10,6 +10,9 @@ import { cookies } from 'next/headers'
 import { getCollectionData } from "@/api/nftscan";
 import formatNumber from "@/utils/formatNumber";
 import { prisma } from '@/components/lib/prisma';
+import { RandomLogoImage } from '@/components/profile-random-image';
+import { HiBadgeCheck } from 'react-icons/hi';
+
 
 
 interface Collection {
@@ -284,8 +287,8 @@ const Collection = async ({ params }: params) => {
   ];
 
   const missingBannerUrl = themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
-  // const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
-  const missingProfileUrl = '/images/baddogs-error-v2-230x230.png'
+  const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
+  // const missingProfileUrl = '/images/baddogs-error-v2-230x230.png'
   // useEffect(() => {
   //   // fetchCollectionItems();
   //   fetchCollectionData();
@@ -332,36 +335,38 @@ const Collection = async ({ params }: params) => {
               <div className="left-1/2 z-10 flex -translate-y-1/2 items-center justify-center">
                 {/* <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white"> */}
                 <figure className="relative h-40 w-40 ">
-                  <Image
-                    src={profile.logo_url || missingProfileUrl}
-                    alt={profile.name}
-                    fill
-                    sizes="100vw"
-                    className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
-                  />
-                  {profile.opensea_verified && (
-                    <div
-                      className="dark:border-jacarta-600 bg-green absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
-                      data-tippy-content="Verified Collection"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        height="24"
-                        className="h-[.875rem] w-[.875rem] fill-white"
-                      >
-                        <path fill="none" d="M0 0h24v24H0z"></path>
-                        <path d="M10 15.172l9.192-9.193 1.415 1.414L10 18l-6.364-6.364 1.414-1.414z"></path>
-                      </svg>
-                    </div>
-                  )}
+                  {profile.logo_url ?
+                    <Image
+                      src={profile.logo_url || missingProfileUrl}
+                      alt={profile.name}
+                      fill
+                      sizes="100vw"
+                      className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
+                    />
+                    : <RandomLogoImage contract={contractAddress} />
+                  }
                 </figure>
               </div>
               <div className="text-center">
-                <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
-                  {profile.name}
-                </h2>
+                <div className="flex justify-center">
+                  <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
+                    {profile.name}
+                  </h2>
+                  {profile.opensea_verified && <div
+                    className="flex h-6 w-6 items-center justify-center rounded-full"
+                    data-tippy-content="Verified Collection"
+                  >
+                    <svg
+                      className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                      fill="none"
+                      viewBox="0 0 15 15"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <HiBadgeCheck />
+                    </svg>
+                  </div>}
+                </div>
                 <div className="mb-2">
                   <span className="text-jacarta-400 text-sm font-bold">
                     Created by{" "}

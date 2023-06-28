@@ -1,156 +1,81 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import {
   ConnectWallet,
   useAddress,
-  useUser,
   useAuth,
-  useDisconnect,
-  useConnect,
-  metamaskWallet,
-  useSigner,
   useConnectionStatus,
+  useDisconnect,
 } from "@thirdweb-dev/react";
-import { RiLoginBoxLine } from "react-icons/ri";
-const metamaskConfig = metamaskWallet();
+import { createWalletAddressCookie, deleteCookie } from "./addressCookie";
+import { getUser, createUser } from "@/api/authenticate";
 
 export default function AuthenticationButton() {
   // const shortenedAddress = address.substring(0, 17).concat("...");
+  const [isLoading, setIsLoading] = useState(false);
   const connectionStatus = useConnectionStatus();
-  const address = useAddress() || "";
+  const address = useAddress();
   const disconnect = useDisconnect();
-  const { user, isLoggedIn, isLoading } = useUser();
+
   const auth = useAuth();
   const { data: session } = useSession();
-  const connect = useConnect();
-  // if (connectionStatus == "connected") {
-  //   loginWithWallet();
-  // }
+
   useEffect(() => {
     if (connectionStatus == "connected" && session == null) {
       loginWithWallet();
+    } else {
+      deleteCookie("wallet-address");
     }
   }, [connectionStatus]);
-  const logOutAll = () => {
-    if (session) {
-      signOut();
-      disconnect();
-    }
-  };
 
   async function loginWithWallet() {
     try {
+      setIsLoading(true);
       const payload = await auth?.login();
-      console.log(payload);
-      // const options: RequestInit = {
-      //   method: "POST",
-      //   headers: {
-      //     accept: "application/json",
-      //   },
-      //   body: JSON.stringify(payload),
-      // };
-      // const res = await fetch(`/api/thirdweb/login`, options);
-      // if (!res.ok) {
-      //   // This will activate the closest `error.js` Error Boundary
-      //   throw new Error("Failed to fetch data");
-      // }
-      if (isLoggedIn) {
-        console.log("user should be logged in =>", user);
-        console.log(payload);
-        const userData = await getUser();
-        const userExists = (await userData.message) ? false : true;
+
+      if (connectionStatus == "connected") {
+        console.log("user should be logged in =>", payload.payload.address);
+        createWalletAddressCookie(payload.payload.address);
+        const userData = await getUser(payload.payload.address);
+        console.log(payload.payload);
+        const userExists = !userData.user_data ? false : true;
 
         if (!userExists) {
-          await createUser(payload.payload.address);
+          console.log("payload:", payload);
+          const create = await createUser(payload.payload.address);
+          //Check if user was successfully created in database
+          if (create.status == 200) {
+            console.log("sign into nextauth");
+            //  Send the payload to next auth as login credentials
+            // using the "credentials" provider method
+            const data = await signIn("credentials", {
+              payload: JSON.stringify(payload),
+              redirect: false,
+            });
+          } else {
+            throw new Error("Failed to create user in database.");
+          }
+        } else if (userExists) {
+          const data = await signIn("credentials", {
+            payload: JSON.stringify(payload),
+            redirect: false,
+          });
         }
-
-        // Then send the payload to next auth as login credentials
-        // using the "credentials" provider method
-        const data = await signIn("credentials", {
-          payload: JSON.stringify(payload),
-          redirect: false,
-        });
+      } else {
+        await disconnect();
       }
+      setIsLoading(false);
     } catch (error) {
       window.alert(error);
     }
   }
-  //get user from supabase to see if wallet address already exists
-  const getUser = async () => {
-    const options: RequestInit = {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-      },
-    };
-    try {
-      const res = await fetch(`/api/user/find?address=${address}`, options);
-      if (!res.ok) {
-        // This will activate the closest `error.js` Error Boundary
-        throw new Error("Failed to fetch data");
-      }
-      const jsonRes = await res.json();
-      return jsonRes;
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
-  const createUser = async (address: string) => {
-    try {
-      const options: RequestInit = {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-        },
-        body: JSON.stringify({ address: address.toString() }),
-      };
-      const res = await fetch("/api/user/create", options);
-      if (!res.ok) {
-        // This will activate the closest `error.js` Error Boundary
-        throw new Error(
-          ("Something went wrong when creating user with wallet:" +
-            address) as string
-        );
-      }
-      const jsonRes = await res.json();
-      return jsonRes;
-    } catch (err) {
-      console.log(err);
-    }
-  };
   return (
-    <div>
-      {session ? (
-        <>
-          <button
-            className="bg-red text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
-            onClick={() => logOutAll()}
-          >
-            {" "}
-            Logout <RiLoginBoxLine />
-          </button>
-          <button
-            className="bg-red text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
-            onClick={() => console.log(user)}
-          >
-            Test
-          </button>
-        </>
+    <>
+      {session || isLoading ? null : address ? (
+        <button onClick={() => loginWithWallet()}>Login</button>
       ) : (
-        // : address ? (
-        //   <>
-        // <button
-        //   className="bg-green text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between h-10 text-base dark:text-white lg:px-5 rounded p-2"
-        //   onClick={() => loginWithWallet()}
-        // >
-        //   {" "}
-        //   Web2 Login <RiLoginBoxLine />
-        // </button>
-        //     <ConnectWallet />
-        //   </>
-        // )
         <ConnectWallet
           className="connect-wallet-btn hover:opacity-60 hover:animate-[wiggle_1s_ease-in-out_infinite] mt-2 text-md"
           btnTitle="Connect Wallet"
@@ -159,6 +84,6 @@ export default function AuthenticationButton() {
           }}
         />
       )}
-    </div>
+    </>
   );
 }

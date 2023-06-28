@@ -28,7 +28,8 @@ export async function POST(req:NextRequest) {
              level: 0,
              quests: [],
              friends: [],
-             inventory: []
+             inventory: [],
+
            }
          }
 

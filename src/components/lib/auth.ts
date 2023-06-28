@@ -1,11 +1,13 @@
+import { getUser } from "@/api/authenticate";
 import {
     ThirdwebAuthProvider,
     authSession,
   } from "@thirdweb-dev/auth/next-auth";
   import NextAuth from "next-auth";
   import type { NextAuthOptions } from 'next-auth'
-  // import { nonceExists } from "./nonce";
-  
+  import { prisma } from "./prisma";
+  import { cookies } from 'next/headers'
+
  const authOptions:NextAuthOptions = {
     session:{
       strategy:"jwt",
@@ -23,14 +25,39 @@ import {
            // Enforce that the user's login message has these exact values
       authOptions: {
         validateNonce: async (nonce: string) => {
-          // Check in database or storage if nonce exists
-          // const nonceExists:boolean = await nonceExists(nonce)
-          // if (nonceExists) {
-          //   throw new Error("Nonce has already been used!");
-          // }
-          console.log(nonce);
-          // // Otherwise save nonce in database or storage for later validation
-          // await dbExample.saveNonce(nonce);
+          const cookieStore = cookies()
+          const address = cookieStore.get('wallet-address')?.value;
+          try{
+            //Check if the nonce exists by querying the record for the nonce value along with the wallet-address
+                const record = await prisma.user.findFirst({
+            where: {
+              address: address?.toString(),
+              nonce: nonce as string
+            },
+            select: {
+              nonce: true
+            }
+          })
+         //If the record does not exist, set nonceExist to false, if it does it may be a replay attack so throw the error
+          const nonceExists = record === null ? false : true;
+
+          if(nonceExists){
+            throw new Error("Nonce has already been used!");
+          }
+ 
+          const updateNonce = await prisma.user.update({
+            where: {
+              address: address?.toString(),
+            },
+            data: {
+              nonce: nonce as string,
+            },
+          })
+          console.log(`updated nonce for user: ${address}`)
+          }catch(err){
+            console.log(err)
+          }
+      
         }
       }
 

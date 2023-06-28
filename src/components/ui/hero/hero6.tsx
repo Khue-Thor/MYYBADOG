@@ -94,7 +94,7 @@ const Hero_6 = async () => {
                 return (
                   <Suspense
                     fallback={<p>loading...</p>}
-                    key={`left-${token_id}`}
+                    key={`left-${contract_address}-${token_id}`}
                   >
                     <article>
                       <div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">
@@ -205,7 +205,7 @@ const Hero_6 = async () => {
                 return (
                   <Suspense
                     fallback={<p>loading...</p>}
-                    key={`right-${token_id}`}
+                    key={`right-${contract_address}-${token_id}`}
                   >
                     <article>
                       <div className="relative overflow-hidden rounded-2.5xl bg-white dark:bg-jacarta-700">

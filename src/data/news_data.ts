@@ -1,5 +1,3 @@
-import NewsItem from "@/app/about/NewsItem";
-
 export type NewsItem = {
   id: string;
   text: string;

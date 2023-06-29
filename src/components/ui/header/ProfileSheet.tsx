@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { getCookie } from "cookies-next";
 import {
   ConnectWallet,
   useAddress,
   useAuth,
   useDisconnect,
   useConnect,
+  useConnectionStatus,
 } from "@thirdweb-dev/react";
 import {
   Sheet,
@@ -19,10 +21,14 @@ import {
 } from "@/components/shadcn/sheet";
 import Link from "next/link";
 export default function ProfileSheet() {
+  const address = getCookie("wallet-address");
+  const [walletAddr, setWalletAddr] = useState(address);
   // const shortenedAddress = address.substring(0, 17).concat("...");
   const disconnect = useDisconnect();
   const { data: session } = useSession();
-  const address = useAddress();
+  //cannot use useAddress() because it loses state on refresh
+  // const address = useAddress() || "";
+
   const logOutAll = () => {
     if (session) {
       signOut();
@@ -48,7 +54,7 @@ export default function ProfileSheet() {
       </SheetTrigger>
       <SheetContent position="right" size="sm" className="bg-accent-dark">
         <SheetHeader>
-          <SheetTitle>{address}</SheetTitle>
+          <SheetTitle>{walletAddr.substring(0, 17).concat("...")}</SheetTitle>
           <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">
             <span className="dark:text-jacarta-200 text-sm font-medium tracking-tight">
               Balance

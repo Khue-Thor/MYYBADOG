@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 export default function ProfileSheet() {
   const address = getCookie("wallet-address");
-  const [walletAddr, setWalletAddr] = useState(address);
+  const [walletAddr, setWalletAddr] = useState(address || "");
   // const shortenedAddress = address.substring(0, 17).concat("...");
   const disconnect = useDisconnect();
   const { data: session } = useSession();
@@ -54,7 +54,7 @@ export default function ProfileSheet() {
       </SheetTrigger>
       <SheetContent position="right" size="sm" className="bg-accent-dark">
         <SheetHeader>
-          <SheetTitle>{walletAddr.substring(0, 17).concat("...")}</SheetTitle>
+          <SheetTitle>{walletAddr}</SheetTitle>
           <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">
             <span className="dark:text-jacarta-200 text-sm font-medium tracking-tight">
               Balance

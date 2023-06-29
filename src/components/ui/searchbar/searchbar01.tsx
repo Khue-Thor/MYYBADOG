@@ -194,7 +194,7 @@ const SearchBar01 = () => {
                         </div>
                       </div>
                       <span className="font-medium text-sm text-gray-700">
-                        {value.openSeaMetadata.floorPrice} ETH
+                        {Number(value.openSeaMetadata.floorPrice).toFixed(3)} ETH
                       </span>
                     </div>
                   </Link>
@@ -252,7 +252,7 @@ const SearchBar01 = () => {
                         </div>
                       </div>
                       <span className="font-medium text-sm text-gray-700">
-                        {value.openSeaMetadata.floorPrice} ETH
+                        {Number(value.openSeaMetadata.floorPrice).toFixed(3)} ETH
                       </span>
                     </div>
                   </Link>

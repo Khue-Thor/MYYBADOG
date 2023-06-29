@@ -127,7 +127,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
     setFailedSearch(false);
     setIsLoading(false);
   };
-  console.log(failedSearch);
 
   return (
     <form action="search" className="relative h-full w-full lg:hidden" onSubmit={(e) => e.preventDefault()}>
@@ -160,9 +159,11 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <div className="flex w-[250px] flex-nowrap">
+                          <div className="flex w-full flex-nowrap">
                             <span className="font-bold dark:text-white text-base">
-                              {value.openSeaMetadata.collectionName}
+                              {value.openSeaMetadata.collectionName.length > 20
+                                ? value.openSeaMetadata.collectionName.slice(0, 20) + "..."
+                                : value.openSeaMetadata.collectionName}
                             </span>
                             {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
                               <div
@@ -172,7 +173,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                                 <svg
                                   className="h-6 w-6" style={{ color: '#1DA1F2' }}
                                   fill="none"
-                                  viewBox="0 0 15 15"
+                                  viewBox="0 0 19 19"
                                   stroke="currentColor"
                                 >
                                   <HiBadgeCheck />
@@ -186,7 +187,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                         </div>
                       </div>
                       <span className="font-medium text-sm text-gray-700">
-                        {value.openSeaMetadata.floorPrice} ETH
+                        {Number(value.openSeaMetadata.floorPrice).toFixed(3)} ETH
                       </span>
                     </div>
                   </Link>
@@ -217,9 +218,13 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                           />
                         </div>
                         <div className="flex flex-col">
-                          <div className="flex w-[250px] flex-nowrap">
+                          <div className="flex w-full flex-nowrap">
                             <span className="font-bold dark:text-white text-base">
-                              {value.openSeaMetadata.collectionName}
+                              {window.innerWidth < 420
+                                ? value.openSeaMetadata.collectionName.slice(0, 15) + "..."
+                                : window.innerWidth < 600
+                                  ? value.openSeaMetadata.collectionName.slice(0, 20) + "..."
+                                  : value.openSeaMetadata.collectionName}
                             </span>
                             {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
                               <div
@@ -229,7 +234,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                                 <svg
                                   className="h-6 w-6" style={{ color: '#1DA1F2' }}
                                   fill="none"
-                                  viewBox="0 0 15 15"
+                                  viewBox="0 0 19 19"
                                   stroke="currentColor"
                                 >
                                   <HiBadgeCheck />
@@ -243,7 +248,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                         </div>
                       </div>
                       <span className="font-medium text-sm text-gray-700">
-                        {value.openSeaMetadata.floorPrice} ETH
+                        {Number(value.openSeaMetadata.floorPrice).toFixed(3)} ETH
                       </span>
                     </div>
                   </Link>

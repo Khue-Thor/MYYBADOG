@@ -93,7 +93,6 @@ const Collection = async ({ params }: params) => {
   const contractAddress = params.contract_address;
   const nextCookies = cookies(); // Get cookies object
   const themeValue = nextCookies.get('theme')?.value || 'dark' // Find cookie
-  console.log('themeValue', themeValue);
 
 
   // const id = params.id;

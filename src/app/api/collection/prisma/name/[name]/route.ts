@@ -7,7 +7,6 @@ export async function GET(
 ) {
   try {
     const name = params.name;
-    console.log('name prisma', name);
 
     const collections = await prisma.collection.findMany({
       where: {
@@ -45,7 +44,6 @@ export async function GET(
         baddogs_verified: collection.baddogs_verified,
       },
     }));
-    console.log('prisma collection ', formattedCollections);
 
     return NextResponse.json(
       { message: 'success', data: formattedCollections },

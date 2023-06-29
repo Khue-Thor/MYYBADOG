@@ -100,6 +100,7 @@ const SearchBar01 = () => {
       getCollections();
     }
     if (enteredWord.length < 3 && enteredWord.length > 0) {
+      setFailedSearch(false);
       setShowSearch(true);
     }
   }, [enteredWord]);
@@ -179,7 +180,7 @@ const SearchBar01 = () => {
                                 <svg
                                   className="h-6 w-6" style={{ color: '#1DA1F2' }}
                                   fill="none"
-                                  viewBox="0 0 15 15"
+                                  viewBox="0 0 20 20"
                                   stroke="currentColor"
                                 >
                                   <HiBadgeCheck />

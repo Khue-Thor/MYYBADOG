@@ -36,7 +36,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
       const data = await res.json();
       setCollectionsData(data.contracts);
-      return data;
+      return data.contracts;
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +87,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
       }
       const result = await res.json();
       setInitialData(result.data);
-      // setInitialData(data);
     } catch (error) {
       setInitialData([]);
     }
@@ -102,6 +101,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
       getCollections();
     }
     if (enteredWord.length < 3 && enteredWord.length > 0) {
+      setFailedSearch(false);
       setShowSearch(true);
     }
   }, [enteredWord]);
@@ -110,6 +110,11 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
     const searchWord = e.target.value;
     setEnteredWord(searchWord);
   };
+
+  const handleClose = () => {
+    setShowSearch(false);
+    setFailedSearch(false);
+  }
 
   const handleClick = () => {
     setShowSearch(true);
@@ -122,6 +127,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
     setFailedSearch(false);
     setIsLoading(false);
   };
+  console.log(failedSearch);
 
   return (
     <form action="search" className="relative h-full w-full lg:hidden" onSubmit={(e) => e.preventDefault()}>
@@ -136,9 +142,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           {showSearch && enteredWord.length < 3 && initialData.length > 1 && (
             <div className="dark:bg-jacarta-800 bg-white border-t-[1px] dark:border-white border-gray-600 text-black absolute z-10 left-[0px] top-[60px] pt-3 pb-[20px] w-full flex flex-col gap-1 pr-[10px] pl-[10px]">
               <span className="font-bold text-sm text-gray-600 p-3">FEATURED</span>
-              <span className="font-bold text-sm text-gray-600 p-3">
-                COLLECTIONS
-              </span>
               {initialData.slice(0, 5).map((value: any) => {
                 return (
                   <Link
@@ -189,7 +192,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                   </Link>
                 );
               })}
-              <span className='font-bold text-sm text-gray-600 p-3'>ACCOUNTS</span>
             </div>
           )}
           {enteredWord.length >= 3 && collectionsData.length !== 0 && (
@@ -271,6 +273,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           )}
         </>
       )}
+
       <span className="absolute right-0 top-0 flex h-full w-12 items-center justify-center rounded-2xl" onClick={clearInput}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -284,15 +287,6 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
         </svg>
       </span>
-      {/* /////////////// */}
-
-      {/* {enteredWord.length == 0 ? (
-        <span></span>
-      ) : (
-       
-      )} */}
-
-
     </form>
   )
 }

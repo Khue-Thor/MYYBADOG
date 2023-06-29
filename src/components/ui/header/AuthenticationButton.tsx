@@ -24,7 +24,7 @@ export default function AuthenticationButton() {
   useEffect(() => {
     if (connectionStatus == "connected" && session == null) {
       loginWithWallet();
-    } else {
+    } else if (connectionStatus == "disconnected") {
       deleteCookie("wallet-address");
     }
   }, [connectionStatus]);
@@ -42,7 +42,7 @@ export default function AuthenticationButton() {
         const userExists = !userData.user_data ? false : true;
 
         if (!userExists) {
-          console.log("payload:", payload);
+          // console.log("payload:", payload);
           const create = await createUser(payload.payload.address);
           //Check if user was successfully created in database
           if (create.status == 200) {
@@ -67,6 +67,7 @@ export default function AuthenticationButton() {
       }
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       window.alert(error);
     }
   }

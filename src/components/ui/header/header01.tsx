@@ -233,7 +233,8 @@ export default function Header01() {
     pages: [
       {
         id: uuidv4(),
-        name: "All NFTs",
+        name: "Brawl",
+        description: "Bring it on!",
         path: "/collection/explore_collection",
         icon: (
           <svg
@@ -250,7 +251,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Photography",
+        name: "Bark!",
+        description: "Send NFT messages",
         path: "/collection/explore_collection",
         icon: (
           <svg
@@ -267,7 +269,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Art",
+        name: "PawSwap",
+        description: "Peer-to-peer swap",
         path: "/art",
         icon: (
           <svg
@@ -284,7 +287,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Sports",
+        name: "Fetch!",
+        description: "Bulk send your NFTs",
         path: "/sports",
         icon: (
           <svg
@@ -302,6 +306,7 @@ export default function Header01() {
       {
         id: uuidv4(),
         name: "Raffles",
+        description: "Create your own raffles",
         path: "/raffles",
         icon: (
           <svg
@@ -318,7 +323,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Trading Cards",
+        name: "BadDogs Meme",
+        description: "Create your own meme",
         path: "/tranding-cards",
         icon: (
           <svg
@@ -335,7 +341,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Domain Names",
+        name: "Games",
+        description: "Play and talk smack",
         path: "/domain-names",
         icon: (
           <svg
@@ -369,7 +376,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Virtual Worlds",
+        name: "Metaverses",
+        description: "Enter web3 worlds",
         path: "/virtual-worlds",
         icon: (
           <svg
@@ -482,11 +490,10 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between "
                         >
                           <span
-                            className={`font-display ${
-                              isChildrenPageActive(page.path, pathname)
+                            className={`font-display ${isChildrenPageActive(page.path, pathname)
                                 ? "text-accent dark:text-accent"
                                 : "text-jacarta-700"
-                            } text-sm dark:text-white`}
+                              } text-sm dark:text-white`}
                           >
                             {page.name}
                           </span>
@@ -495,6 +502,57 @@ export default function Header01() {
                               new
                             </span>
                           ) : undefined}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+
+                {/* utilities */}
+                <li className="js-nav-dropdown nav-item dropdown group relative">
+                  <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
+                    <span
+                      className={
+                        isParentPageActive(explore.pages, pathname)
+                          ? "text-accent dark:text-accent"
+                          : ""
+                      }
+                    >
+                      Utilities
+                    </span>
+                    <i className="lg:hidden">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width={24}
+                        height={24}
+                        className="h-4 w-4 dark:fill-white"
+                      >
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                      </svg>
+                    </i>
+                  </button>
+                  <ul
+                    className="dropdown-menu dark:bg-jacarta-800 -left-6 top-[85%] z-10 hidden grid-flow-col grid-rows-5 gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-5 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative"
+                    aria-labelledby="navDropdown-1"
+                  >
+                    {explore?.pages?.map((page) => (
+                      <li key={page.id}>
+                        <Link
+                          href={page.path}
+                          prefetch={false}
+                          className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
+                        >
+                          <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
+                            {page?.icon}
+                          </span>
+                          <span className="font-display text-jacarta-700 text-sm dark:text-white">
+                            {page?.name} <br />
+                            <span className="font-body text-jacarta-700 text-3xs dark:text-white">
+                              {page?.description ? page?.description : ""}
+                            </span>
+                          </span>
                         </Link>
                       </li>
                     ))}
@@ -535,11 +593,10 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                         >
                           <span
-                            className={`font-display ${
-                              isChildrenPageActive(page.path, pathname)
+                            className={`font-display ${isChildrenPageActive(page.path, pathname)
                                 ? "!text-accent !dark:text-accent"
                                 : "text-jacarta-700 dark:text-white"
-                            } text-sm `}
+                              } text-sm `}
                           >
                             {page.name}
                           </span>
@@ -548,54 +605,6 @@ export default function Header01() {
                               new
                             </span>
                           ) : undefined}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-
-                {/* explore */}
-                <li className="js-nav-dropdown nav-item dropdown group relative">
-                  <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
-                    <span
-                      className={
-                        isParentPageActive(explore.pages, pathname)
-                          ? "text-accent dark:text-accent"
-                          : ""
-                      }
-                    >
-                      Utilities
-                    </span>
-                    <i className="lg:hidden">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width={24}
-                        height={24}
-                        className="h-4 w-4 dark:fill-white"
-                      >
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
-                      </svg>
-                    </i>
-                  </button>
-                  <ul
-                    className="dropdown-menu dark:bg-jacarta-800 -left-6 top-[85%] z-10 hidden grid-flow-col grid-rows-5 gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-5 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative"
-                    aria-labelledby="navDropdown-1"
-                  >
-                    {explore?.pages?.map((page) => (
-                      <li key={page.id}>
-                        <Link
-                          href={page.path}
-                          prefetch={false}
-                          className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
-                        >
-                          <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
-                            {page?.icon}
-                          </span>
-                          <span className="font-display text-jacarta-700 text-sm dark:text-white">
-                            {page?.name}
-                          </span>
                         </Link>
                       </li>
                     ))}
@@ -764,9 +773,8 @@ export default function Header01() {
 
       {/* start mobile menu and it's other materials  */}
       <div
-        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${
-          toggle ? "nav-menu--is-open" : "hidden"
-        }`}
+        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${toggle ? "nav-menu--is-open" : "hidden"
+          }`}
       >
         <div className="t-0 dark:bg-jacarta-800 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 lg:hidden">
           <div className="dark:hidden">
@@ -837,9 +845,8 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === home.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === home.id ? "block" : "hidden"
+                  }`}
               >
                 {home?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -849,11 +856,10 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                     >
                       <span
-                        className={`font-display ${
-                          isChildrenPageActive(pathname, page.path)
+                        className={`font-display ${isChildrenPageActive(pathname, page.path)
                             ? "text-accent dark:text-accent"
                             : "text-jacarta-700"
-                        } text-sm dark:text-white`}
+                          } text-sm dark:text-white`}
                       >
                         {page.name}
                       </span>
@@ -895,9 +901,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === page.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === page.id ? "block" : "hidden"
+                  }`}
               >
                 {page?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -953,9 +958,8 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === explore.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === explore.id ? "block" : "hidden"
+                  }`}
                 aria-labelledby="navDropdown-1"
               >
                 {explore?.pages?.map((page) => (
@@ -1005,9 +1009,8 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
-                  isCollapse === resource.id ? "block" : "hidden"
-                }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === resource.id ? "block" : "hidden"
+                  }`}
                 aria-labelledby="navDropdown-4"
               >
                 {resource?.pages?.map((page) => (
@@ -1018,11 +1021,10 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                     >
                       <span
-                        className={`font-display text-jacarta-700 text-sm dark:text-white ${
-                          isChildrenPageActive(page.path, pathname)
+                        className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, pathname)
                             ? "text-accent dark:text-accent"
                             : ""
-                        }`}
+                          }`}
                       >
                         {page.name}
                       </span>

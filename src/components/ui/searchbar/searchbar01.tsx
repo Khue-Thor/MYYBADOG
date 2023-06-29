@@ -215,7 +215,7 @@ const SearchBar01 = () => {
                             alt="Image"
                             className="rounded-lg w-12 h-12"
                           />
-                          {value.openSeaMetadata.safelistRequestStatus && (
+                          {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
                             <div
                               className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
                               data-tippy-content="Verified Collection"

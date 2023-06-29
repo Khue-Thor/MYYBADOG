@@ -28,6 +28,7 @@ export async function GET(
         floor_price: true,
         name: true,
         opensea_verified: true,
+        baddogs_verified: true,
       },
       take: 10,
       orderBy: [{ opensea_verified: 'desc' }, { floor_price: 'desc' }],
@@ -41,6 +42,7 @@ export async function GET(
         collectionName: collection.name,
         floorPrice: String(collection.floor_price),
         safelistRequestStatus: collection.opensea_verified,
+        baddogs_verified: collection.baddogs_verified,
       },
     }));
     console.log('prisma collection ', formattedCollections);

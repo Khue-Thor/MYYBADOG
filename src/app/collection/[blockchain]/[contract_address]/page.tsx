@@ -352,12 +352,12 @@ const Collection = async ({ params }: params) => {
                   <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
                     {profile.name}
                   </h2>
-                  {profile.opensea_verified && <div
-                    className="flex h-6 w-6 items-center justify-center rounded-full"
+                  {(profile.opensea_verified || profile.baddogs_verified) && <div
+                    className="flex h-6 w-6 items-center justify-center "
                     data-tippy-content="Verified Collection"
                   >
                     <svg
-                      className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                      className="mt-3" style={{ color: '#1DA1F2' }}
                       fill="none"
                       viewBox="0 0 15 15"
                       stroke="currentColor"

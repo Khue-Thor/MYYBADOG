@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getRanking, rankingData } from '@/api/nftscan';
+// import { getRanking, rankingData } from '@/api/nftscan';
 import LoadingSkeleton from './skeleton';
 import { HiBadgeCheck } from 'react-icons/hi'
 
@@ -10,7 +10,7 @@ const SearchBar01 = () => {
 
   const [enteredWord, setEnteredWord] = useState('');
   const [collectionsData, setCollectionsData] = useState([]);
-  const [initialData, setInitialData] = useState<rankingData[]>([]);
+  const [initialData, setInitialData] = useState([]);
   const [failedSearch, setFailedSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -78,8 +78,14 @@ const SearchBar01 = () => {
   async function getInitialCollections() {
     // fetch initial trending data to display before user searches
     try {
-      const data = await getRanking('volume_total');
-      setInitialData(data);
+      // const data = await getRanking('volume_total');
+      const query = `/api/collection/prisma/topvolume`;
+      const res = await fetch(query, { method: 'GET' });
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const result = await res.json();
+      setInitialData(result.data);
     } catch (error) {
       setInitialData([]);
     }
@@ -135,19 +141,19 @@ const SearchBar01 = () => {
         value={enteredWord}
       />
       {isLoading ? (
-        <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+        <div className="bg-jacarta-700  text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <LoadingSkeleton />
         </div>
       ) : (
         <>
           {showSearch && enteredWord.length < 3 && initialData.length > 1 && (
-            <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+            <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-[550px] pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
               <span className="font-bold text-sm text-gray-600 p-3">FEATURED</span>
-              {initialData.slice(0, 5).map((value) => {
+              {initialData.slice(0, 5).map((value: any) => {
                 return (
                   <Link
-                    key={value.contract_address}
-                    href={`/collection/eth-mainnet/${value.contract_address}`}
+                    key={value.address}
+                    href={`/collection/eth-mainnet/${value.address}`}
                     prefetch={false}
                     onClick={clearInput}
                   >
@@ -155,37 +161,39 @@ const SearchBar01 = () => {
                       <div className="flex gap-3 items-top">
                         <div className="relative">
                           <img
-                            src={value.logo_url}
+                            src={value.openSeaMetadata.imageUrl || '/images/baddogs-error-v2-230x230.png'}
                             alt="Image"
                             className="rounded-lg w-12 h-12"
                           />
-                          {true && (
-                            <div
-                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
-                              data-tippy-content="Verified Collection"
-                            >
-                              <svg
-                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
-                                fill="none"
-                                viewBox="0 0 15 15"
-                                stroke="currentColor"
-                              >
-                                <HiBadgeCheck />
-                              </svg>
-                            </div>
-                          )}
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white text-base w-[150px]">
-                            {value.contract_name}
-                          </span>
+                          <div className="flex w-[250px] flex-nowrap">
+                            <span className="font-bold dark:text-white text-base ">
+                              {value.openSeaMetadata.collectionName}
+                            </span>
+                            {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
+                              <div
+                                className="flex items-center justify-center rounded-full"
+                                data-tippy-content="Verified Collection"
+                              >
+                                <svg
+                                  className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                  fill="none"
+                                  viewBox="0 0 15 15"
+                                  stroke="currentColor"
+                                >
+                                  <HiBadgeCheck />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
                           <span className="font-medium text-xs text-gray-700">
-                            {value.items_total} items
+                            {value.totalSupply} items
                           </span>
                         </div>
                       </div>
                       <span className="font-medium text-sm text-gray-700">
-                        {value.floor_price} ETH
+                        {value.openSeaMetadata.floorPrice} ETH
                       </span>
                     </div>
                   </Link>
@@ -195,7 +203,7 @@ const SearchBar01 = () => {
           )}
 
           {enteredWord.length >= 3 && collectionsData && collectionsData.length !== 0 && (
-            <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+            <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-[550px] pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
               <span className="font-bold text-sm text-gray-600 p-3">
                 COLLECTIONS
               </span>
@@ -211,30 +219,32 @@ const SearchBar01 = () => {
                       <div className="flex gap-3 items-top">
                         <div className="relative">
                           <img
-                            src={value.openSeaMetadata.imageUrl}
+                            src={value.openSeaMetadata.imageUrl || '/images/baddogs-error-v2-230x230.png'}
                             alt="Image"
                             className="rounded-lg w-12 h-12"
                           />
-                          {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
-                            <div
-                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
-                              data-tippy-content="Verified Collection"
-                            >
-                              <svg
-                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
-                                fill="none"
-                                viewBox="0 0 15 15"
-                                stroke="currentColor"
-                              >
-                                <HiBadgeCheck />
-                              </svg>
-                            </div>
-                          )}
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white text-base w-[150px]">
-                            {value.openSeaMetadata.collectionName}
-                          </span>
+                          <div className="flex w-[300px] flex-nowrap">
+                            <span className="font-bold dark:text-white text-base">
+                              {value.openSeaMetadata.collectionName}
+                            </span>
+                            {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
+                              <div
+                                className="flex items-center justify-center rounded-full"
+                                data-tippy-content="Verified Collection"
+                              >
+                                <svg
+                                  className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                  fill="none"
+                                  viewBox="0 0 15 15"
+                                  stroke="currentColor"
+                                >
+                                  <HiBadgeCheck />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
                           <span className="font-medium text-xs text-gray-700">
                             {value.totalSupply} items
                           </span>

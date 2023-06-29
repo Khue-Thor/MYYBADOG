@@ -11,7 +11,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
 
   const [enteredWord, setEnteredWord] = useState('');
   const [collectionsData, setCollectionsData] = useState([]);
-  const [initialData, setInitialData] = useState<rankingData[]>([]);
+  const [initialData, setInitialData] = useState([]);
   const [failedSearch, setFailedSearch] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -79,8 +79,15 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
   async function getInitialCollections() {
     // fetch initial trending data to display before user searches
     try {
-      const data = await getRanking('volume_total');
-      setInitialData(data);
+      // const data = await getRanking('volume_total');
+      const query = `/api/collection/prisma/topvolume`;
+      const res = await fetch(query, { method: 'GET' });
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const result = await res.json();
+      setInitialData(result.data);
+      // setInitialData(data);
     } catch (error) {
       setInitialData([]);
     }
@@ -132,11 +139,11 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
               <span className="font-bold text-sm text-gray-600 p-3">
                 COLLECTIONS
               </span>
-              {initialData.slice(0, 5).map((value: rankingData) => {
+              {initialData.slice(0, 5).map((value: any) => {
                 return (
                   <Link
-                    key={value.contract_address}
-                    href={`/collection/eth-mainnet/${value.contract_address}`}
+                    key={value.address}
+                    href={`/collection/eth-mainnet/${value.address}`}
                     prefetch={false}
                     onClick={clearInput}
                   >
@@ -144,37 +151,39 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                       <div className="flex gap-3 items-top">
                         <div className="relative">
                           <img
-                            src={value.logo_url}
+                            src={value.openSeaMetadata.imageUrl || '/images/baddogs-error-v2-230x230.png'}
                             alt="Image"
                             className="rounded-lg w-12 h-12"
                           />
-                          {true && (
-                            <div
-                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
-                              data-tippy-content="Verified Collection"
-                            >
-                              <svg
-                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
-                                fill="none"
-                                viewBox="0 0 15 15"
-                                stroke="currentColor"
-                              >
-                                <HiBadgeCheck />
-                              </svg>
-                            </div>
-                          )}
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white text-base w-[150px]">
-                            {value.contract_name}
-                          </span>
+                          <div className="flex w-[250px] flex-nowrap">
+                            <span className="font-bold dark:text-white text-base">
+                              {value.openSeaMetadata.collectionName}
+                            </span>
+                            {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
+                              <div
+                                className="flex items-center justify-center rounded-full"
+                                data-tippy-content="Verified Collection"
+                              >
+                                <svg
+                                  className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                  fill="none"
+                                  viewBox="0 0 15 15"
+                                  stroke="currentColor"
+                                >
+                                  <HiBadgeCheck />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
                           <span className="font-medium text-xs text-gray-700">
-                            {value.items_total} items
+                            {value.totalSupply} items
                           </span>
                         </div>
                       </div>
                       <span className="font-medium text-sm text-gray-700">
-                        {value.floor_price} ETH
+                        {value.openSeaMetadata.floorPrice} ETH
                       </span>
                     </div>
                   </Link>
@@ -194,36 +203,38 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                     key={value.address}
                     href={`/collection/eth-mainnet/${value.address}`}
                     prefetch={false}
-                    onClick={handleCloseSearchBar}
+                    onClick={clearInput}
                   >
-                    <div className="p-1 dark:hover:bg-jacarta-600  hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
+                    <div className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
                         <div className="relative">
-                          <Image src={value.openSeaMetadata.imageUrl}
+                          <img
+                            src={value.openSeaMetadata.imageUrl || '/images/baddogs-error-v2-230x230.png'}
                             alt="Image"
-                            width={9}
-                            height={9}
-                            className="rounded-lg w-9 h-9" />
-                          {value.openSeaMetadata.safelistRequestStatus && (
-                            <div
-                              className="absolute -right-2 bottom-0 flex h-6 w-6 items-center justify-center rounded-full"
-                              data-tippy-content="Verified Collection"
-                            >
-                              <svg
-                                className="h-6 w-6" style={{ color: '#1DA1F2' }}
-                                fill="none"
-                                viewBox="0 0 15 15"
-                                stroke="currentColor"
-                              >
-                                <HiBadgeCheck />
-                              </svg>
-                            </div>
-                          )}
+                            className="rounded-lg w-12 h-12"
+                          />
                         </div>
                         <div className="flex flex-col">
-                          <span className="font-bold dark:text-white text-base w-[150px]">
-                            {value.openSeaMetadata.collectionName}
-                          </span>
+                          <div className="flex w-[250px] flex-nowrap">
+                            <span className="font-bold dark:text-white text-base">
+                              {value.openSeaMetadata.collectionName}
+                            </span>
+                            {(value.openSeaMetadata.safelistRequestStatus || value.openSeaMetadata.baddogs_verified) && (
+                              <div
+                                className="flex items-center justify-center rounded-full"
+                                data-tippy-content="Verified Collection"
+                              >
+                                <svg
+                                  className="h-6 w-6" style={{ color: '#1DA1F2' }}
+                                  fill="none"
+                                  viewBox="0 0 15 15"
+                                  stroke="currentColor"
+                                >
+                                  <HiBadgeCheck />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
                           <span className="font-medium text-xs text-gray-700">
                             {value.totalSupply} items
                           </span>

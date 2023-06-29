@@ -51,6 +51,19 @@ const OneCategoryItem = ({ params }: params) => {
     contractAddress,
     blockchain
   } = item;
+
+  interface ImageWithFallbackProps {
+    imageURL: string;
+    fallbackImageURL: string;
+  }
+
+  const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ imageURL, fallbackImageURL }) => {
+    const handleError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+      event.currentTarget.src = fallbackImageURL;
+    };
+
+    return <img src={imageURL} onError={handleError} alt="Image with fallback" className="w-full h-[230px] rounded-[0.625rem] object-cover" />;
+  };
   return (
     <div>
 
@@ -61,10 +74,9 @@ const OneCategoryItem = ({ params }: params) => {
               <Link href={`/${blockchain}/${contractAddress}/${id}`}>
                 {
                   image ?
-                    <img
-                      src={image || '/public/images/404.png'}
-                      alt="item 5"
-                      className="w-full h-[230px] rounded-[0.625rem] object-cover"
+                    <ImageWithFallback
+                      imageURL={image as string}
+                      fallbackImageURL="/images/baddogs-error-v2-230x230.png"
                     />
                     : <CategoryItemPlaceholder params={{ url: params.profile.logo_url }} />
                 }

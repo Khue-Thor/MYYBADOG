@@ -8,7 +8,8 @@ module.exports = {
   darkMode: "class",
   theme: {
     screens: {
-      sm: "575px",
+      xs: "320px",
+      sm: "485px",
       md: "768px",
       lg: "1025px",
       xl: "1202px",

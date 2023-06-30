@@ -490,10 +490,11 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600  hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between "
                         >
                           <span
-                            className={`font-display ${isChildrenPageActive(page.path, pathname)
+                            className={`font-display ${
+                              isChildrenPageActive(page.path, pathname)
                                 ? "text-accent dark:text-accent"
                                 : "text-jacarta-700"
-                              } text-sm dark:text-white`}
+                            } text-sm dark:text-white`}
                           >
                             {page.name}
                           </span>
@@ -593,10 +594,11 @@ export default function Header01() {
                           className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                         >
                           <span
-                            className={`font-display ${isChildrenPageActive(page.path, pathname)
+                            className={`font-display ${
+                              isChildrenPageActive(page.path, pathname)
                                 ? "!text-accent !dark:text-accent"
                                 : "text-jacarta-700 dark:text-white"
-                              } text-sm `}
+                            } text-sm `}
                           >
                             {page.name}
                           </span>
@@ -717,25 +719,16 @@ export default function Header01() {
                 <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
               </svg>
             </button>
-            <Link
-              href="/profile/user_avatar"
-              prefetch={false}
-              className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
-              aria-label="profile"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width={24}
-                height={24}
-                className="fill-jacarta-700 h-4 w-4 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-              >
-                <path fill="none" d="M0 0h24v24H0z" />
-                <path d="M11 14.062V20h2v-5.938c3.946.492 7 3.858 7 7.938H4a8.001 8.001 0 0 1 7-7.938zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6z" />
-              </svg>
-            </Link>
+            <li className="group list-none">
+              {session ? (
+                <ProfileSheet />
+              ) : (
+                <span className="ml-2">
+                  <AuthenticationButton />
+                </span>
+              )}
+            </li>
 
-            <DarkMode />
             <button
               className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
               aria-label="open mobile menu"
@@ -773,8 +766,9 @@ export default function Header01() {
 
       {/* start mobile menu and it's other materials  */}
       <div
-        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${toggle ? "nav-menu--is-open" : "hidden"
-          }`}
+        className={`lg:hidden js-mobile-menu dark:bg-jacarta-800 invisible fixed inset-0 z-20 ml-auto items-center bg-white opacity-0 lg:visible lg:relative lg:inset-auto lg:bg-transparent lg:opacity-100 dark:lg:bg-transparent ${
+          toggle ? "nav-menu--is-open" : "hidden"
+        }`}
       >
         <div className="t-0 dark:bg-jacarta-800 fixed left-0 z-10 flex w-full items-center justify-between bg-white p-6 lg:hidden">
           <div className="dark:hidden">
@@ -845,8 +839,9 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === home.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu dark:bg-jacarta-800 left-0 top-[85%] z-10 min-w-[200px] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:grid lg:translate-y-4 lg:py-4 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === home.id ? "block" : "hidden"
+                }`}
               >
                 {home?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -856,10 +851,11 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors justify-between"
                     >
                       <span
-                        className={`font-display ${isChildrenPageActive(pathname, page.path)
+                        className={`font-display ${
+                          isChildrenPageActive(pathname, page.path)
                             ? "text-accent dark:text-accent"
                             : "text-jacarta-700"
-                          } text-sm dark:text-white`}
+                        } text-sm dark:text-white`}
                       >
                         {page.name}
                       </span>
@@ -901,8 +897,9 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === page.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === page.id ? "block" : "hidden"
+                }`}
               >
                 {page?.pages?.map((page) => (
                   <li key={page.id} onClick={() => setToggle(false)}>
@@ -958,8 +955,9 @@ export default function Header01() {
                 </i>
               </button>
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === explore.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === explore.id ? "block" : "hidden"
+                }`}
                 aria-labelledby="navDropdown-1"
               >
                 {explore?.pages?.map((page) => (
@@ -1009,8 +1007,9 @@ export default function Header01() {
               </button>
 
               <ul
-                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${isCollapse === resource.id ? "block" : "hidden"
-                  }`}
+                className={`dropdown-menu left-0 top-[85%] z-10 grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative ${
+                  isCollapse === resource.id ? "block" : "hidden"
+                }`}
                 aria-labelledby="navDropdown-4"
               >
                 {resource?.pages?.map((page) => (
@@ -1021,10 +1020,11 @@ export default function Header01() {
                       className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
                     >
                       <span
-                        className={`font-display text-jacarta-700 text-sm dark:text-white ${isChildrenPageActive(page.path, pathname)
+                        className={`font-display text-jacarta-700 text-sm dark:text-white ${
+                          isChildrenPageActive(page.path, pathname)
                             ? "text-accent dark:text-accent"
                             : ""
-                          }`}
+                        }`}
                       >
                         {page.name}
                       </span>
@@ -1053,7 +1053,10 @@ export default function Header01() {
         {/* End navbar mobile menu  */}
 
         <div className="mt-10 w-full lg:hidden">
-          <div className="js-wallet bg-accent shadow-accent-volume hover:bg-accent-dark block w-full rounded-full py-3 px-8 text-center font-semibold text-white transition-all">
+          <div className="js-wallet flex justify-evenly align-middle bg-accent shadow-accent-volume hover:bg-accent-dark block w-full rounded-full py-3 px-8 text-center font-semibold text-white transition-all">
+            <span className="h-full">
+              <DarkMode />
+            </span>
             <ConnectWallet />
           </div>
           <hr className="dark:bg-jacarta-600 bg-jacarta-100 my-5 h-px border-0" />

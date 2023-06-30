@@ -8,6 +8,7 @@ import Footer from "../components/ui/footer";
 import "@/styles/custom.css";
 import BidsModal from "@/components/modal/BidsModal";
 import { Session } from "next-auth";
+import { Toaster } from "@/components/shadcn/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +38,10 @@ export default function RootLayout({
             <div>
               <Header01 />
               <>{children}</>
+              <Toaster />
             </div>
           </Providers>
+
           <Footer />
           <BidsModal />
         </body>

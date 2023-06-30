@@ -12,6 +12,7 @@ import {
 } from "@thirdweb-dev/react";
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
+import { ToastProvider } from "./shadcn/toast";
 
 export function Providers({
   children,
@@ -37,7 +38,7 @@ export function Providers({
                 (process.env.NEXT_PUBLIC_THIRDWEB_AUTH_DOMAIN as string) || "",
             }}
           >
-            {children}
+            <ToastProvider>{children}</ToastProvider>
           </ThirdwebProvider>
         </SessionProvider>
       </ThemeProvider>

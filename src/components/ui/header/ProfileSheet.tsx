@@ -20,20 +20,26 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import Link from "next/link";
+import { useToast } from "@/components/shadcn/use-toast";
 export default function ProfileSheet() {
   const address = getCookie("wallet-address");
   const [walletAddr, setWalletAddr] = useState(address || "");
   // const shortenedAddress = address.substring(0, 17).concat("...");
   const disconnect = useDisconnect();
   const { data: session } = useSession();
+  const { toast } = useToast();
   //cannot use useAddress() because it loses state on refresh
   // const address = useAddress() || "";
 
   const logOutAll = () => {
     if (session) {
-      signOut();
+      signOut({ redirect: false });
       disconnect();
     }
+    toast({
+      title: "Signed Out",
+      description: "Friday, February 10, 2023 at 5:57 PM",
+    });
   };
 
   return (
@@ -52,7 +58,11 @@ export default function ProfileSheet() {
           </svg>
         </button>
       </SheetTrigger>
-      <SheetContent position="right" size="sm" className="bg-accent-dark">
+      <SheetContent
+        position="right"
+        size="sm"
+        className="bg-accent-dark xs:w-10/12 md:w-1/3"
+      >
         <SheetHeader>
           <SheetTitle>{walletAddr}</SheetTitle>
           <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">

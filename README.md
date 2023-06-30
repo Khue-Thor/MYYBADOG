@@ -1,6 +1,7 @@
 ## Getting Started
 
-We need to run the following install due to react-chat-element@12.0.8 for now. (might use another library later)
+We need to run the following install due to react-chat-element@12.0.8,react-metamask-avatar for now. (might use another library later):
+
 npm install --legacy-peer-deps
 
 ```bash
@@ -55,21 +56,24 @@ const supaData: raffles | null = await prisma.raffles.findUnique({
 ```
 
 ### How to sync Prisma Migration in development
+
 [Source Article](https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/team-development)
 
 1. Pull latest files from git for ./prisma/migrations folder
+
 ```
 git pull
 ```
 
 2. Run the migrate dev command to apply new migrations
+
 ```
 // (name of the migration e.g. collection-banner-field, tag-model, etc)
 npx prisma migrate dev --name collection-banner-field
-``` 
-
+```
 
 3. Generate the new prisma code
+
 ```
 npx prisma generate
 ```

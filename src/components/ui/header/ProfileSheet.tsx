@@ -38,7 +38,6 @@ export default function ProfileSheet() {
     }
     toast({
       title: "Signed Out",
-      description: "Friday, February 10, 2023 at 5:57 PM",
     });
   };
 

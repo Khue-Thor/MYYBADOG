@@ -13,19 +13,37 @@ import {
   isParentPageActive,
 } from "../../../utils/daynamicNavigation";
 import React, { useEffect, useState } from "react";
-
 import SearchBar01 from "../searchbar/searchbar01";
 import SearchBar02 from "../searchbar/searchbar02";
-
-import { useSession } from "next-auth/react";
-import { ConnectWallet, useAddress, useAuth } from "@thirdweb-dev/react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { getUser, createUser } from "@/api/authenticate";
+import { getCookie } from "cookies-next";
+import {
+  ConnectWallet,
+  useAddress,
+  useAuth,
+  useConnectionStatus,
+  useDisconnect,
+} from "@thirdweb-dev/react";
 import AuthenticationButton from "./AuthenticationButton";
 import ProfileSheet from "./ProfileSheet";
+import { useToast } from "@/components/shadcn/use-toast";
+import { createWalletAddressCookie, deleteCookie } from "./addressCookie";
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
   const [searchBarOpen, setSearchBarOpen] = useState(false);
+  const connectionStatus = useConnectionStatus();
+  const connected = connectionStatus == "connected" ? true : false;
+  const [isLoading, setIsLoading] = useState(false);
+  const address = useAddress();
+  const [currentAccount, setCurrentAccount] = useState("0x0");
+  const disconnect = useDisconnect();
+  const cookieAddress = getCookie("wallet-address");
+  const auth = useAuth();
+  const { data: session } = useSession();
+  const { toast } = useToast();
 
   const handleOpenSearchBar = () => {
     setSearchBarOpen(true);
@@ -34,6 +52,50 @@ export default function Header01() {
   const handleCloseSearchBar = () => {
     setSearchBarOpen(false);
   };
+  useEffect(() => {
+    if (!window.ethereum) {
+      // Nothing to do here... no ethereum provider found
+      return;
+    }
+    const accountWasChanged = (accounts: any) => {
+      signOut();
+      setCurrentAccount(accounts[0]);
+      toast({
+        title: "Account was changed. User Signed Out",
+      });
+    };
+    // const handleConnect = () =>{
+    //   console.log("connected")
+    // }
+    // window.addEventListener("CloseEvent",)
+    window.ethereum.on("error", (tx: any) => {
+      toast({ title: "something went wrong" });
+    });
+    window.ethereum.on("accountsChanged", accountWasChanged);
+    // window.ethereum.on("connect",handleConnect)
+  }, [currentAccount]);
+
+  useEffect(() => {
+    if (connectionStatus == "connected" && session == null) {
+      console.log("loginwithwallet");
+      //conditional so it doesn't automatically pop up sign request for login
+      if (cookieAddress == address || cookieAddress == "") {
+        loginWithWallet();
+      } else {
+        return;
+      }
+    } else if (connectionStatus == "disconnected") {
+      disconnect();
+      signOut();
+      deleteCookie("wallet-address");
+    }
+
+    // const clearAccount = () => {
+    //   setAccount("0x0");
+    //   signOut();
+    //   console.log("clearAccount");
+    // };
+  }, [connected]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -43,8 +105,6 @@ export default function Header01() {
     });
   });
 
-  const { data: session } = useSession();
-
   // window resize
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -53,6 +113,66 @@ export default function Header01() {
       }
     });
   });
+  let payload: any = null;
+  async function loginWithWallet() {
+    try {
+      payload = await auth?.login();
+    } catch (err: any) {
+      console.log(err.code);
+      toast({ title: err.code });
+    }
+    try {
+      // setIsLoading(true);
+      // console.log(payload);
+      if (connectionStatus == "connected") {
+        console.log("user should be logged in =>", payload.payload.address);
+        createWalletAddressCookie(payload.payload.address);
+        const userData = await getUser(payload.payload.address);
+        // console.log(payload.payload);
+        const userExists = !userData.user_data ? false : true;
+
+        if (!userExists) {
+          // console.log("payload:", payload);
+          const create = await createUser(payload.payload.address);
+          //Check if user was successfully created in database
+          if (create.status == 200) {
+            toast({
+              title: "User Successfully Registered.",
+            });
+            console.log("sign into nextauth");
+            //  Send the payload to next auth as login credentials
+            // using the "credentials" provider method
+            const data = await signIn("credentials", {
+              payload: JSON.stringify(payload),
+              redirect: false,
+            });
+          } else {
+            throw new Error("Failed to create user in database.");
+          }
+        } else if (userExists) {
+          const data = await signIn("credentials", {
+            payload: JSON.stringify(payload),
+            redirect: false,
+          });
+        }
+        toast({
+          title: "User Successfully Signed In.",
+        });
+      } else {
+        await disconnect();
+        toast({
+          title: "Something went wrong. You have been disconnected.",
+        });
+      }
+      setCurrentAccount(payload.payload.address);
+      // setIsLoading(false);
+    } catch (error: any) {
+      // setIsLoading(false);
+      toast({
+        title: error,
+      });
+    }
+  }
 
   const pathname = usePathname() || "";
   /* -------------------------------------------------------------------------- */
@@ -719,7 +839,7 @@ export default function Header01() {
                 <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
               </svg>
             </button>
-            <li className="group list-none">
+            <li className="group list-none md:hidden lg:hidden xl:hidden">
               {session ? (
                 <ProfileSheet />
               ) : (

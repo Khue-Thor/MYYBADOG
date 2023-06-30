@@ -286,7 +286,7 @@ const SearchBar01 = () => {
         </>
       )}
 
-      <span className="absolute right-0 top-0 flex h-full w-1/4 items-center justify-center rounded-2xl" onClick={clearInput}>
+      <span className="absolute xxl:right-10 xl:right-3 right-2 top-0 flex h-full items-center justify-center rounded-2xl" onClick={clearInput}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"

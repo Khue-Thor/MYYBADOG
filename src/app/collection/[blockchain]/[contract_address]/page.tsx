@@ -5,15 +5,13 @@ import Collection_items from "@/components/collection/Collection_items";
 import Image from "next/image";
 import Link from "next/link";
 import Meta from "@/components/wallet-btn/Meta";
-import { cookies } from 'next/headers'
+import { cookies } from "next/headers";
 // import { getColectionMetrics } from "@/api/nftgo";
 import { getCollectionData } from "@/api/nftscan";
 import formatNumber from "@/utils/formatNumber";
-import { prisma } from '@/components/lib/prisma';
-import { RandomLogoImage } from '@/components/profile-random-image';
-import { HiBadgeCheck } from 'react-icons/hi';
-
-
+import { prisma } from "@/components/lib/prisma";
+import { RandomLogoImage } from "@/components/profile-random-image";
+import { HiBadgeCheck } from "react-icons/hi";
 
 interface Collection {
   id: number;
@@ -92,8 +90,7 @@ const Collection = async ({ params }: params) => {
   // const [profile, setProfile] = useState<Data>();
   const contractAddress = params.contract_address;
   const nextCookies = cookies(); // Get cookies object
-  const themeValue = nextCookies.get('theme')?.value || 'dark' // Find cookie
-
+  const themeValue = nextCookies.get("theme")?.value || "dark"; // Find cookie
 
   // const id = params.id;
   // const blockchain = params.blockchain;
@@ -199,7 +196,6 @@ const Collection = async ({ params }: params) => {
   //   setCollectionItemData(items);
   // }
 
-
   const fetchBannerAndProfile = async (contractAddress: string) => {
     try {
       const collections = await prisma.collection.findMany({
@@ -237,19 +233,19 @@ const Collection = async ({ params }: params) => {
         ...collection,
         items_total: Number(collection.items_total),
         amounts_total: Number(collection.amounts_total),
+        floor_price: Number(collection.floor_price),
       }));
 
       if (processedCollections.length === 0) {
         const data = await getCollectionData(contractAddress);
         // setProfile(data);
-        data.volume_24h = String(+data.floor_price * +data.owners_total)
+        data.volume_24h = String(+data.floor_price * +data.owners_total);
         return data;
       }
 
       return processedCollections[0] as Collection;
     } catch (error) {
       console.log(error);
-
     }
   };
 
@@ -285,8 +281,12 @@ const Collection = async ({ params }: params) => {
     },
   ];
 
-  const missingBannerUrl = themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
-  const missingProfileUrl = themeValue === "dark" ? "/images/baddogs-no-image-white.png" : "/images/baddogs-no-image-black.png";
+  const missingBannerUrl =
+    themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
+  const missingProfileUrl =
+    themeValue === "dark"
+      ? "/images/baddogs-no-image-white.png"
+      : "/images/baddogs-no-image-black.png";
   // const missingProfileUrl = '/images/baddogs-error-v2-230x230.png'
   // useEffect(() => {
   //   // fetchCollectionItems();
@@ -328,13 +328,13 @@ const Collection = async ({ params }: params) => {
         {/* <!-- Profile --> */}
 
         {profile && (
-          <section className="dark:bg-jacarta-800 bg-light-base flex flex-col">
+          <section className="dark:bg-jacarta-800 bg-light-base flex flex-col pb-2">
             <div className="container">
               {/* <!-- Avatar --> */}
               <div className="left-1/2 z-10 flex -translate-y-1/2 items-center justify-center">
                 {/* <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white"> */}
                 <figure className="relative h-40 w-40 ">
-                  {profile.logo_url ?
+                  {profile.logo_url ? (
                     <Image
                       src={profile.logo_url || missingProfileUrl}
                       alt={profile.name}
@@ -342,8 +342,9 @@ const Collection = async ({ params }: params) => {
                       sizes="100vw"
                       className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
                     />
-                    : <RandomLogoImage contract={contractAddress} />
-                  }
+                  ) : (
+                    <RandomLogoImage contract={contractAddress} />
+                  )}
                 </figure>
               </div>
               <div className="text-center">
@@ -351,19 +352,22 @@ const Collection = async ({ params }: params) => {
                   <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
                     {profile.name}
                   </h2>
-                  {(profile.opensea_verified || profile.baddogs_verified) && <div
-                    className="flex h-6 w-6 items-center justify-center "
-                    data-tippy-content="Verified Collection"
-                  >
-                    <svg
-                      className="mt-3" style={{ color: '#1DA1F2' }}
-                      fill="none"
-                      viewBox="0 0 15 15"
-                      stroke="currentColor"
+                  {(profile.opensea_verified || profile.baddogs_verified) && (
+                    <div
+                      className="flex h-6 w-6 items-center justify-center "
+                      data-tippy-content="Verified Collection"
                     >
-                      <HiBadgeCheck />
-                    </svg>
-                  </div>}
+                      <svg
+                        className="mt-3"
+                        style={{ color: "#1DA1F2" }}
+                        fill="none"
+                        viewBox="0 0 15 15"
+                        stroke="currentColor"
+                      >
+                        <HiBadgeCheck />
+                      </svg>
+                    </div>
+                  )}
                 </div>
                 <div className="mb-2">
                   <span className="text-jacarta-400 text-sm font-bold">
@@ -382,31 +386,36 @@ const Collection = async ({ params }: params) => {
                     Contract Address{" "}
                   </span>
                   <Link
-                    href='#'
+                    href="#"
                     className="text-accent text-sm font-bold"
                     legacyBehavior
                   >
-                    {profile.contract_address ? profile.contract_address : contractAddress}
+                    {profile.contract_address
+                      ? profile.contract_address
+                      : contractAddress}
                   </Link>
                 </div>
 
                 <div className="dark:bg-jacarta-800 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex flex-wrap items-center justify-center rounded-xl border bg-white">
-                  {details && details.map(({ detailsNumber, detailsText }: any, index) => {
-                    return (
-                      <Link
-                        href="#"
-                        key={index}
-                        className="dark:border-jacarta-600 border-jacarta-100 w-1/2 rounded-l-xl border-r py-4 hover:shadow-md sm:w-32"
-                      >
-                        <div className="text-jacarta-700 mb-1 text-base font-bold dark:text-white">
-                          {detailsNumber}
-                        </div>
-                        <div className="text-2xs dark:text-jacarta-400 font-medium tracking-tight">
-                          {detailsText}
-                        </div>
-                      </Link>
-                    );
-                  })}
+                  {details &&
+                    details.map(
+                      ({ detailsNumber, detailsText }: any, index) => {
+                        return (
+                          <Link
+                            href="#"
+                            key={index}
+                            className="dark:border-jacarta-600 border-jacarta-100 w-1/2 rounded-l-xl border-r py-4 hover:shadow-md sm:w-32"
+                          >
+                            <div className="text-jacarta-700 mb-1 text-base font-bold dark:text-white">
+                              {detailsNumber}
+                            </div>
+                            <div className="text-2xs dark:text-jacarta-400 font-medium tracking-tight">
+                              {detailsText}
+                            </div>
+                          </Link>
+                        );
+                      }
+                    )}
                 </div>
 
                 <p className="dark:text-jacarta-300 mx-auto max-w-xl text-lg">
@@ -418,7 +427,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                    // onClick={() => handleLikes()}
+                      // onClick={() => handleLikes()}
                     >
                       <button>
                         {likesImage ? (
@@ -437,7 +446,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                    // onClick={() => handleLikes()}
+                      // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`${profile.discord}`}
@@ -455,7 +464,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                    // onClick={() => handleLikes()}
+                      // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`https://www.twitter.com/${profile.twitter}`}
@@ -473,7 +482,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                    // onClick={() => handleLikes()}
+                      // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`${profile.website}`}
@@ -492,7 +501,7 @@ const Collection = async ({ params }: params) => {
                       {/* <Likes data={} /> */}
                       <div
                         className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                        // onClick={() => handleLikes()}
                       >
                         <Link
                           href={`https://www.instagram.com/${profile.instagram}`}
@@ -518,7 +527,7 @@ const Collection = async ({ params }: params) => {
         )}
 
         {/* <!-- end profile --> */}
-      </div >
+      </div>
       <Collection_items
         params={{
           contract_address: contractAddress,

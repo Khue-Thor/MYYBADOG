@@ -36,7 +36,6 @@ export default function Header01() {
   const [searchBarOpen, setSearchBarOpen] = useState(false);
   const connectionStatus = useConnectionStatus();
   const connected = connectionStatus == "connected" ? true : false;
-  const [isLoading, setIsLoading] = useState(false);
   const address = useAddress();
   const [currentAccount, setCurrentAccount] = useState("0x0");
   const disconnect = useDisconnect();
@@ -113,64 +112,65 @@ export default function Header01() {
       }
     });
   });
-  let payload: any = null;
-  async function loginWithWallet() {
+ 
+  async function loginWithWallet() { 
+    let payload: any = null;
     try {
       payload = await auth?.login();
     } catch (err: any) {
       console.log(err.code);
       toast({ title: err.code });
     }
-    try {
-      // setIsLoading(true);
-      // console.log(payload);
-      if (connectionStatus == "connected") {
-        console.log("user should be logged in =>", payload.payload.address);
-        createWalletAddressCookie(payload.payload.address);
-        const userData = await getUser(payload.payload.address);
-        // console.log(payload.payload);
-        const userExists = !userData.user_data ? false : true;
+    if (payload !== null) {
+      try {
+        // setIsLoading(true);
+        console.log(payload);
+        if (connectionStatus == "connected") {
+          console.log("user should be logged in =>", payload.payload.address);
+          createWalletAddressCookie(payload.payload.address);
+          const userData = await getUser(payload.payload.address);
+          // console.log(payload.payload);
+          const userExists = !userData.user_data ? false : true;
 
-        if (!userExists) {
-          // console.log("payload:", payload);
-          const create = await createUser(payload.payload.address);
-          //Check if user was successfully created in database
-          if (create.status == 200) {
-            toast({
-              title: "User Successfully Registered.",
-            });
-            console.log("sign into nextauth");
-            //  Send the payload to next auth as login credentials
-            // using the "credentials" provider method
+          if (!userExists) {
+            // console.log("payload:", payload);
+            const create = await createUser(payload.payload.address);
+            //Check if user was successfully created in database
+            if (create.status == 200) {
+              toast({
+                title: "User Successfully Registered.",
+              });
+              console.log("sign into nextauth");
+              //  Send the payload to next auth as login credentials
+              // using the "credentials" provider method
+              const data = await signIn("credentials", {
+                payload: JSON.stringify(payload),
+                redirect: false,
+              });
+            } else {
+              throw new Error("Failed to create user in database.");
+            }
+          } else if (userExists) {
             const data = await signIn("credentials", {
               payload: JSON.stringify(payload),
               redirect: false,
             });
-          } else {
-            throw new Error("Failed to create user in database.");
           }
-        } else if (userExists) {
-          const data = await signIn("credentials", {
-            payload: JSON.stringify(payload),
-            redirect: false,
+          toast({
+            title: "User Successfully Signed In.",
           });
+        } else {
+          await disconnect();
+          throw new Error("Something went wrong.No payload obtained");
         }
+        setCurrentAccount(payload.payload.address);
+        // setIsLoading(false);
+      } catch (error: any) {
+        // setIsLoading(false);
         toast({
-          title: "User Successfully Signed In.",
-        });
-      } else {
-        await disconnect();
-        toast({
-          title: "Something went wrong. You have been disconnected.",
+          title: error,
         });
       }
-      setCurrentAccount(payload.payload.address);
-      // setIsLoading(false);
-    } catch (error: any) {
-      // setIsLoading(false);
-      toast({
-        title: error,
-      });
     }
   }
 

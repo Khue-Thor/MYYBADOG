@@ -36,7 +36,11 @@ const CategoryItem = ({ params }: params) => {
   };
 
   useEffect(() => {
-    isVideoUrl(sortedtrendingCategoryItemData[0].image)
+    try {
+      isVideoUrl(sortedtrendingCategoryItemData[0].image)
+    } catch (error) {
+      console.log(error);
+    }
   }, [sortedtrendingCategoryItemData])
 
   const lastPostRef = useRef<HTMLElement>(null)

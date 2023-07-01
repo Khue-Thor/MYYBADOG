@@ -12,6 +12,7 @@ import formatNumber from "@/utils/formatNumber";
 import { prisma } from "@/components/lib/prisma";
 import { RandomLogoImage } from "@/components/profile-random-image";
 import { HiBadgeCheck } from "react-icons/hi";
+import { notFound } from 'next/navigation';
 
 interface Collection {
   id: number;
@@ -281,6 +282,10 @@ const Collection = async ({ params }: params) => {
     },
   ];
 
+  if (!profile) {
+    // console.log("no collection found with that address");
+    return notFound()
+  }
   const missingBannerUrl =
     themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
   const missingProfileUrl =
@@ -427,7 +432,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <button>
                         {likesImage ? (
@@ -446,7 +451,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`${profile.discord}`}
@@ -464,7 +469,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`https://www.twitter.com/${profile.twitter}`}
@@ -482,7 +487,7 @@ const Collection = async ({ params }: params) => {
                     {/* <Likes data={} /> */}
                     <div
                       className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                      // onClick={() => handleLikes()}
+                    // onClick={() => handleLikes()}
                     >
                       <Link
                         href={`${profile.website}`}
@@ -501,7 +506,7 @@ const Collection = async ({ params }: params) => {
                       {/* <Likes data={} /> */}
                       <div
                         className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm"
-                        // onClick={() => handleLikes()}
+                      // onClick={() => handleLikes()}
                       >
                         <Link
                           href={`https://www.instagram.com/${profile.instagram}`}

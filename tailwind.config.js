@@ -71,6 +71,10 @@ module.exports = {
         200: "#7750f8",
         300: "#9668ff",
       },
+      success: "#28A745",
+      error: "#DC3545",
+      warning: "#FFC107",
+      info: "#17A2B8",
     },
     boxShadow: {
       none: "none",

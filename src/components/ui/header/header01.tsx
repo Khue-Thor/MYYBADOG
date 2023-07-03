@@ -68,7 +68,10 @@ export default function Header01() {
     // }
     // window.addEventListener("CloseEvent",)
     window.ethereum.on("error", (tx: any) => {
-      toast({ title: "something went wrong" });
+      toast({
+        variant: "error",
+        title: "something went wrong",
+      });
     });
     window.ethereum.on("accountsChanged", accountWasChanged);
     // window.ethereum.on("connect",handleConnect)
@@ -112,14 +115,14 @@ export default function Header01() {
       }
     });
   });
- 
-  async function loginWithWallet() { 
+
+  async function loginWithWallet() {
     let payload: any = null;
     try {
       payload = await auth?.login();
     } catch (err: any) {
       console.log(err.code);
-      toast({ title: err.code });
+      toast({ variant: "error", title: err.code });
     }
     if (payload !== null) {
       try {
@@ -138,6 +141,7 @@ export default function Header01() {
             //Check if user was successfully created in database
             if (create.status == 200) {
               toast({
+                variant: "success",
                 title: "User Successfully Registered.",
               });
               console.log("sign into nextauth");
@@ -157,6 +161,7 @@ export default function Header01() {
             });
           }
           toast({
+            variant: "success",
             title: "User Successfully Signed In.",
           });
         } else {
@@ -168,6 +173,7 @@ export default function Header01() {
       } catch (error: any) {
         // setIsLoading(false);
         toast({
+          variant: "error",
           title: error,
         });
       }
@@ -800,7 +806,32 @@ export default function Header01() {
                     </button>
                   </Link>
                 </li>
-
+                {/* <li>
+                  <button
+                    onClick={() => {
+                      {
+                        toast({
+                          variant: "success",
+                          title: "Sign up was successful!",
+                        });
+                        toast({
+                          variant: "error",
+                          title: "Sign up failed!",
+                        });
+                        toast({
+                          variant: "warning",
+                          title: "Beware of Dogs!",
+                        });
+                        toast({
+                          variant: "info",
+                          title: "Something will be available in 5 mins.",
+                        });
+                      }
+                    }}
+                  >
+                    Test Btn
+                  </button>
+                </li> */}
                 {session ? (
                   <li>
                     <ProfileSheet />

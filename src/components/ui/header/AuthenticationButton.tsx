@@ -51,6 +51,7 @@ export default function AuthenticationButton() {
           //Check if user was successfully created in database
           if (create.status == 200) {
             toast({
+              variant: "success",
               title: "User Successfully Registered.",
             });
             console.log("sign into nextauth");
@@ -70,6 +71,7 @@ export default function AuthenticationButton() {
           });
         }
         toast({
+          variant: "success",
           title: "User Successfully Signed In.",
         });
 
@@ -78,6 +80,7 @@ export default function AuthenticationButton() {
       } catch (error: any) {
         setIsLoading(false);
         toast({
+          variant: "error",
           title: error,
         });
       }

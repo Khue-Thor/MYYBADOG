@@ -71,7 +71,7 @@ const Hero_6 = async () => {
   return (
     <>
       {/* <!-- Hero --> */}
-      <section className="relative px-6 pb-8 py-24 md:pt-32">
+      <section className="relative px-6 pb-8 py-24 md:pt-16">
         <div className="flex flex-col gap-5 lg:flex-row">
           {/* <!-- Left side --> */}
           <div className="w-full lg:w-1/3">
@@ -105,11 +105,12 @@ const Hero_6 = async () => {
                             className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
                           >
                             <Image
+                              style={{ maxHeight: "16.5rem" }}
                               src={image || "/images/404.png"}
                               alt={name}
                               className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"
-                              height="470"
-                              width="470"
+                              height="320"
+                              width="320"
                             />
                           </Link>
                         </figure>

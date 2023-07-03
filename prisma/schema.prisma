@@ -7,14 +7,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+/// TODO: Should be renamed to "User" not users
+model User {
+  id             String    @id @default(uuid())
+  address        String    @unique
+  createdAt      DateTime? @default(now()) @db.Timestamptz(6)
+  lastLoggedIn   DateTime? @default(now()) @db.Timestamptz(6)
+  username       String?   @unique
+  badges         Json[]    @db.Json
+  level          BigInt?   @default(0)
+  quests         Json[]    @db.Json
+  friends        Json[]    @db.Json
+  inventory      Json[]    @db.Json
+  nonce          String?
+  profilePicture String?
+  nfts           NFT[]
+  raffles        Raffle[]
+  role           UserRole  @default(USER)
+  offers         Offer[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+enum EnumOfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+model Offer {
+  id        String          @id @default(uuid())
+  from      User            @relation(name: "offerFrom", fields: [fromId], references: [id])
+  fromId    String
+  to        User            @relation(name: "offerTo", fields: [toId], references: [id])
+  toId      String
+  nft       NFT             @relation(fields: [nftId], references: [id])
+  nftId     String
+  amount    Float
+  message   String?
+  status    EnumOfferStatus
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  User      User?           @relation(fields: [userId], references: [id])
+  userId    String?
+}
+
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Raffle {
-  id               BigInt    @id @default(autoincrement())
-  created_at       DateTime? @default(now()) @db.Timestamptz(6)
+  id               String    @id @default(uuid())
+  createdAt        DateTime? @default(now()) @db.Timestamptz(6)
   name             String?
   token_id         Int?
-  nft_address      String?   @db.VarChar
+  nftAddress       String?   @db.VarChar
   start_date       DateTime? @db.Timestamptz(6)
   end_date         DateTime? @db.Timestamptz(6)
   raffle_cost      Float?    @db.Real
@@ -25,23 +75,34 @@ model Raffle {
   transaction_list Json[]    @db.Json
   favourite_count  Int?
   nft_image        String?   @db.VarChar
-  raffler          String?   @unique @db.VarChar
+  raffler          User?     @relation(fields: [rafflerId], references: [id])
+  rafflerId        String?
 }
 
-/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
-/// TODO: Should be renamed to "User" not users
-model User {
-  id             BigInt    @id @default(autoincrement())
-  address        String    @unique
-  created_at     DateTime? @default(now()) @db.Timestamptz(6)
-  last_logged_in DateTime? @default(now()) @db.Timestamptz(6)
-  username       String?
-  badges         Json[]    @db.Json
-  level          BigInt?   @default(0)
-  quests         Json[]    @db.Json
-  friends        Json[]    @db.Json
-  inventory      Json[]    @db.Json
-  nonce          String?
+model NFT {
+  id                 String      @id @default(uuid())
+  tokenId            String      @unique
+  name               String
+  description        String
+  image              String
+  collectionContract Collection? @relation(fields: [collectionId], references: [id])
+  collectionId       String?
+  owner              User?       @relation(fields: [ownerId], references: [id])
+  ownerId            String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  listedAt           DateTime?
+  category           Category?   @relation(fields: [categoryId], references: [id])
+  categoryId         String?
+  Offer              Offer[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  nfts      NFT[]
 }
 
 model Reward {
@@ -51,72 +112,73 @@ model Reward {
 
 /// Model to store NFT collection data
 model Collection {
-  id BigInt @id @default(autoincrement())
-  contract_address String @unique
-  contract_name String?
-  name String
-  slug String?
-  symbol String
-  description String?
-  version Float?
-  website String?
-  email String?
-  twitter String?
-  discord String?
-  telegram String?
-  github String?
-  instagram String?
-  medium String?
-  logo_url String?
-  banner_url String?
-  featured_url String?
-  image_url String?
-  large_image_url String?
-  attributes Json?
-  erc_type String
-  token_type String
-  chain_identifier String?
-  asset_contract_type String?
-  deploy_block_number BigInt
-  owner String
-  contract_deployer String
-  verified Boolean
-  opensea_verified Boolean
-  baddogs_verified Boolean
-  rug_verified Boolean
-  sus_verified Boolean
-  royalty Float?
-  is_nsfw Boolean?
-  is_hidden Boolean?
-  is_featured Boolean?
-  items_total BigInt
-  amounts_total BigInt
-  owners_total Int
-  opensea_floor_price Float?
-  looksrare_floor_price Float?
-  blur_floor_price Float?
-  floor_price Float
+  id                         String    @id @default(uuid())
+  contract_address           String    @unique
+  contract_name              String?
+  name                       String
+  slug                       String?
+  symbol                     String
+  description                String?
+  version                    Float?
+  website                    String?
+  email                      String?
+  twitter                    String?
+  discord                    String?
+  telegram                   String?
+  github                     String?
+  instagram                  String?
+  medium                     String?
+  logo_url                   String?
+  banner_url                 String?
+  featured_url               String?
+  image_url                  String?
+  large_image_url            String?
+  attributes                 Json?
+  erc_type                   String
+  token_type                 String
+  chain_identifier           String?
+  asset_contract_type        String?
+  deploy_block_number        BigInt
+  owner                      String
+  contract_deployer          String
+  verified                   Boolean
+  opensea_verified           Boolean
+  baddogs_verified           Boolean
+  rug_verified               Boolean
+  sus_verified               Boolean
+  royalty                    Float?
+  is_nsfw                    Boolean?
+  is_hidden                  Boolean?
+  is_featured                Boolean?
+  items_total                BigInt
+  amounts_total              BigInt
+  owners_total               Int
+  opensea_floor_price        Float?
+  looksrare_floor_price      Float?
+  blur_floor_price           Float?
+  floor_price                Float
   collections_with_same_name Json?
-  price_symbol String
-  volume_total Float?
-  sales_total Int?
-  average_price Float?
-  lowest_price_24h Float?
-  average_price_24h Float?
-  volume_24h Float?
-  sales_24h Int?
-  highest_price Float?
-  volume_1d Float?
-  volume_7d Float?
-  volume_30d Float?
-  volume_change_1d String?
-  volume_change_7d String?
-  volume_change_30d String?
-  market_cap BigInt?
-  average_price_change_1d String?
-  average_price_change_7d String?
-  average_price_change_30d String?
-  last_ingested_at DateTime?
-  last_updated_at DateTime?
-  created_at DateTime?
+  price_symbol               String
+  volume_total               Float?
+  sales_total                Int?
+  average_price              Float?
+  lowest_price_24h           Float?
+  average_price_24h          Float?
+  volume_24h                 Float?
+  sales_24h                  Int?
+  highest_price              Float?
+  volume_1d                  Float?
+  volume_7d                  Float?
+  volume_30d                 Float?
+  volume_change_1d           String?
+  volume_change_7d           String?
+  volume_change_30d          String?
+  market_cap                 BigInt?
+  average_price_change_1d    String?
+  average_price_change_7d    String?
+  average_price_change_30d   String?
+  last_ingested_at           DateTime?
+  last_updated_at            DateTime?
+  created_at                 DateTime?
+  NFT                        NFT[]
 }

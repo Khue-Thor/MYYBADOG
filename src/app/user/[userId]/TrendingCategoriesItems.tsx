@@ -4,9 +4,9 @@ import {
   trendingCategoryData,
 } from "@/data/categories_data";
 import { useDispatch, useSelector } from "react-redux";
-import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
-import CategoryItem from "@/app/user/CategoryItem";
-import RecentlyAddedDropdown from '@/app/user/RecentlyAddedDropdown';
+import { updateTrendingCategoryItemData } from "../../../redux/counterSlice";
+import CategoryItem from "@/app/user/[userId]/CategoryItem";
+import RecentlyAddedDropdown from '@/app/user/[userId]/RecentlyAddedDropdown';
 
 const TrendingCategoriesItems = () => {
   const [itemdata, setItemdata] = useState(trendingCategoryData);

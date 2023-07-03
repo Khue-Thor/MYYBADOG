@@ -1,13 +1,13 @@
-"use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
-import Social_dropdown from "../../components/dropdown/Social_dropdown";
-import Auctions_dropdown from "../../components/dropdown/Auctions_dropdown";
+import Social_dropdown from "@/components/dropdown/Social_dropdown";
 import user_data from "@/data/user_data";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import Meta from "@/components/meta";
 import Tippy from "@/components/Tippy";
-import UserItems from "@/app/user/UserItems";
+import UserItems from "@/app/user/[userId]/UserItems";
+import UserId from "@/app/user/[userId]/UserId";
+import AuctionsDropdown from "@/components/dropdown/AuctionsDropdown";
+import LikeButton from "@/app/user/[userId]/LikeButton";
 
 type Props = {
   params: { userId: string };
@@ -15,23 +15,6 @@ type Props = {
 
 export default async function User({ params }: Props) {
   const { userId } = params;
-
-  const [likesImage, setLikesImage] = useState(false);
-  const [copied, setCopied] = useState(false);
-
-  const handleLikes = () => {
-    if (!likesImage) {
-      setLikesImage(true);
-    } else {
-      setLikesImage(false);
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  }, [copied]);
 
   return (
     <>
@@ -50,6 +33,7 @@ export default async function User({ params }: Props) {
                   src={coverPhoto}
                   alt="banner"
                   fill
+                  sizes={"100vw"}
                   className="object-cover"
                 />
               </div>
@@ -62,6 +46,7 @@ export default async function User({ params }: Props) {
                       src={image}
                       alt={title}
                       fill
+                      sizes={"150px"}
                       className="dark:border-jacarta-600 rounded-xl border-[5px] border-white object-contain"
                     />
                     <div
@@ -95,22 +80,7 @@ export default async function User({ params }: Props) {
                           <use xlinkHref="/icons.svg#icon-ETH"></use>
                         </svg>
                       </Tippy>
-
-                      <Tippy
-                        hideOnClick={false}
-                        content={
-                          copied ? <span>copied</span> : <span>copy</span>
-                        }
-                      >
-                        <button className="js-copy-clipboard dark:text-jacarta-200 max-w-[10rem] select-none overflow-hidden text-ellipsis whitespace-nowrap">
-                          <CopyToClipboard
-                            text={userId}
-                            onCopy={() => setCopied(true)}
-                          >
-                            <span>{userId}</span>
-                          </CopyToClipboard>
-                        </button>
-                      </Tippy>
+                      <UserId userId={userId} />
                     </div>
 
                     <p className="dark:text-jacarta-300 mx-auto mb-2 max-w-xl text-lg">
@@ -123,23 +93,13 @@ export default async function User({ params }: Props) {
                     <div className="mt-6 flex items-center justify-center space-x-2.5 relative">
                       <div className="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white">
                         <div className="js-likes relative inline-flex h-10 w-10 cursor-pointer items-center justify-center text-sm">
-                          <button onClick={() => handleLikes()}>
-                            {likesImage ? (
-                              <svg className="icon dark:fill-jacarta-200 fill-jacarta-500 h-4 w-4">
-                                <use xlinkHref="/icons.svg#icon-heart-fill"></use>
-                              </svg>
-                            ) : (
-                              <svg className="icon dark:fill-jacarta-200 fill-jacarta-500 h-4 w-4">
-                                <use xlinkHref="/icons.svg#icon-heart"></use>
-                              </svg>
-                            )}
-                          </button>
+                          <LikeButton />
                         </div>
                       </div>
 
                       <Social_dropdown />
 
-                      <Auctions_dropdown classes="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 dropdown hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white relative" />
+                      <AuctionsDropdown classes="dark:border-jacarta-600 dark:hover:bg-jacarta-600 border-jacarta-100 dropdown hover:bg-jacarta-100 dark:bg-jacarta-700 rounded-xl border bg-white relative" />
                     </div>
                   </div>
                 </div>

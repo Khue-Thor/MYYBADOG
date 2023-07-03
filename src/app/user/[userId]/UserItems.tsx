@@ -1,9 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Image from "next/image";
-import Explore_collection_item from "../collectrions/explore_collection_item";
-import ActivityItem from "@/app/user/ActivityItem";
-import TrendingCategoriesItems from "@/app/user/TrendingCategoriesItems";
+import ActivityItem from "@/app/user/[userId]/ActivityItem";
+import TrendingCategoriesItems from "@/app/user/[userId]/TrendingCategoriesItems";
+import ExploreCollectionItem from "@/app/user/[userId]/ExploreCollectionItem";
 
 const UserItems = () => {
   const [itemActive, setItemActive] = useState(1);
@@ -34,6 +35,7 @@ const UserItems = () => {
       icon: "activity",
     },
   ];
+
   return (
     <>
       <section className="relative py-24">
@@ -43,7 +45,7 @@ const UserItems = () => {
             src="/images/gradient_light.jpg"
             alt="gradient"
             className="h-full w-full"
-            layout="fill"
+            fill
           />
         </picture>
         <div className="container">
@@ -98,7 +100,7 @@ const UserItems = () => {
             <TabPanel>
               {/* <!-- Grid --> */}
               <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-3 lg:grid-cols-4">
-                <Explore_collection_item itemFor="userPage" />
+                <ExploreCollectionItem itemFor="userPage" />
               </div>
             </TabPanel>
             <TabPanel>

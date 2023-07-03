@@ -8,13 +8,13 @@ import Tippy from "@tippyjs/react";
 import {
   updatetrendingCategorySorText,
   updateTrendingCategoryItemByInput,
-} from "../../redux/counterSlice";
+} from "../../../redux/counterSlice";
 import { useDispatch } from "react-redux";
 import {
   updateRenkingData,
   updateRenkingDataByBlockchain,
   updateRenkingDataByPostdate,
-} from "../../redux/counterSlice";
+} from "../../../redux/counterSlice";
 
 type Props = {
   data: { id: number; text: string }[];

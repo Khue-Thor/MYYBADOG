@@ -56,37 +56,39 @@ const Activity_item = () => {
                 .replace("_sm", "")
                 .replace("avatar", "item");
               return (
-                <Link href={`/item/${itemLink}`} key={id}>
-                  <a className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl relative flex items-center border bg-white p-8 transition-shadow hover:shadow-lg">
-                    <figure className="mr-5 self-start">
-                      <Image
-                        src={image}
-                        alt={title}
-                        height={50}
-                        width={50}
-                        className="rounded-2lg object-cover"
-                        loading="lazy"
-                      />
-                    </figure>
+                <Link
+                  href={`/item/${itemLink}`}
+                  key={id}
+                  className="dark:bg-jacarta-700 dark:border-jacarta-700 border-jacarta-100 rounded-2.5xl relative flex items-center border bg-white p-8 transition-shadow hover:shadow-lg"
+                >
+                  <figure className="mr-5 self-start">
+                    <Image
+                      src={image}
+                      alt={title}
+                      height={50}
+                      width={50}
+                      className="rounded-2lg object-cover"
+                      loading="lazy"
+                    />
+                  </figure>
 
-                    <div>
-                      <h3 className="font-display text-jacarta-700 mb-1 text-base font-semibold dark:text-white">
-                        {title}
-                      </h3>
-                      <span className="dark:text-jacarta-200 text-jacarta-500 mb-3 block text-sm">
-                        {price}
-                      </span>
-                      <span className="text-jacarta-300 block text-xs">
-                        {time}
-                      </span>
-                    </div>
+                  <div>
+                    <h3 className="font-display text-jacarta-700 mb-1 text-base font-semibold dark:text-white">
+                      {title}
+                    </h3>
+                    <span className="dark:text-jacarta-200 text-jacarta-500 mb-3 block text-sm">
+                      {price}
+                    </span>
+                    <span className="text-jacarta-300 block text-xs">
+                      {time}
+                    </span>
+                  </div>
 
-                    <div className="dark:border-jacarta-600 border-jacarta-100 ml-auto rounded-full border p-3">
-                      <svg className="icon fill-jacarta-700 dark:fill-white h-6 w-6">
-                        <use xlinkHref={`/icons.svg#icon-${category}`}></use>
-                      </svg>
-                    </div>
-                  </a>
+                  <div className="dark:border-jacarta-600 border-jacarta-100 ml-auto rounded-full border p-3">
+                    <svg className="icon fill-jacarta-700 dark:fill-white h-6 w-6">
+                      <use xlinkHref={`/icons.svg#icon-${category}`}></use>
+                    </svg>
+                  </div>
                 </Link>
               );
             })}

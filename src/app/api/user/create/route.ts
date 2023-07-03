@@ -29,7 +29,11 @@ export async function POST(req:NextRequest) {
              quests: [],
              friends: [],
              inventory: [],
-
+             nfts:[],
+             raffles:[]
+             offers:[],
+             createdListings:[],
+             purchases:[]
            }
          }
 

@@ -10,27 +10,57 @@ datasource db {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 /// TODO: Should be renamed to "User" not users
 model User {
-  id             String    @id @default(uuid())
-  address        String    @unique
-  createdAt      DateTime? @default(now()) @db.Timestamptz(6)
-  lastLoggedIn   DateTime? @default(now()) @db.Timestamptz(6)
-  username       String?   @unique
-  badges         Json[]    @db.Json
-  level          BigInt?   @default(0)
-  quests         Json[]    @db.Json
-  friends        Json[]    @db.Json
-  inventory      Json[]    @db.Json
-  nonce          String?
-  profilePicture String?
-  nfts           NFT[]
-  raffles        Raffle[]
-  role           UserRole  @default(USER)
-  offers         Offer[]
+  id              String     @id @default(uuid())
+  address         String     @unique
+  createdAt       DateTime?  @default(now()) @db.Timestamptz(6)
+  lastLoggedIn    DateTime?  @default(now()) @db.Timestamptz(6)
+  username        String?    @unique
+  badges          Json[]     @db.Json
+  level           BigInt?    @default(0)
+  quests          Json[]     @db.Json
+  friends         Json[]     @db.Json
+  inventory       Json[]     @db.Json
+  nonce           String?
+  profilePicture  String?
+  nfts            NFT[]
+  raffles         Raffle[]
+  role            UserRole   @default(USER)
+  offers          Offer[]
+  createdListings Listing[]
+  purchases       Purchase[]
 }
 
 enum UserRole {
   ADMIN
   USER
+}
+model Purchase {
+id String @id @default(uuid())
+listing Listing @relation(fields: [listingId], references: [id])
+listingId String
+buyer User @relation(fields: [buyerId], references: [id])
+buyerId String
+amount Float
+purchasedAt DateTime @default(now())
+
+
+
+@@map("purchases")
+}
+model Listing {
+id String @id @default(uuid())
+nft NFT @relation(fields: [nftId], references: [id])
+nftId String
+price Float
+currency String
+creator User @relation(fields: [creatorId], references: [id])
+creatorId String
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+
+
+@@map("listings")
 }
 
 enum EnumOfferStatus {

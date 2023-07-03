@@ -13,19 +13,36 @@ import {
   isParentPageActive,
 } from "../../../utils/daynamicNavigation";
 import React, { useEffect, useState } from "react";
-
 import SearchBar01 from "../searchbar/searchbar01";
 import SearchBar02 from "../searchbar/searchbar02";
-
-import { useSession } from "next-auth/react";
-import { ConnectWallet, useAddress, useAuth } from "@thirdweb-dev/react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import { getUser, createUser } from "@/api/authenticate";
+import { getCookie } from "cookies-next";
+import {
+  ConnectWallet,
+  useAddress,
+  useAuth,
+  useConnectionStatus,
+  useDisconnect,
+} from "@thirdweb-dev/react";
 import AuthenticationButton from "./AuthenticationButton";
 import ProfileSheet from "./ProfileSheet";
+import { useToast } from "@/components/shadcn/use-toast";
+import { createWalletAddressCookie, deleteCookie } from "./addressCookie";
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
   const [isCollapse, setCollapse] = useState(null);
   const [searchBarOpen, setSearchBarOpen] = useState(false);
+  const connectionStatus = useConnectionStatus();
+  const connected = connectionStatus == "connected" ? true : false;
+  const address = useAddress();
+  const [currentAccount, setCurrentAccount] = useState("0x0");
+  const disconnect = useDisconnect();
+  const cookieAddress = getCookie("wallet-address");
+  const auth = useAuth();
+  const { data: session } = useSession();
+  const { toast } = useToast();
 
   const handleOpenSearchBar = () => {
     setSearchBarOpen(true);
@@ -34,6 +51,53 @@ export default function Header01() {
   const handleCloseSearchBar = () => {
     setSearchBarOpen(false);
   };
+  useEffect(() => {
+    if (!window.ethereum) {
+      // Nothing to do here... no ethereum provider found
+      return;
+    }
+    const accountWasChanged = (accounts: any) => {
+      signOut();
+      setCurrentAccount(accounts[0]);
+      toast({
+        title: "Account was changed. User Signed Out",
+      });
+    };
+    // const handleConnect = () =>{
+    //   console.log("connected")
+    // }
+    // window.addEventListener("CloseEvent",)
+    window.ethereum.on("error", (tx: any) => {
+      toast({
+        variant: "error",
+        title: "something went wrong",
+      });
+    });
+    window.ethereum.on("accountsChanged", accountWasChanged);
+    // window.ethereum.on("connect",handleConnect)
+  }, [currentAccount]);
+
+  useEffect(() => {
+    if (connectionStatus == "connected" && session == null) {
+      console.log("loginwithwallet");
+      //conditional so it doesn't automatically pop up sign request for login
+      if (cookieAddress == address || cookieAddress == "") {
+        loginWithWallet();
+      } else {
+        return;
+      }
+    } else if (connectionStatus == "disconnected") {
+      disconnect();
+      signOut();
+      deleteCookie("wallet-address");
+    }
+
+    // const clearAccount = () => {
+    //   setAccount("0x0");
+    //   signOut();
+    //   console.log("clearAccount");
+    // };
+  }, [connected]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -43,8 +107,6 @@ export default function Header01() {
     });
   });
 
-  const { data: session } = useSession();
-
   // window resize
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -53,6 +115,70 @@ export default function Header01() {
       }
     });
   });
+
+  async function loginWithWallet() {
+    let payload: any = null;
+    try {
+      payload = await auth?.login();
+    } catch (err: any) {
+      console.log(err.code);
+      toast({ variant: "error", title: err.code });
+    }
+    if (payload !== null) {
+      try {
+        // setIsLoading(true);
+        console.log(payload);
+        if (connectionStatus == "connected") {
+          console.log("user should be logged in =>", payload.payload.address);
+          createWalletAddressCookie(payload.payload.address);
+          const userData = await getUser(payload.payload.address);
+          // console.log(payload.payload);
+          const userExists = !userData.user_data ? false : true;
+
+          if (!userExists) {
+            // console.log("payload:", payload);
+            const create = await createUser(payload.payload.address);
+            //Check if user was successfully created in database
+            if (create.status == 200) {
+              toast({
+                variant: "success",
+                title: "User Successfully Registered.",
+              });
+              console.log("sign into nextauth");
+              //  Send the payload to next auth as login credentials
+              // using the "credentials" provider method
+              const data = await signIn("credentials", {
+                payload: JSON.stringify(payload),
+                redirect: false,
+              });
+            } else {
+              throw new Error("Failed to create user in database.");
+            }
+          } else if (userExists) {
+            const data = await signIn("credentials", {
+              payload: JSON.stringify(payload),
+              redirect: false,
+            });
+          }
+          toast({
+            variant: "success",
+            title: "User Successfully Signed In.",
+          });
+        } else {
+          await disconnect();
+          throw new Error("Something went wrong.No payload obtained");
+        }
+        setCurrentAccount(payload.payload.address);
+        // setIsLoading(false);
+      } catch (error: any) {
+        // setIsLoading(false);
+        toast({
+          variant: "error",
+          title: error,
+        });
+      }
+    }
+  }
 
   const pathname = usePathname() || "";
   /* -------------------------------------------------------------------------- */
@@ -233,7 +359,8 @@ export default function Header01() {
     pages: [
       {
         id: uuidv4(),
-        name: "All NFTs",
+        name: "Brawl",
+        description: "Bring it on!",
         path: "/collection/explore_collection",
         icon: (
           <svg
@@ -250,7 +377,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Photography",
+        name: "Bark!",
+        description: "Send NFT messages",
         path: "/collection/explore_collection",
         icon: (
           <svg
@@ -267,7 +395,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Art",
+        name: "PawSwap",
+        description: "Peer-to-peer swap",
         path: "/art",
         icon: (
           <svg
@@ -284,7 +413,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Sports",
+        name: "Fetch!",
+        description: "Bulk send your NFTs",
         path: "/sports",
         icon: (
           <svg
@@ -302,6 +432,7 @@ export default function Header01() {
       {
         id: uuidv4(),
         name: "Raffles",
+        description: "Create your own raffles",
         path: "/raffles",
         icon: (
           <svg
@@ -318,7 +449,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Trading Cards",
+        name: "BadDogs Meme",
+        description: "Create your own meme",
         path: "/tranding-cards",
         icon: (
           <svg
@@ -335,7 +467,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Domain Names",
+        name: "Games",
+        description: "Play and talk smack",
         path: "/domain-names",
         icon: (
           <svg
@@ -369,7 +502,8 @@ export default function Header01() {
       },
       {
         id: uuidv4(),
-        name: "Virtual Worlds",
+        name: "Metaverses",
+        description: "Enter web3 worlds",
         path: "/virtual-worlds",
         icon: (
           <svg
@@ -501,6 +635,57 @@ export default function Header01() {
                   </ul>
                 </li>
 
+                {/* utilities */}
+                <li className="js-nav-dropdown nav-item dropdown group relative">
+                  <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
+                    <span
+                      className={
+                        isParentPageActive(explore.pages, pathname)
+                          ? "text-accent dark:text-accent"
+                          : ""
+                      }
+                    >
+                      Utilities
+                    </span>
+                    <i className="lg:hidden">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        width={24}
+                        height={24}
+                        className="h-4 w-4 dark:fill-white"
+                      >
+                        <path fill="none" d="M0 0h24v24H0z" />
+                        <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
+                      </svg>
+                    </i>
+                  </button>
+                  <ul
+                    className="dropdown-menu dark:bg-jacarta-800 -left-6 top-[85%] z-10 hidden grid-flow-col grid-rows-5 gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-5 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative"
+                    aria-labelledby="navDropdown-1"
+                  >
+                    {explore?.pages?.map((page) => (
+                      <li key={page.id}>
+                        <Link
+                          href={page.path}
+                          prefetch={false}
+                          className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
+                        >
+                          <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
+                            {page?.icon}
+                          </span>
+                          <span className="font-display text-jacarta-700 text-sm dark:text-white">
+                            {page?.name} <br />
+                            <span className="font-body text-jacarta-700 text-3xs dark:text-white">
+                              {page?.description ? page?.description : ""}
+                            </span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+
                 {/* page */}
                 <li className="js-nav-dropdown group relative">
                   <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
@@ -548,54 +733,6 @@ export default function Header01() {
                               new
                             </span>
                           ) : undefined}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-
-                {/* explore */}
-                <li className="js-nav-dropdown nav-item dropdown group relative">
-                  <button className="dropdown-toggle text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5 w-full">
-                    <span
-                      className={
-                        isParentPageActive(explore.pages, pathname)
-                          ? "text-accent dark:text-accent"
-                          : ""
-                      }
-                    >
-                      Utilities
-                    </span>
-                    <i className="lg:hidden">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        width={24}
-                        height={24}
-                        className="h-4 w-4 dark:fill-white"
-                      >
-                        <path fill="none" d="M0 0h24v24H0z" />
-                        <path d="M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z" />
-                      </svg>
-                    </i>
-                  </button>
-                  <ul
-                    className="dropdown-menu dark:bg-jacarta-800 -left-6 top-[85%] z-10 hidden grid-flow-col grid-rows-5 gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-5 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative"
-                    aria-labelledby="navDropdown-1"
-                  >
-                    {explore?.pages?.map((page) => (
-                      <li key={page.id}>
-                        <Link
-                          href={page.path}
-                          prefetch={false}
-                          className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center rounded-xl px-5 py-2 transition-colors"
-                        >
-                          <span className="bg-light-base mr-3 rounded-xl p-[0.375rem]">
-                            {page?.icon}
-                          </span>
-                          <span className="font-display text-jacarta-700 text-sm dark:text-white">
-                            {page?.name}
-                          </span>
                         </Link>
                       </li>
                     ))}
@@ -669,7 +806,32 @@ export default function Header01() {
                     </button>
                   </Link>
                 </li>
-
+                {/* <li>
+                  <button
+                    onClick={() => {
+                      {
+                        toast({
+                          variant: "success",
+                          title: "Sign up was successful!",
+                        });
+                        toast({
+                          variant: "error",
+                          title: "Sign up failed!",
+                        });
+                        toast({
+                          variant: "warning",
+                          title: "Beware of Dogs!",
+                        });
+                        toast({
+                          variant: "info",
+                          title: "Something will be available in 5 mins.",
+                        });
+                      }
+                    }}
+                  >
+                    Test Btn
+                  </button>
+                </li> */}
                 {session ? (
                   <li>
                     <ProfileSheet />
@@ -708,25 +870,16 @@ export default function Header01() {
                 <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
               </svg>
             </button>
-            <Link
-              href="/profile/user_avatar"
-              prefetch={false}
-              className="border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
-              aria-label="profile"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width={24}
-                height={24}
-                className="fill-jacarta-700 h-4 w-4 transition-colors group-hover:fill-white group-focus:fill-white dark:fill-white"
-              >
-                <path fill="none" d="M0 0h24v24H0z" />
-                <path d="M11 14.062V20h2v-5.938c3.946.492 7 3.858 7 7.938H4a8.001 8.001 0 0 1 7-7.938zM12 13c-3.315 0-6-2.685-6-6s2.685-6 6-6 6 2.685 6 6-2.685 6-6 6z" />
-              </svg>
-            </Link>
+            <li className="group list-none md:hidden lg:hidden xl:hidden">
+              {session ? (
+                <ProfileSheet />
+              ) : (
+                <span className="ml-2">
+                  <AuthenticationButton />
+                </span>
+              )}
+            </li>
 
-            <DarkMode />
             <button
               className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
               aria-label="open mobile menu"
@@ -1051,7 +1204,10 @@ export default function Header01() {
         {/* End navbar mobile menu  */}
 
         <div className="mt-10 w-full lg:hidden">
-          <div className="js-wallet bg-accent shadow-accent-volume hover:bg-accent-dark block w-full rounded-full py-3 px-8 text-center font-semibold text-white transition-all">
+          <div className="js-wallet flex justify-evenly align-middle bg-accent shadow-accent-volume hover:bg-accent-dark block w-full rounded-full py-3 px-8 text-center font-semibold text-white transition-all">
+            <span className="h-full">
+              <DarkMode />
+            </span>
             <ConnectWallet />
           </div>
           <hr className="dark:bg-jacarta-600 bg-jacarta-100 my-5 h-px border-0" />

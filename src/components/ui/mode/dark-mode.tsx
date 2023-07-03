@@ -27,8 +27,10 @@ export default function DarkMode() {
       <button
         className="js-dark-mode-trigger dark:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded border border-jacarta-100 bg-white transition-colors hover:border-transparent hover:bg-accent focus:border-transparent focus:bg-accent dark:border-transparent dark:bg-white/[.15] dark:hover:bg-accent"
         aria-label="light"
-        onClick={() =>
+        onClick={() => {
+          document.cookie = `theme=${theme === "dark" ? 'light' : 'dark'}; path=/;`;
           theme === "dark" ? setTheme("light") : setTheme("dark")
+        }
         }
       >
         <svg

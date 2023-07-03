@@ -3206,13 +3206,18 @@ html {
 		line-height: normal;
 	}
 
-	.text-2xs {
+	.text-xs {
 		font-size: 0.8125rem;
 		line-height: normal;
 	}
 
-	.text-xs {
+	.text-2xs {
 		font-size: 0.75rem;
+		line-height: normal;
+	}
+
+	.text-3xs {
+		font-size: 0.6rem;
 		line-height: normal;
 	}
 

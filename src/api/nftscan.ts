@@ -40,6 +40,8 @@ export interface Data {
   floor_price: number;
   collections_with_same_name: string[];
   price_symbol: string;
+  volume_24h: string;
+  baddogs_verified: boolean;
 }
 
 const urlBuilder = (contractAdress: string) => {

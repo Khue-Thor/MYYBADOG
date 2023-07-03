@@ -40,9 +40,9 @@ export async function POST(req:NextRequest) {
         //This needs to be logged.
         const userCreated = await fixBigInt(createUser);
          console.log("User created with Data:", userCreated);
-         return NextResponse.json({data:userCreated},{ status:200 })
+         return NextResponse.json({data:userCreated,status:200},{ status:200 })
        }else{
-         return NextResponse.json({error: "Failed to register user." },{status:400 })
+         return NextResponse.json({error: "Failed to register user.",status:400 },{status:400 })
        }
        
      }

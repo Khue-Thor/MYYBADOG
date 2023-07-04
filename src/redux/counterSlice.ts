@@ -1,17 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 import TypeItem from "@/interfaces/TypeItem";
 import { RankingItem } from "@/interfaces/RankingItem";
+import { TrendingCategoryItem } from "@/interfaces/TrendingCategoryItem";
+import {FeatureCollectionsItem} from '@/data/Feature_collections_data';
 
-const initialState = {
+type State = {
+  mblMenu: boolean;
+  dropdown: boolean;
+  collection_activity_item_data: TypeItem[];
+  trendingCategoryItemData: TrendingCategoryItem[];
+  sortedtrendingCategoryItemData: TrendingCategoryItem[];
+  collectiondata: TypeItem[];
+  sortedCollectionData: FeatureCollectionsItem[];
+  renkingData: TypeItem[];
+  filteredRenkingData: TypeItem[];
+  walletModal: boolean;
+  bidsModal: boolean;
+  buyModal: boolean;
+  propartiesModalValue: boolean;
+  trendingCategorySorText: string;
+  startToken: number;
+  limit: number;
+};
+
+const initialState: State = {
   mblMenu: false,
   dropdown: false,
-  collection_activity_item_data: [] as TypeItem[],
-  trendingCategoryItemData: [] as TypeItem[],
-  sortedtrendingCategoryItemData: [] as TypeItem[],
-  collectiondata: [] as TypeItem[],
-  sortedCollectionData: [] as TypeItem[],
-  renkingData: [] as RankingItem[],
-  filteredRenkingData: [] as RankingItem[],
+  collection_activity_item_data: [],
+  trendingCategoryItemData: [],
+  sortedtrendingCategoryItemData: [],
+  collectiondata: [],
+  sortedCollectionData: [],
+  renkingData: [],
+  filteredRenkingData: [],
   walletModal: false,
   bidsModal: false,
   buyModal: false,

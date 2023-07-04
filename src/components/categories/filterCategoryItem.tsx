@@ -67,7 +67,8 @@ const FilterCategoryItem = ({ params }: params) => {
   const { contract_address } = params;
   const urlParams = usePathname();
   const dispatch = useAppDispatch();
-  const { startToken, limit } = useAppSelector((state) => state.counter);
+  const startToken = useAppSelector((state) => state.counter.startToken);
+  const limit = useAppSelector((state) => state.counter.limit);
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState<Item | null>(initialItem);
 

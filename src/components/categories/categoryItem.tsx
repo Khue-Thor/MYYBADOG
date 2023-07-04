@@ -19,8 +19,8 @@ interface params {
 }
 
 const CategoryItem = ({ params }: params) => {
-  const { sortedtrendingCategoryItemData } = useAppSelector(
-    (state) => state.counter
+  const sortedtrendingCategoryItemData = useAppSelector(
+    (state) => state.counter.sortedtrendingCategoryItemData
   );
   const dispatch = useAppDispatch();
   const [isVideo, setIsVideo] = useState(false);

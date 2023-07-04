@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { getCookie } from "cookies-next";
+import ProfileLinkSection from "./profile-sections/ProfileLinkSection";
 import {
   ConnectWallet,
   useAddress,
@@ -63,8 +64,8 @@ export default function ProfileSheet() {
         className="bg-accent-dark xs:w-10/12 md:w-1/3"
       >
         <SheetHeader>
-          <SheetTitle>{walletAddr}</SheetTitle>
-          <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">
+          <div className="w-full pt-4 flex flex-grow"></div> <ConnectWallet />
+          {/* <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">
             <span className="dark:text-jacarta-200 text-sm font-medium tracking-tight">
               Balance
             </span>
@@ -79,13 +80,19 @@ export default function ProfileSheet() {
               Next: <span>40 EXP</span>{" "}
               <progress className="pt-2" max="100" value="70"></progress>
             </div>
-          </div>
+          </div> */}
         </SheetHeader>
+        <div className="flex flex-grow flex-col justify-evenly h-3/4 mt-4">
+          <ProfileLinkSection />
+          {/* placeholder sections */}
+          <ProfileLinkSection />
+          <ProfileLinkSection />
+        </div>
         <SheetFooter>
           <SheetClose asChild>
             <button
               onClick={() => logOutAll()}
-              className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 transition-colors"
+              className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 mt-2 transition-colors"
             >
               <span className="font-display text-jacarta-700 mt-1 text-sm dark:text-white">
                 Sign out

@@ -85,12 +85,7 @@ const Hero_6 = async () => {
                   owner,
                   last_price,
                 } = item;
-                // const itemLink = img
-                // 	.split('/')
-                // 	.slice(-1)
-                // 	.toString()
-                // 	.replace('_square.jpg', '')
-                // 	.replace('.gif', '');
+
                 return (
                   <Suspense
                     fallback={<p>loading...</p>}
@@ -161,6 +156,7 @@ const Hero_6 = async () => {
                           className="group block after:absolute after:inset-0 after:block after:bg-jacarta-900/20"
                         >
                           <Image
+                            style={{ maxHeight: "34.25rem" }}
                             src={image || "/images/404.png"}
                             alt={name}
                             className="w-full object-cover transition-transform duration-[1600ms] will-change-transform group-hover:scale-105"

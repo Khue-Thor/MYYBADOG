@@ -44,6 +44,7 @@ import {
           if(nonceExists){
             throw new Error("Nonce has already been used!");
           }
+          //TODO: Verify Nonce with Auth.verify
  
           const updateNonce = await prisma.user.update({
             where: {

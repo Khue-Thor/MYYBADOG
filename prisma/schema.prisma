@@ -42,10 +42,6 @@ buyer User @relation(fields: [buyerId], references: [id])
 buyerId String
 amount Float
 purchasedAt DateTime @default(now())
-
-
-
-@@map("purchases")
 }
 model Listing {
 id String @id @default(uuid())
@@ -59,8 +55,6 @@ createdAt DateTime @default(now())
 updatedAt DateTime @updatedAt
 
 
-
-@@map("listings")
 }
 
 enum EnumOfferStatus {

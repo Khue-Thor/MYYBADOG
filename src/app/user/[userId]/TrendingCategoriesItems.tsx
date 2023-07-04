@@ -6,13 +6,12 @@ import {
 import { updateTrendingCategoryItemData } from "../../../redux/counterSlice";
 import CategoryItem from "@/app/user/[userId]/CategoryItem";
 import RecentlyAddedDropdown from "@/app/user/[userId]/RecentlyAddedDropdown";
-import { useAppSelector } from "@/hooks/useAppSelector";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 const TrendingCategoriesItems = () => {
   const [itemdata, setItemdata] = useState(trendingCategoryData);
   const dispatch = useAppDispatch();
-  const { trendingCategorySorText } = useAppSelector((state) => state.counter);
+  // const { trendingCategorySorText } = useAppSelector((state) => state.counter);
   const [filterVal, setFilterVal] = useState(0);
 
   const handleFilter = (category: string) => {

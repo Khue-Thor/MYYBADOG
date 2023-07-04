@@ -10,8 +10,8 @@ import { useAppSelector } from "@/hooks/useAppSelector";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 const CategoryItem = () => {
-  const { sortedtrendingCategoryItemData } = useAppSelector(
-    (state) => state.counter
+  const sortedtrendingCategoryItemData = useAppSelector(
+    (state) => state.counter.sortedtrendingCategoryItemData
   );
   const dispatch = useAppDispatch();
 

@@ -10,7 +10,9 @@ type Props = {
 };
 
 const ExploreCollectionItem: React.FC<Props> = ({ itemFor }) => {
-  const { sortedCollectionData } = useAppSelector((state) => state.counter);
+  const sortedCollectionData = useAppSelector(
+    (state) => state.counter.sortedCollectionData
+  );
 
   const [itemData, setItemData] = useState<FeatureCollectionsItem[]>([]);
 

@@ -17,7 +17,7 @@ type TypeItem = {
 
 export default TypeItem;
 
-/**item: 
+/**item:
  * {
 		id: 'item_1',
 		image: '/images/products/item_1.jpg',
@@ -31,5 +31,5 @@ export default TypeItem;
 		ownerName: '@051_Hart',
 		auction_timer: '636234213',
 	},
- * 
+ *
  */

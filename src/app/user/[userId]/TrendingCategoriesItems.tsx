@@ -1,22 +1,20 @@
-"use client";
-
-import React, { useState } from "react";
-// import CategoryItem from "./category-item";
+import React, { useEffect, useState } from "react";
 import {
   tranding_category_filter,
   trendingCategoryData,
 } from "@/data/categories_data";
-// import Recently_added_dropdown from "../dropdown/recently_added_dropdown";
-// import { useSelector, useDispatch } from "react-redux";
-// import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
+import { updateTrendingCategoryItemData } from "../../../redux/counterSlice";
+import CategoryItem from "@/app/user/[userId]/CategoryItem";
+import RecentlyAddedDropdown from "@/app/user/[userId]/RecentlyAddedDropdown";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
-const TrendingCategoryItems = () => {
+const TrendingCategoriesItems = () => {
   const [itemdata, setItemdata] = useState(trendingCategoryData);
-  // const dispatch = useDispatch();
-  // const { trendingCategorySorText } = useSelector((state) => state.counter);
+  const dispatch = useAppDispatch();
+  // const { trendingCategorySorText } = useAppSelector((state) => state.counter);
   const [filterVal, setFilterVal] = useState(0);
 
-  const handleFilter = (category: any) => {
+  const handleFilter = (category: string) => {
     if (category !== "all") {
       setItemdata(
         trendingCategoryData.filter((item) => item.category === category)
@@ -45,9 +43,9 @@ const TrendingCategoryItems = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   dispatch(updateTrendingCategoryItemData(itemdata.slice(0, 8)));
-  // }, [itemdata, dispatch]);
+  useEffect(() => {
+    dispatch(updateTrendingCategoryItemData(itemdata.slice(0, 8)));
+  }, [itemdata, dispatch]);
 
   return (
     <>
@@ -107,13 +105,13 @@ const TrendingCategoryItems = () => {
           })}
         </ul>
         {/* dropdown */}
-        {/* <Recently_added_dropdown data={sortText} dropdownFor="recently_added" /> */}
+        <RecentlyAddedDropdown data={sortText} dropdownFor="recently_added" />
       </div>
 
       {/* <!-- Grid --> */}
-      {/* <CategoryItem /> */}
+      <CategoryItem />
     </>
   );
 };
 
-export default TrendingCategoryItems;
+export default TrendingCategoriesItems;

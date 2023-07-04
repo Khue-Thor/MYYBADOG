@@ -1,5 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
-import TypeItem from '@/interfaces/TypeItem';
+import { createSlice } from "@reduxjs/toolkit";
+import TypeItem from "@/interfaces/TypeItem";
+import { FeatureCollectionsItem } from "@/data/Feature_collections_data";
 
 const initialState = {
   mblMenu: false,
@@ -8,20 +9,20 @@ const initialState = {
   trendingCategoryItemData: [] as TypeItem[],
   sortedtrendingCategoryItemData: [] as TypeItem[],
   collectiondata: [] as TypeItem[],
-  sortedCollectionData: [] as TypeItem[],
+  sortedCollectionData: [] as FeatureCollectionsItem[],
   renkingData: [] as TypeItem[],
   filteredRenkingData: [] as TypeItem[],
   walletModal: false,
   bidsModal: false,
   buyModal: false,
   propartiesModalValue: false,
-  trendingCategorySorText: '',
+  trendingCategorySorText: "",
   startToken: 1,
   limit: 32,
 };
 
 export const counterSlice = createSlice({
-  name: 'counter',
+  name: "counter",
   initialState,
   reducers: {
     openMblMenu: (state) => {
@@ -94,23 +95,23 @@ export const counterSlice = createSlice({
     },
     updatetrendingCategorySorText: (state, action) => {
       const sortText = action.payload;
-      if (sortText === 'Price: Low to High') {
+      if (sortText === "Price: Low to High") {
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
             (a, b) => +a.sortPrice - +b.sortPrice
           );
-      } else if (sortText === 'Price: high to low') {
+      } else if (sortText === "Price: high to low") {
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
             (a, b) => +b.sortPrice - +a.sortPrice
           );
-      } else if (sortText === 'Recently Added') {
+      } else if (sortText === "Recently Added") {
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
             (a, b) =>
               new Date(a.addDate).getTime() - new Date(b.addDate).getTime()
           );
-      } else if (sortText === 'Auction Ending Soon') {
+      } else if (sortText === "Auction Ending Soon") {
         state.sortedtrendingCategoryItemData =
           state.trendingCategoryItemData.sort(
             (a, b) =>
@@ -169,7 +170,7 @@ export const counterSlice = createSlice({
     updateRenkingData: (state, action) => {
       const text = action.payload;
       let tempItem = state.renkingData.filter((item) => item.category === text);
-      if (text === 'All') {
+      if (text === "All") {
         tempItem = state.renkingData;
       }
       state.filteredRenkingData = tempItem;

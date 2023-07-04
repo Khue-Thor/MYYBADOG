@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import TypeItem from "@/interfaces/TypeItem";
-import { FeatureCollectionsItem } from "@/data/Feature_collections_data";
+import { RankingItem } from "@/interfaces/RankingItem";
 
 const initialState = {
   mblMenu: false,
@@ -9,9 +9,9 @@ const initialState = {
   trendingCategoryItemData: [] as TypeItem[],
   sortedtrendingCategoryItemData: [] as TypeItem[],
   collectiondata: [] as TypeItem[],
-  sortedCollectionData: [] as FeatureCollectionsItem[],
-  renkingData: [] as TypeItem[],
-  filteredRenkingData: [] as TypeItem[],
+  sortedCollectionData: [] as TypeItem[],
+  renkingData: [] as RankingItem[],
+  filteredRenkingData: [] as RankingItem[],
   walletModal: false,
   bidsModal: false,
   buyModal: false,

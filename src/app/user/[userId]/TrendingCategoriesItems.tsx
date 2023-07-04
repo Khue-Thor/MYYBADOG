@@ -3,15 +3,16 @@ import {
   tranding_category_filter,
   trendingCategoryData,
 } from "@/data/categories_data";
-import { useDispatch, useSelector } from "react-redux";
 import { updateTrendingCategoryItemData } from "../../../redux/counterSlice";
 import CategoryItem from "@/app/user/[userId]/CategoryItem";
-import RecentlyAddedDropdown from '@/app/user/[userId]/RecentlyAddedDropdown';
+import RecentlyAddedDropdown from "@/app/user/[userId]/RecentlyAddedDropdown";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 const TrendingCategoriesItems = () => {
   const [itemdata, setItemdata] = useState(trendingCategoryData);
-  const dispatch = useDispatch();
-  const { trendingCategorySorText } = useSelector((state) => state.counter);
+  const dispatch = useAppDispatch();
+  const { trendingCategorySorText } = useAppSelector((state) => state.counter);
   const [filterVal, setFilterVal] = useState(0);
 
   const handleFilter = (category: string) => {

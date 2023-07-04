@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react";
-import { tranding_category_filter } from "@/data/categories_data";
+import React, { useState } from "react";
 // import CategoryItem from "./category-item";
-import { trendingCategoryData } from "@/data/categories_data";
-import Tippy from "@tippyjs/react";
+import {
+  tranding_category_filter,
+  trendingCategoryData,
+} from "@/data/categories_data";
 // import Recently_added_dropdown from "../dropdown/recently_added_dropdown";
 // import { useSelector, useDispatch } from "react-redux";
 // import { updateTrendingCategoryItemData } from "../../redux/counterSlice";
@@ -15,7 +16,7 @@ const TrendingCategoryItems = () => {
   // const { trendingCategorySorText } = useSelector((state) => state.counter);
   const [filterVal, setFilterVal] = useState(0);
 
-  const handleFilter = (category:any) => {
+  const handleFilter = (category: any) => {
     if (category !== "all") {
       setItemdata(
         trendingCategoryData.filter((item) => item.category === category)

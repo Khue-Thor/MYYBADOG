@@ -2,17 +2,18 @@ import React from "react";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import { useDispatch, useSelector } from "react-redux";
 import { buyModalShow } from "../../../redux/counterSlice";
 import Likes from "@/components/likes";
 import AuctionsDropdown from "@/components/dropdown/AuctionsDropdown";
 import Image from "next/image";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 const CategoryItem = () => {
-  const { sortedtrendingCategoryItemData } = useSelector(
+  const { sortedtrendingCategoryItemData } = useAppSelector(
     (state) => state.counter
   );
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="grid grid-cols-1 gap-[1.875rem] md:grid-cols-2 lg:grid-cols-4">

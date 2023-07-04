@@ -1,16 +1,16 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import featureCollectionsData, {
   FeatureCollectionsItem,
 } from "@/data/Feature_collections_data";
+import { useAppSelector } from "@/hooks/useAppSelector";
 
 type Props = {
   itemFor: string;
 };
 
 const ExploreCollectionItem: React.FC<Props> = ({ itemFor }) => {
-  const { sortedCollectionData } = useSelector((state) => state.counter);
+  const { sortedCollectionData } = useAppSelector((state) => state.counter);
 
   const [itemData, setItemData] = useState<FeatureCollectionsItem[]>([]);
 

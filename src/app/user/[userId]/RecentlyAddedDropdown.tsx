@@ -6,15 +6,13 @@ import React, {
 } from "react";
 import Tippy from "@tippyjs/react";
 import {
-  updatetrendingCategorySorText,
-  updateTrendingCategoryItemByInput,
-} from "../../../redux/counterSlice";
-import { useDispatch } from "react-redux";
-import {
   updateRenkingData,
   updateRenkingDataByBlockchain,
   updateRenkingDataByPostdate,
+  updateTrendingCategoryItemByInput,
+  updatetrendingCategorySorText,
 } from "../../../redux/counterSlice";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 type Props = {
   data: { id: number; text: string }[];
@@ -22,7 +20,7 @@ type Props = {
 };
 
 const RecentlyAddedDropdown: React.FC<Props> = ({ data, dropdownFor }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [currencyValFrom, setCurrencyValFrom] = useState(0);
   const [currencyValTo, setCurrencyValTo] = useState(0);
   const [sortActive, setsortActive] = useState(1);

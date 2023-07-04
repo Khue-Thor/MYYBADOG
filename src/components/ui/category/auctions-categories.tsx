@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import HeadLine from "@/components/headline";
 import Auctions_category_data from "@/data/auctions_category_data";
+import auctions_category_data from "@/data/auctions_category_data";
 import Tippy from "@tippyjs/react";
 // import Countdown_timer from "../Countdown_timer";
 // import Auctions_dropdown from "../dropdown/Auctions_dropdown";
@@ -9,11 +10,9 @@ import Link from "next/link";
 // import { useDispatch } from "react-redux";
 import "tippy.js/themes/light.css";
 import Image from "next/image";
-import auctions_category_data from "@/data/auctions_category_data";
 import Likes from "@/components/likes";
 
 const AuctionsCategories = () => {
-  // const dispatch = useDispatch();
   const [data, setData] = useState(Auctions_category_data.slice(0, 8));
   const [loadMoreBtn, setLoadMoreBtn] = useState(true);
 
@@ -62,7 +61,6 @@ const AuctionsCategories = () => {
                           }
                         >
                           <Link href={/item/ + itemLink}>
-
                             <Image
                               src={creatorImage}
                               alt="creator"
@@ -70,7 +68,6 @@ const AuctionsCategories = () => {
                               height={24}
                               width={24}
                             />
-
                           </Link>
                         </Tippy>
                         <Tippy
@@ -81,7 +78,6 @@ const AuctionsCategories = () => {
                           }
                         >
                           <Link href={/item/ + itemLink}>
-
                             <Image
                               src={ownerImage}
                               alt="creator"
@@ -89,7 +85,6 @@ const AuctionsCategories = () => {
                               height={24}
                               width={24}
                             />
-
                           </Link>
                         </Tippy>
                       </div>
@@ -99,7 +94,6 @@ const AuctionsCategories = () => {
                     </div>
                     <figure className="relative">
                       <Link href={/item/ + itemLink}>
-
                         <Image
                           src={bigImage}
                           alt="item 8"
@@ -110,17 +104,14 @@ const AuctionsCategories = () => {
                           layout="responsive"
                           objectFit="cover"
                         />
-
                       </Link>
                       {/* <Countdown_timer time={+auction_timer} /> */}
                     </figure>
                     <div className="mt-7 flex items-center justify-between">
                       <Link href={/item/ + itemLink}>
-
                         <span className="font-display text-jacarta-700 hover:text-accent text-base dark:text-white">
                           {title}
                         </span>
-
                       </Link>
                       <span className="dark:border-jacarta-600 border-jacarta-100 flex items-center whitespace-nowrap rounded-md border py-1 px-2">
                         <span>

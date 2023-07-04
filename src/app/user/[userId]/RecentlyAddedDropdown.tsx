@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  ChangeEvent,
+  ChangeEventHandler,
+  useEffect,
+  useState,
+} from "react";
+import Tippy from "@tippyjs/react";
 import {
   updateRenkingData,
   updateRenkingDataByBlockchain,
   updateRenkingDataByPostdate,
   updateTrendingCategoryItemByInput,
   updatetrendingCategorySorText,
-} from "../../redux/counterSlice";
-import TypeItem from "@/interfaces/TypeItem";
-import Tippy from "../Tippy";
+} from "../../../redux/counterSlice";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 
-const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
+type Props = {
+  data: { id: number; text: string }[];
+  dropdownFor: string;
+};
+
+const RecentlyAddedDropdown: React.FC<Props> = ({ data, dropdownFor }) => {
   const dispatch = useAppDispatch();
   const [currencyValFrom, setCurrencyValFrom] = useState(0);
   const [currencyValTo, setCurrencyValTo] = useState(0);
@@ -24,16 +33,10 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
   const [dropdownSale, setDropdownSale] = useState(false);
   const [currencyDropdown, setCurrencyDropdown] = useState(false);
 
-  // for line 282 onwards
-  type dataType = {
-    id: string;
-    text: string;
-  };
-
   const handleRenkingCategoriesDropdown = () => {
-    window.addEventListener("click", (w) => {
-      const target = w.target as HTMLInputElement;
-      if (target.closest(".rankingCategoriesDropdown")) {
+    window.addEventListener("click", (e) => {
+      if (!e.target) return;
+      if ((e.target as Element).closest(".rankingCategoriesDropdown")) {
         if (renkingCategoriesdropdownShow) {
           setRenkingCategoriesDropdownShow(false);
         } else {
@@ -45,9 +48,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
     });
   };
   const handleBlockChainDropdown = () => {
-    window.addEventListener("click", (w) => {
-      const target = w.target as HTMLInputElement;
-      if (target.closest(".blockchainDropdown")) {
+    window.addEventListener("click", (e) => {
+      if (!e.target) return;
+      if ((e.target as Element).closest(".blockchainDropdown")) {
         if (blockChaindropdownShow) {
           setBlockChainDropdownShow(false);
         } else {
@@ -60,9 +63,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
   };
 
   const handleItemDateDropdown = () => {
-    window.addEventListener("click", (w) => {
-      const target = w.target as HTMLInputElement;
-      if (target.closest(".itemDateDropdown")) {
+    window.addEventListener("click", (e) => {
+      if (!e.target) return;
+      if ((e.target as Element).closest(".itemDateDropdown")) {
         if (itemDateDropdown) {
           setItemDateDropdown(false);
         } else {
@@ -75,9 +78,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
   };
 
   const handleCategoryDropdown = () => {
-    window.addEventListener("click", (w) => {
-      const target = w.target as HTMLInputElement;
-      if (target.closest(".category-dropdown")) {
+    window.addEventListener("click", (e) => {
+      if (!e.target) return;
+      if ((e.target as Element).closest(".category-dropdown")) {
         if (categoryDropdown) {
           setCategoryDropdown(false);
         } else {
@@ -90,9 +93,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
   };
 
   const handleSaleDropdown = () => {
-    window.addEventListener("click", (w) => {
-      const target = w.target as HTMLInputElement;
-      if (target.closest(".dropdown-sale")) {
+    window.addEventListener("click", (e) => {
+      if (!e.target) return;
+      if ((e.target as Element).closest(".dropdown-sale")) {
         if (dropdownSale) {
           setDropdownSale(false);
         } else {
@@ -105,14 +108,13 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
   };
 
   const handleCurrencyDropdown = () => {
+    console.log("first");
     if (currencyDropdown) {
       setCurrencyDropdown(false);
     } else {
       setCurrencyDropdown(true);
     }
   };
-
-  // console.log(blockChaindropdownShow);
 
   useEffect(() => {
     dispatch(updatetrendingCategorySorText(sortFilterText));
@@ -133,19 +135,15 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
     },
   ];
 
-  const handleInput = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    text: string
-  ) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>, text: string) => {
     if (e.target.checked) {
-      // console.log(text);
       dispatch(updateTrendingCategoryItemByInput(text));
     } else {
       dispatch(updateTrendingCategoryItemByInput(""));
     }
   };
 
-  const handleCurrencyValTo = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCurrencyValTo: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = +e.target.value;
     if (value < 0) {
       setCurrencyValTo(0);
@@ -153,7 +151,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
       setCurrencyValTo(value);
     }
   };
-  const handleCurrencyValFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCurrencyValFrom: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = +e.target.value;
     if (value < 0) {
       setCurrencyValFrom(0);
@@ -171,7 +169,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
             animation="fade"
             arrow={false}
             trigger="click"
-            interactive={true}
+            interactive
             placement="bottom"
             className="tooltip-container"
             content={
@@ -182,20 +180,20 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
                 <span className="font-display text-jacarta-300 block px-5 py-2 text-sm font-semibold">
                   Sort By
                 </span>
-                {data.map((item: TypeItem) => {
+                {data.map((item) => {
                   const { id, text } = item;
                   return (
                     <button
                       key={id}
                       className="dropdown-item font-display text-jacarta-700 dark:hover:bg-jacarta-600 hover:bg-jacarta-50 flex w-full items-center justify-between rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white"
                       onClick={() => {
-                        setsortActive(+id);
+                        setsortActive(id);
 
                         setSortFilterText(text);
                       }}
                     >
                       {text}
-                      {sortActive === +id && (
+                      {sortActive === id && (
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
@@ -280,9 +278,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
           }
         >
           <ul className="flex flex-col flex-wrap">
-            {data.map(({ id, text }: dataType) => {
+            {data.map(({ id, text }) => {
               return (
-                <li key={id} onClick={() => setsortActive(+id)}>
+                <li key={id} onClick={() => setsortActive(id)}>
                   <button
                     className="dropdown-item font-display dark:hover:bg-jacarta-600 hover:bg-jacarta-50 flex w-full items-center justify-between rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white"
                     onClick={() =>
@@ -292,7 +290,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
                     <span className="text-jacarta-700 dark:text-white">
                       {text}
                     </span>
-                    {sortActive === +id && (
+                    {sortActive === id && (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -340,14 +338,14 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
           }
         >
           <ul className="flex flex-col flex-wrap">
-            {data.map(({ id, text }: dataType) => {
+            {data.map(({ id, text }) => {
               return (
-                <li key={id} onClick={() => setsortActive(+id)}>
+                <li key={id} onClick={() => setsortActive(id)}>
                   <button className="dropdown-item font-display dark:hover:bg-jacarta-600 hover:bg-jacarta-50 flex w-full items-center justify-between rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white">
                     <span className="text-jacarta-700 dark:text-white">
                       {text}
                     </span>
-                    {sortActive === +id && (
+                    {sortActive === id && (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -395,9 +393,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
           }
         >
           <ul className="flex flex-col flex-wrap">
-            {data.map(({ id, text }: dataType) => {
+            {data.map(({ id, text }) => {
               return (
-                <li key={id} onClick={() => setsortActive(+id)}>
+                <li key={id} onClick={() => setsortActive(id)}>
                   <button
                     className="dropdown-item font-display dark:hover:bg-jacarta-600 hover:bg-jacarta-50 flex w-full items-center justify-between rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white"
                     onClick={() => dispatch(updateRenkingData(text))}
@@ -405,7 +403,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
                     <span className="text-jacarta-700 dark:text-white">
                       {text}
                     </span>
-                    {sortActive === +id && (
+                    {sortActive === id && (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -453,17 +451,17 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
           }
         >
           <ul className="flex flex-col flex-wrap">
-            {data.map(({ id, text }: dataType) => {
+            {data.map(({ id, text }) => {
               return (
                 <li key={id}>
                   <button
                     className="dropdown-item font-display dark:hover:bg-jacarta-600 hover:bg-jacarta-50 flex w-full items-center justify-between rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white"
-                    onClick={() => setsortActive(+id)}
+                    onClick={() => setsortActive(id)}
                   >
                     <span className="text-jacarta-700 dark:text-white">
                       {text}
                     </span>
-                    {sortActive === +id && (
+                    {sortActive === id && (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
@@ -537,7 +535,7 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
           animation="fade"
           arrow={false}
           trigger="click"
-          interactive={true}
+          interactive
           placement="bottom"
           className="tooltip-container"
           content={
@@ -605,14 +603,14 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
                   type="number"
                   placeholder="From"
                   value={currencyValFrom}
-                  onChange={(e) => handleCurrencyValFrom(e)}
+                  onChange={handleCurrencyValFrom}
                   className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full max-w-[7.5rem] rounded-lg border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
                 />
                 <input
                   type="number"
                   placeholder="To"
                   value={currencyValTo}
-                  onChange={(e) => handleCurrencyValTo(e)}
+                  onChange={handleCurrencyValTo}
                   className="text-jacarta-700 placeholder-jacarta-500 focus:ring-accent border-jacarta-100 w-full max-w-[7.5rem] rounded-lg border py-[0.6875rem] px-4 dark:border-transparent dark:bg-white/[.15] dark:text-white dark:placeholder-white"
                 />
               </div>
@@ -683,18 +681,18 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
               : "dropdown-menu dark:bg-jacarta-800 z-10 whitespace-nowrap rounded-xl max-w-xs w-[13rem] bg-white py-4 px-2 text-left shadow-xl hidden absolute top-full right-0"
           }
         >
-          {data.map(({ id, text }: dataType) => {
+          {data.map(({ id, text }) => {
             return (
               <button
                 key={id}
                 onClick={() => {
-                  setsortActive(+id);
+                  setsortActive(id);
                   dispatch(updateRenkingDataByPostdate(text));
                 }}
                 className="dropdown-item font-display text-jacarta-700 dark:hover:bg-jacarta-600 hover:bg-jacarta-50 flex w-full items-center justify-between rounded-xl px-5 py-2 text-left text-sm transition-colors dark:text-white"
               >
                 {text}
-                {sortActive === +id && (
+                {sortActive === id && (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -712,8 +710,9 @@ const Recently_added_dropdown = ({ data, dropdownFor }: any) => {
         </div>
       </div>
     );
+  } else {
+    return null;
   }
-  return null;
 };
 
-export default Recently_added_dropdown;
+export default RecentlyAddedDropdown;

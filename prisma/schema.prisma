@@ -10,24 +10,35 @@ datasource db {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 /// TODO: Should be renamed to "User" not users
 model User {
-  id              String     @id @default(uuid())
-  address         String     @unique
-  createdAt       DateTime?  @default(now()) @db.Timestamptz(6)
-  lastLoggedIn    DateTime?  @default(now()) @db.Timestamptz(6)
-  username        String?    @unique
-  badges          Json[]     @db.Json
-  level           BigInt?    @default(0)
-  quests          Json[]     @db.Json
-  friends         Json[]     @db.Json
-  inventory       Json[]     @db.Json
+  id              String       @id @default(uuid())
+  address         String       @unique
+  createdAt       DateTime?    @default(now()) @db.Timestamptz(6)
+  lastLoggedIn    DateTime?    @default(now()) @db.Timestamptz(6)
+  username        String?      @unique
+  badges          Json[]       @db.Json
+  level           BigInt?      @default(0)
+  quests          Json[]       @db.Json
+  friends         Json[]       @db.Json
+  inventory       Json[]       @db.Json
   nonce           String?
   profilePicture  String?
   nfts            NFT[]
-  raffles         Raffle[]
-  role            UserRole   @default(USER)
-  offers          Offer[]
+  user_raffles    UserRaffle[]
+  role            UserRole     @default(USER)
+  offersMade      Offer[]      @relation("offerFrom")
+  offersReceived  Offer[]      @relation("offerTo")
   createdListings Listing[]
   purchases       Purchase[]
+  Raffle          Raffle[]
+}
+
+//this is used to connect the User and raffles table in a many-to-many relationship
+model UserRaffle {
+  id        String @id @default(uuid())
+  user_id   String
+  user      User   @relation(fields: [user_id], references: [id])
+  raffle_id String
+  raffle    Raffle @relation(fields: [raffle_id], references: [id])
 }
 
 enum UserRole {
@@ -46,17 +57,16 @@ model Purchase {
 }
 
 model Listing {
-  id        String   @id @default(uuid())
-  nft       NFT      @relation(fields: [nftId], references: [id])
+  id        String     @id @default(uuid())
+  nft       NFT        @relation(fields: [nftId], references: [id])
   nftId     String
   price     Float
   currency  String
-  creator   User     @relation(fields: [creatorId], references: [id])
+  creator   User       @relation(fields: [creatorId], references: [id])
   creatorId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Purchase Purchase[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  Purchase  Purchase[]
 }
 
 enum EnumOfferStatus {
@@ -79,30 +89,28 @@ model Offer {
   status    EnumOfferStatus
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
-  User      User?           @relation(fields: [userId], references: [id])
-  userId    String?
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Raffle {
-  id               String    @id @default(uuid())
-  createdAt        DateTime? @default(now()) @db.Timestamptz(6)
+  id               String       @id @default(uuid())
+  created_at       DateTime?    @default(now()) @db.Timestamptz(6)
   name             String?
   token_id         Int?
-  nftAddress       String?   @db.VarChar
-  start_date       DateTime? @db.Timestamptz(6)
-  end_date         DateTime? @db.Timestamptz(6)
-  raffle_cost      Float?    @db.Real
+  nft_address      String?      @db.VarChar
+  start_date       DateTime?    @db.Timestamptz(6)
+  end_date         DateTime?    @db.Timestamptz(6)
+  raffle_cost      Float?       @db.Real
   max_tickets      Int?
   sold_tickets     Int?
-  created_by       String?   @db.VarChar
-  participant_list Json[]    @db.Json
-  transaction_list Json[]    @db.Json
+  created_by       String?      @db.VarChar
+  participant_list UserRaffle[]
+  transaction_list Json[]       @db.Json
   favourite_count  Int?
-  nft_image        String?   @db.VarChar
-  raffler          User?     @relation(fields: [rafflerId], references: [id])
-  rafflerId        String?
+  nft_image        String?      @db.VarChar
+  raffler          User?        @relation(fields: [raffler_id], references: [id])
+  raffler_id       String?
 }
 
 model NFT {
@@ -112,7 +120,7 @@ model NFT {
   description        String
   image              String
   collectionContract Collection? @relation(fields: [collectionId], references: [id])
-  collectionId       String?
+  collectionId       BigInt?
   owner              User?       @relation(fields: [ownerId], references: [id])
   ownerId            String?
   createdAt          DateTime    @default(now())

@@ -23,16 +23,20 @@ export async function POST(req:NextRequest) {
  const init = {
            data: {
              address: address as string,
-             username: '',
+             username: address as string,
              badges: [],
              level: 0,
              quests: [],
-             friends: [],
+             friendships: [],
+             friendships_accepted:[],
              inventory: [],
              nfts:[],
-             raffles:[]
-             offers:[],
-             createdListings:[],
+             rewards_earned:[],
+             created_raffles:[],
+             user_raffles:[],
+             offers_received:[],
+             offers_made:[],
+             created_listings:[],
              purchases:[]
            }
          }

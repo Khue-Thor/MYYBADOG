@@ -10,26 +10,44 @@ datasource db {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 /// TODO: Should be renamed to "User" not users
 model User {
-  id              String       @id @default(uuid())
-  address         String       @unique
-  createdAt       DateTime?    @default(now()) @db.Timestamptz(6)
-  lastLoggedIn    DateTime?    @default(now()) @db.Timestamptz(6)
-  username        String?      @unique
-  badges          Json[]       @db.Json
-  level           BigInt?      @default(0)
-  quests          Json[]       @db.Json
-  friends         Json[]       @db.Json
-  inventory       Json[]       @db.Json
-  nonce           String?
-  profilePicture  String?
-  nfts            NFT[]
-  user_raffles    UserRaffle[]
-  role            UserRole     @default(USER)
-  offersMade      Offer[]      @relation("offerFrom")
-  offersReceived  Offer[]      @relation("offerTo")
-  createdListings Listing[]
-  purchases       Purchase[]
-  Raffle          Raffle[]
+  id                   String       @id @default(uuid())
+  address              String       @unique
+  created_at           DateTime?    @default(now()) @db.Timestamptz(6)
+  last_logged_in       DateTime?    @default(now()) @db.Timestamptz(6)
+  username             String?      @unique
+  badges               Json[]       @db.Json
+  level                BigInt?      @default(0)
+  quests               Json[]       @db.Json
+  friendships          Friendship[] @relation("user")
+  friendships_accepted Friendship[] @relation("friend")
+  inventory            Json[]       @db.Json
+  rewards_earned       Reward[]
+  nonce                String?
+  profile_picture      String?
+  nfts                 NFT[]
+  created_raffles      Raffle[]
+  user_raffles         UserRaffle[]
+  role                 UserRole     @default(USER)
+  offers_made          Offer[]      @relation("offerFrom")
+  offers_received      Offer[]      @relation("offerTo")
+  created_listings     Listing[]
+  purchases            Purchase[]
+}
+
+//Friend request made through client-side
+model Friendship {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  user_id    String
+  user       User     @relation("user", fields: [user_id], references: [id])
+  friend_id  String
+  friend     User     @relation("friend", fields: [friend_id], references: [id])
+}
+
+enum RequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 //this is used to connect the User and raffles table in a many-to-many relationship
@@ -47,26 +65,26 @@ enum UserRole {
 }
 
 model Purchase {
-  id          String   @id @default(uuid())
-  listing     Listing  @relation(fields: [listingId], references: [id])
-  listingId   String
-  buyer       User     @relation(fields: [buyerId], references: [id])
-  buyerId     String
-  amount      Float
-  purchasedAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  listing      Listing  @relation(fields: [listing_id], references: [id])
+  listing_id   String
+  buyer        User     @relation(fields: [buyer_id], references: [id])
+  buyer_id     String
+  amount       Float
+  purchased_at DateTime @default(now())
 }
 
 model Listing {
-  id        String     @id @default(uuid())
-  nft       NFT        @relation(fields: [nftId], references: [id])
-  nftId     String
-  price     Float
-  currency  String
-  creator   User       @relation(fields: [creatorId], references: [id])
-  creatorId String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  Purchase  Purchase[]
+  id         String     @id @default(uuid())
+  nft        NFT        @relation(fields: [nft_id], references: [id])
+  nft_id     String
+  price      Float
+  currency   String
+  creator    User       @relation(fields: [creator_id], references: [id])
+  creator_id String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  purchase   Purchase[]
 }
 
 enum EnumOfferStatus {
@@ -78,12 +96,12 @@ enum EnumOfferStatus {
 
 model Offer {
   id        String          @id @default(uuid())
-  from      User            @relation(name: "offerFrom", fields: [fromId], references: [id])
-  fromId    String
-  to        User            @relation(name: "offerTo", fields: [toId], references: [id])
-  toId      String
-  nft       NFT             @relation(fields: [nftId], references: [id])
-  nftId     String
+  from      User            @relation(name: "offerFrom", fields: [from_id], references: [id])
+  from_id   String
+  to        User            @relation(name: "offerTo", fields: [to_id], references: [id])
+  to_id     String
+  nft       NFT             @relation(fields: [nft_id], references: [id])
+  nft_id    String
   amount    Float
   message   String?
   status    EnumOfferStatus
@@ -114,35 +132,37 @@ model Raffle {
 }
 
 model NFT {
-  id                 String      @id @default(uuid())
-  tokenId            String      @unique
-  name               String
-  description        String
-  image              String
-  collectionContract Collection? @relation(fields: [collectionId], references: [id])
-  collectionId       BigInt?
-  owner              User?       @relation(fields: [ownerId], references: [id])
-  ownerId            String?
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
-  listedAt           DateTime?
-  category           Category?   @relation(fields: [categoryId], references: [id])
-  categoryId         String?
-  Offer              Offer[]
-  Listing            Listing[]
+  id                  String      @id @default(uuid())
+  token_id            String      @unique
+  name                String
+  description         String
+  image               String
+  collection_contract Collection? @relation(fields: [collection_id], references: [id])
+  collection_id       BigInt?
+  owner               User?       @relation(fields: [owner_id], references: [id])
+  owner_id            String?
+  created_at          DateTime    @default(now())
+  updated_at          DateTime    @updatedAt
+  listed_at           DateTime?
+  category            Category?   @relation(fields: [category_id], references: [id])
+  category_id         String?
+  offers              Offer[]
+  listings            Listing[]
 }
 
 model Category {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  nfts      NFT[]
+  id         String   @id @default(uuid())
+  name       String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  nfts       NFT[]
 }
 
 model Reward {
-  id        BigInt @id @default(autoincrement())
-  dispensed BigInt @default(0)
+  id        BigInt  @id @default(autoincrement())
+  dispensed BigInt  @default(0)
+  User      User?   @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 /// Model to store NFT collection data

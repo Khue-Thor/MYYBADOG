@@ -1,7 +1,7 @@
 // pass a wallet address and get a shortened version of it
 // e.g. 0x1234567890abcdef1234567890abcdef12345678 -> 0x...5678
 
-function walletShortener(
+export default function walletShortener(
   wallet: string,
   prefixLength: number,
   suffixLength: number

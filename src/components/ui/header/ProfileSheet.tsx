@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { getCookie } from "cookies-next";
 import ProfileLinkSection from "./profile-sections/ProfileLinkSection";
+import { AiOutlineCopy } from 'react-icons/ai';
 import {
   ConnectWallet,
   useAddress,
@@ -22,8 +23,14 @@ import {
 } from "@/components/shadcn/sheet";
 import Link from "next/link";
 import { useToast } from "@/components/shadcn/use-toast";
+import { RandomImage } from '@/components/random-image';
+
+import Image from 'next/image';
+import walletShortener from '@/utils/walletShortener';
+import { BiLinkExternal } from 'react-icons/bi';
+import ProfileWallet from './profile-sections/ProfileWallet';
 export default function ProfileSheet() {
-  const address = getCookie("wallet-address");
+  const address = getCookie("wallet-address") as string;
   const [walletAddr, setWalletAddr] = useState(address || "");
   // const shortenedAddress = address.substring(0, 17).concat("...");
   const disconnect = useDisconnect();
@@ -41,6 +48,16 @@ export default function ProfileSheet() {
       title: "Signed Out",
     });
   };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(address);
+    toast({
+      title: "Copied to clipboard",
+    });
+  }
+  const handleRedirect = () => {
+    window.open(`https://etherscan.io/address/${address}`, "_blank");
+  }
 
   return (
     <Sheet>
@@ -61,9 +78,33 @@ export default function ProfileSheet() {
       <SheetContent
         position="right"
         size="sm"
-        className="bg-accent-dark xs:w-10/12 md:w-1/3"
+        className="flex flex-col bg-accent-dark xs:w-10/12 md:w-1/3"
       >
         <SheetHeader>
+          <ProfileWallet address={address} />
+          {/* <div className="flex justify-between mr-5">
+            <RandomImage contract={address} size={70} />
+            <Image src="/images/bdco-skull-white-28x40.svg" width="36" height="52" alt='logo'></Image>
+          </div>
+          <div className="font-display text-jacarta-700 text-md dark:text-white text-left">{walletShortener(address, 2, 4)}</div>
+          <div className="flex justify-between mr-4">
+            <div>
+              <div className="flex border border-jacarta-600  rounded-md pr-2">
+                <div className="flex w-[110px] text-center dark:bg-jacarta-600 bg-jacarta-50 hover:text-accent font-display text-jacarta-600 text-sm dark:text-white text-left rounded-md py-2 px-2">{walletShortener(address, 4, 4)}
+                  <span>
+                    <AiOutlineCopy onClick={handleCopy} className="ml-2 cursor-pointer" />
+                  </span>
+                </div>
+                <BiLinkExternal className="w-5 h-8 cursor-pointer" onClick={handleRedirect} />
+              </div>
+            </div>
+            <button
+              onClick={() => logOutAll()}
+              className="w-[100px] font-display text-jacarta-700 text-sm dark:text-white text-center dark:hover:bg-jacarta-600 border border-gray-300 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center justify-center rounded-md transition-colors"
+            >
+              Disconnect
+            </button> */}
+          {/* </div> */}
           <div className="w-full pt-4 flex flex-grow"></div> <ConnectWallet />
           {/* <div className="dark:border-jacarta-600 border-jacarta-100 mx-5 mb-6 rounded-lg border p-4">
             <span className="dark:text-jacarta-200 text-sm font-medium tracking-tight">
@@ -95,12 +136,12 @@ export default function ProfileSheet() {
               className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 mt-2 transition-colors"
             >
               <span className="font-display text-jacarta-700 mt-1 text-sm dark:text-white">
-                Sign out
+                Disconnect
               </span>
             </button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>
-    </Sheet>
+    </Sheet >
   );
 }

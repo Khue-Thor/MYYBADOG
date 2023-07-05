@@ -10,28 +10,30 @@ datasource db {
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 /// TODO: Should be renamed to "User" not users
 model User {
-  id                   String       @id @default(uuid())
-  address              String       @unique
-  created_at           DateTime?    @default(now()) @db.Timestamptz(6)
-  last_logged_in       DateTime?    @default(now()) @db.Timestamptz(6)
-  username             String?      @unique
-  badges               Json[]       @db.Json
-  level                BigInt?      @default(0)
-  quests               Json[]       @db.Json
-  friendships          Friendship[] @relation("user")
-  friendships_accepted Friendship[] @relation("friend")
-  inventory            Json[]       @db.Json
-  rewards_earned       Reward[]
+  id                   String         @id @default(uuid())
+  address              String         @unique
+  created_at           DateTime?      @default(now()) @db.Timestamptz(6)
+  last_logged_in       DateTime?      @default(now()) @db.Timestamptz(6)
+  username             String?        @unique
+  badges               Json[]         @db.Json
+  level                BigInt?        @default(0)
+  quests               Json[]         @db.Json
+  friendships          Friendship[]   @relation("user")
+  friendships_accepted Friendship[]   @relation("friend")
+  inventory            Json[]         @db.Json
+  rewards_earned       RewardEarned[]
   nonce                String?
   profile_picture      String?
   nfts                 NFT[]
   created_raffles      Raffle[]
   user_raffles         UserRaffle[]
-  role                 UserRole     @default(USER)
-  offers_made          Offer[]      @relation("offerFrom")
-  offers_received      Offer[]      @relation("offerTo")
+  role                 UserRole       @default(USER)
+  offers_made          Offer[]        @relation("offerFrom")
+  offers_received      Offer[]        @relation("offerTo")
   created_listings     Listing[]
   purchases            Purchase[]
+
+  @@index([address])
 }
 
 //Friend request made through client-side
@@ -69,6 +71,8 @@ model Purchase {
   buyer_id     String
   amount       Float
   purchased_at DateTime @default(now())
+
+  @@index([id])
 }
 
 model Listing {
@@ -82,6 +86,8 @@ model Listing {
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   purchase   Purchase[]
+
+  @@index([id])
 }
 
 enum EnumOfferStatus {
@@ -104,6 +110,8 @@ model Offer {
   status    EnumOfferStatus
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
+
+  @@index([id])
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
@@ -126,11 +134,13 @@ model Raffle {
   nft_image        String?      @db.VarChar
   raffler          User?        @relation(fields: [raffler_id], references: [id])
   raffler_id       String?
+
+  @@index([id])
 }
 
 model NFT {
   id                  String      @id @default(uuid())
-  token_id            String      @unique
+  token_id            String
   name                String
   description         String
   image               String
@@ -142,24 +152,37 @@ model NFT {
   updated_at          DateTime    @updatedAt
   listed_at           DateTime?
   category            Category?   @relation(fields: [category_id], references: [id])
-  category_id         String?
+  category_id         BigInt?
   offers              Offer[]
   listings            Listing[]
+
+  @@index([owner_id])
 }
 
 model Category {
-  id         String   @id @default(uuid())
+  id         BigInt   @id @default(autoincrement())
   name       String   @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   nfts       NFT[]
+
+  @@index([name])
 }
 
 model Reward {
-  id        BigInt  @id @default(autoincrement())
-  dispensed BigInt  @default(0)
-  User      User?   @relation(fields: [user_id], references: [id])
-  user_id   String?
+  id        Int    @id @default(autoincrement())
+  dispensed BigInt @default(0)
+  name      String
+}
+
+model RewardEarned {
+  id        Int    @id @default(autoincrement())
+  dispensed BigInt @default(0)
+  name      String
+  User      User   @relation(fields: [user_id], references: [id])
+  user_id   String
+
+  @@index([id])
 }
 
 /// Model to store NFT collection data
@@ -233,4 +256,6 @@ model Collection {
   slug                       String?
   version                    Float?
   NFT                        NFT[]
+
+  @@index([contract_address])
 }

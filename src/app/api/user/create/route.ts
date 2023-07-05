@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyLogin } from "@thirdweb-dev/auth/evm";
 import { cookies } from 'next/headers';
 import {prisma} from "@/lib/prisma";
+import { Friendship,NFT,Raffle,UserRaffle,Offer,Listing,Purchase, UserRole } from "@prisma/client";
 
 import { authOptions }  from "@/lib/auth";
 import { fixBigInt } from "@/utils/bigIntFixer";
@@ -23,13 +24,22 @@ export async function POST(req:NextRequest) {
  const init = {
            data: {
              address: address as string,
-             username: '',
+             username: address as string,
              badges: [],
-             level: 0,
+             level: 1,
              quests: [],
-             friends: [],
+            //  friendships: [],
+            //  friendships_accepted:[],
              inventory: [],
-
+            //  nfts: [],
+            //  rewards_earned:[],
+            //  created_raffles:[],
+            //  user_raffles:[],
+             role: UserRole.USER,
+            //  offers_received:[],
+            //  offers_made:[],
+            //  created_listings:[],
+            //  purchases:[]
            }
          }
 

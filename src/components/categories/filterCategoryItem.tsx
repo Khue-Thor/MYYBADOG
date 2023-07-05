@@ -1,16 +1,15 @@
-import React, { use, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import {
   incrementStartToken,
   updateTrendingCategoryItemData,
 } from "../../redux/counterSlice";
 import { usePathname } from "next/navigation";
 import CategoryItem from "./categoryItem";
-import { RootState } from "@/redux/store";
 import OneCategoryItem from "./oneCategoryItem";
 import { CollectionItemSkeleton } from "../CollectionItemSkeleton";
 import { Data } from "@/api/nftscan";
-import { NFTMetaData } from "@/api/alchemy";
+import { useAppSelector } from "@/hooks/useAppSelector";
+import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 interface params {
   params: {
@@ -67,10 +66,9 @@ const FilterCategoryItem = ({ params }: params) => {
   const [isLoading, setIsLoading] = useState(true);
   const { contract_address } = params;
   const urlParams = usePathname();
-  const dispatch = useDispatch();
-  const { startToken, limit } = useSelector<RootState, RootState["counter"]>(
-    (state) => state.counter
-  );
+  const dispatch = useAppDispatch();
+  const startToken = useAppSelector((state) => state.counter.startToken);
+  const limit = useAppSelector((state) => state.counter.limit);
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState<Item | null>(initialItem);
 

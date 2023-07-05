@@ -34,27 +34,29 @@ enum UserRole {
   ADMIN
   USER
 }
+
 model Purchase {
-id String @id @default(uuid())
-listing Listing @relation(fields: [listingId], references: [id])
-listingId String
-buyer User @relation(fields: [buyerId], references: [id])
-buyerId String
-amount Float
-purchasedAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  listing     Listing  @relation(fields: [listingId], references: [id])
+  listingId   String
+  buyer       User     @relation(fields: [buyerId], references: [id])
+  buyerId     String
+  amount      Float
+  purchasedAt DateTime @default(now())
 }
+
 model Listing {
-id String @id @default(uuid())
-nft NFT @relation(fields: [nftId], references: [id])
-nftId String
-price Float
-currency String
-creator User @relation(fields: [creatorId], references: [id])
-creatorId String
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid())
+  nft       NFT      @relation(fields: [nftId], references: [id])
+  nftId     String
+  price     Float
+  currency  String
+  creator   User     @relation(fields: [creatorId], references: [id])
+  creatorId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-
+  Purchase Purchase[]
 }
 
 enum EnumOfferStatus {
@@ -119,6 +121,7 @@ model NFT {
   category           Category?   @relation(fields: [categoryId], references: [id])
   categoryId         String?
   Offer              Offer[]
+  Listing            Listing[]
 }
 
 model Category {
@@ -136,14 +139,11 @@ model Reward {
 
 /// Model to store NFT collection data
 model Collection {
-  id                         String    @id @default(uuid())
+  id                         BigInt    @id @default(autoincrement())
   contract_address           String    @unique
-  contract_name              String?
   name                       String
-  slug                       String?
   symbol                     String
   description                String?
-  version                    Float?
   website                    String?
   email                      String?
   twitter                    String?
@@ -155,13 +155,10 @@ model Collection {
   logo_url                   String?
   banner_url                 String?
   featured_url               String?
-  image_url                  String?
   large_image_url            String?
   attributes                 Json?
   erc_type                   String
   token_type                 String
-  chain_identifier           String?
-  asset_contract_type        String?
   deploy_block_number        BigInt
   owner                      String
   contract_deployer          String
@@ -171,15 +168,10 @@ model Collection {
   rug_verified               Boolean
   sus_verified               Boolean
   royalty                    Float?
-  is_nsfw                    Boolean?
-  is_hidden                  Boolean?
-  is_featured                Boolean?
   items_total                BigInt
   amounts_total              BigInt
   owners_total               Int
   opensea_floor_price        Float?
-  looksrare_floor_price      Float?
-  blur_floor_price           Float?
   floor_price                Float
   collections_with_same_name Json?
   price_symbol               String
@@ -204,5 +196,16 @@ model Collection {
   last_ingested_at           DateTime?
   last_updated_at            DateTime?
   created_at                 DateTime?
+  asset_contract_type        String?
+  blur_floor_price           Float?
+  chain_identifier           String?
+  contract_name              String?
+  image_url                  String?
+  is_featured                Boolean?
+  is_hidden                  Boolean?
+  is_nsfw                    Boolean?
+  looksrare_floor_price      Float?
+  slug                       String?
+  version                    Float?
   NFT                        NFT[]
 }

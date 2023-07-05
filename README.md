@@ -59,10 +59,11 @@ const supaData: raffles | null = await prisma.raffles.findUnique({
 
 [Source Article](https://www.prisma.io/docs/guides/migrate/developing-with-prisma-migrate/team-development)
 
-1. Pull latest files from git for ./prisma/migrations folder
+1. Pull latest files from git for ./prisma/migrations folder and database
 
 ```
-git pull
+git pull 
+npx prisma db pull
 ```
 
 2. Run the migrate dev command to apply new migrations

@@ -52,17 +52,20 @@ export default function Header01() {
     setSearchBarOpen(false);
   };
   useEffect(() => {
-    if (!window.ethereum) {
-      // Nothing to do here... no ethereum provider found
-      return;
-    }
     const accountWasChanged = (accounts: any) => {
-      signOut();
-      setCurrentAccount(accounts[0]);
-      toast({
-        title: "Account was changed. User Signed Out",
-      });
+      if (currentAccount !== accounts[0]) {
+        setCurrentAccount(accounts[0]);
+        signOut();
+        toast({
+          variant: "info",
+          title: "Account was changed. User Signed Out.",
+        });
+      }
     };
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", accountWasChanged);
+    }
+
     // const handleConnect = () =>{
     //   console.log("connected")
     // }
@@ -70,10 +73,15 @@ export default function Header01() {
     window.ethereum.on("error", (tx: any) => {
       toast({
         variant: "error",
-        title: "something went wrong",
+        title: "Something went wrong",
       });
     });
-    window.ethereum.on("accountsChanged", accountWasChanged);
+    // Cleanup function to remove the event listener
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener("accountsChanged", accountWasChanged);
+      }
+    };
     // window.ethereum.on("connect",handleConnect)
   }, [currentAccount]);
 
@@ -870,15 +878,9 @@ export default function Header01() {
                 <path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 20c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z" />
               </svg>
             </button>
-            <li className="group list-none md:hidden lg:hidden xl:hidden">
-              {session ? (
-                <ProfileSheet />
-              ) : (
-                <span className="ml-2">
-                  <AuthenticationButton />
-                </span>
-              )}
-            </li>
+            <div className="group list-none md:hidden lg:hidden xl:hidden">
+              {session ? <ProfileSheet /> : <AuthenticationButton />}
+            </div>
 
             <button
               className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"

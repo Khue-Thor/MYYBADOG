@@ -52,17 +52,20 @@ export default function Header01() {
     setSearchBarOpen(false);
   };
   useEffect(() => {
-    if (!window.ethereum) {
-      // Nothing to do here... no ethereum provider found
-      return;
-    }
     const accountWasChanged = (accounts: any) => {
-      signOut();
-      setCurrentAccount(accounts[0]);
-      toast({
-        title: "Account was changed. User Signed Out",
-      });
+      if (currentAccount !== accounts[0]) {
+        setCurrentAccount(accounts[0]);
+        signOut();
+        toast({
+          variant: "info",
+          title: "Account was changed. User Signed Out.",
+        });
+      }
     };
+    if (window.ethereum) {
+      window.ethereum.on("accountsChanged", accountWasChanged);
+    }
+
     // const handleConnect = () =>{
     //   console.log("connected")
     // }
@@ -70,10 +73,15 @@ export default function Header01() {
     window.ethereum.on("error", (tx: any) => {
       toast({
         variant: "error",
-        title: "something went wrong",
+        title: "Something went wrong",
       });
     });
-    window.ethereum.on("accountsChanged", accountWasChanged);
+    // Cleanup function to remove the event listener
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener("accountsChanged", accountWasChanged);
+      }
+    };
     // window.ethereum.on("connect",handleConnect)
   }, [currentAccount]);
 

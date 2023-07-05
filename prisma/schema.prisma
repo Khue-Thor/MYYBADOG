@@ -56,6 +56,9 @@ model UserRaffle {
 enum UserRole {
   ADMIN
   USER
+  MODERATOR
+  BOT
+  AI
 }
 
 model Purchase {

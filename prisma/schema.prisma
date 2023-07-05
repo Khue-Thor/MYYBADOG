@@ -258,4 +258,5 @@ model Collection {
   NFT                        NFT[]
 
   @@index([contract_address])
+  @@index([contract_deployer])
 }

@@ -27,9 +27,7 @@ export async function POST(req:NextRequest) {
              badges: [],
              level: 0,
              quests: [],
-             friends: [],
              inventory: [],
-
            }
          }
 

@@ -152,7 +152,7 @@ model NFT {
   updated_at          DateTime    @updatedAt
   listed_at           DateTime?
   category            Category?   @relation(fields: [category_id], references: [id])
-  category_id         BigInt?
+  category_id         Int?
   offers              Offer[]
   listings            Listing[]
 
@@ -160,7 +160,7 @@ model NFT {
 }
 
 model Category {
-  id         BigInt   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   name       String   @unique
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -176,7 +176,7 @@ model Reward {
 }
 
 model RewardEarned {
-  id        Int    @id @default(autoincrement())
+  id        BigInt @id @default(autoincrement())
   dispensed BigInt @default(0)
   name      String
   User      User   @relation(fields: [user_id], references: [id])

@@ -247,9 +247,9 @@ model Collection {
   average_price_change_1d    String?
   average_price_change_7d    String?
   average_price_change_30d   String?
-  last_ingested_at           DateTime?
-  last_updated_at            DateTime? @updatedAt
-  created_at                 DateTime? @default(now())
+  ingested_at                DateTime?
+  updated_at                 DateTime  @updatedAt
+  created_at                 DateTime  @default(now())
   asset_contract_type        String?
   blur_floor_price           Float?
   chain_identifier           String?

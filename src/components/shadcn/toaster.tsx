@@ -30,7 +30,7 @@ export function Toaster() {
                       height={60}
                       width={60}
                       alt="Bad Dogs Company | NFT Marketplace"
-                      className="absolute z-10 opacity-30"
+                      className="absolute z-0 opacity-30"
                       style={{ top: "-8px", right: "-4px" }}
                     />
                   </div>

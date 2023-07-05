@@ -44,12 +44,6 @@ model Friendship {
   friend     User     @relation("friend", fields: [friend_id], references: [id])
 }
 
-enum RequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
-
 //this is used to connect the User and raffles table in a many-to-many relationship
 model UserRaffle {
   id        String @id @default(uuid())

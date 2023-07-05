@@ -158,8 +158,8 @@ model Category {
 model Reward {
   id        BigInt  @id @default(autoincrement())
   dispensed BigInt  @default(0)
-  User      User?   @relation(fields: [userId], references: [id])
-  userId    String?
+  User      User?   @relation(fields: [user_id], references: [id])
+  user_id   String?
 }
 
 /// Model to store NFT collection data

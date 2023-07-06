@@ -13,7 +13,6 @@ import { createWalletAddressCookie, deleteCookie } from "./addressCookie";
 import { getUser, createUser } from "@/api/authenticate";
 import { useToast } from "@/components/shadcn/use-toast";
 import { BiLogInCircle } from "react-icons/bi";
-import { BsWallet2 } from "react-icons/bs";
 import { WalletIcon } from "lucide-react";
 
 export default function AuthenticationButton() {

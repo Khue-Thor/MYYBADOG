@@ -860,8 +860,8 @@ export default function Header01() {
           </div>
           {/* header menu conent end for desktop */}
 
-          <div className="ml-auto flex lg:hidden">
-            {/* search button for mobile respsonive */}
+          <div className="ml-auto flex lg:hidden gap-2">
+            {/* search button for mobile responsive */}
             <button
               className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
               aria-label="open mobile search bar"
@@ -883,7 +883,7 @@ export default function Header01() {
             </div>
 
             <button
-              className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group ml-2 flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
+              className="js-mobile-toggle border-jacarta-100 hover:bg-accent dark:hover:bg-accent focus:bg-accent group flex h-10 w-10 items-center justify-center rounded-full border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]"
               aria-label="open mobile menu"
               onClick={() => setToggle(true)}
             >

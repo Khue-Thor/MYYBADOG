@@ -28,7 +28,7 @@ const menuItems = [
 const renderedItems = menuItems.map((item, index) => (
   <Button
     key={index} // Add a key for each item for React's diffing algorithm
-    className={`w-full flex align-middle items-center bg-accent-light ${
+    className={`w-full flex align-middle items-center bg-accent-light sm:h-full ${
       index === 0
         ? "rounded-t-md"
         : index === menuItems.length - 1
@@ -49,7 +49,7 @@ const renderedItems = menuItems.map((item, index) => (
 
 const ProfileLinkSection = () => {
   return (
-    <div className="flex flex-col text-left z-50 items-start w-full rounded-t-md rounded-b-lg shadow-sm mt-2">
+    <div className="flex flex-col text-left z-50 items-start w-full rounded-t-md rounded-b-lg shadow-sm mt-2 sm:h-1/4">
       {renderedItems}
     </div>
   );

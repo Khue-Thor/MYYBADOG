@@ -1,19 +1,28 @@
-import { RandomImage } from "@/components/random-image";
-import walletShortener from "@/utils/walletShortener";
+"use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import React from "react";
-import { AiOutlineCopy } from "react-icons/ai";
-import { BiLinkExternal } from "react-icons/bi";
-import { useToast } from "@/components/shadcn/use-toast";
-import { signOut, useSession } from "next-auth/react";
-import { useDisconnect } from "@thirdweb-dev/react";
 import { Button } from "@/components/shadcn/button";
 import { Ethereum } from "@thirdweb-dev/chain-icons";
 
-export default function ProfileWallet({ address }: { address: string }) {
-  const { toast } = useToast();
-  const disconnect = useDisconnect();
-  const { data: session } = useSession();
+export default function ProfileFunds({ address }: { address: string }) {
+  const [ethPrice, setEthPrice] = useState(null);
+  const [wEthPrice, setWEthPrice] = useState(null);
+  const [bdcPrice, setBdcPrice] = useState(null);
+  async function getEthereumPrice() {
+    const ethResponse = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=weth,ethereum&vs_currencies=usd"
+    );
+    const data = await ethResponse.json();
+    setEthPrice(data.ethereum.usd);
+    setWEthPrice(data.weth.usd);
+  }
+
+  useEffect(() => {
+    if (!ethPrice || !wEthPrice) {
+      getEthereumPrice();
+    }
+  }, [ethPrice, wEthPrice]);
 
   return (
     <>
@@ -24,15 +33,20 @@ export default function ProfileWallet({ address }: { address: string }) {
           <div className="mb-2 border-b-[1px] border-gray-100 ">
             <div className="flex flex-row items-start p-2 hover:bg-accent hover:cursor-pointer rounded-lg">
               <div className="flex-grow flex-row inline-flex gap-2">
-                <div className="rounded-full h-8 w-8 bg-accent-lighter flex justify-center items-center self-center">
-                  <div className="h-3 w-3 -translate-y-1">
-                    <Ethereum />
+                <div className="rounded-full h-8 w-8 bg-gray-100 flex justify-center items-center self-center">
+                  <div className="h-4 w-4 -translate-y-1">
+                    <Image
+                      src="/images/bdco-skull-dark-28x40.svg"
+                      width="32"
+                      height="32"
+                      alt="logo"
+                    ></Image>
                   </div>
                 </div>
                 <div className="flex-col">
                   <div className="font-bold">BDC</div>
                   <div className="text-xs font-medium opacity-75 -translate-y-0.5">
-                    $888.00
+                    {bdcPrice ? `$${bdcPrice}` : "N/A"}
                   </div>
                 </div>
               </div>
@@ -49,7 +63,7 @@ export default function ProfileWallet({ address }: { address: string }) {
                 <div className="flex-col">
                   <div className="font-bold">ETH</div>
                   <div className="text-xs font-medium opacity-75 -translate-y-0.5">
-                    $2,333.00
+                    {ethPrice ? `$${ethPrice}` : "N/A"}
                   </div>
                 </div>
               </div>
@@ -58,14 +72,14 @@ export default function ProfileWallet({ address }: { address: string }) {
             <div className="flex flex-row items-start p-2 hover:bg-accent hover:cursor-pointer rounded-lg">
               <div className="flex-grow flex-row inline-flex gap-2">
                 <div className="rounded-full h-8 w-8 bg-accent-lighter flex justify-center items-center self-center">
-                  <div className="h-3 w-3 -translate-y-1">
+                  <div className="text-red h-3 w-3 -translate-y-1">
                     <Ethereum />
                   </div>
                 </div>
                 <div className="flex-col">
                   <div className="font-bold">WETH</div>
                   <div className="text-xs font-medium opacity-75 -translate-y-0.5">
-                    $1,533.00
+                    {wEthPrice ? `$${wEthPrice}` : "N/A"}
                   </div>
                 </div>
               </div>

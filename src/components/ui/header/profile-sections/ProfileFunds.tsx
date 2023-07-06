@@ -8,7 +8,7 @@ import { Ethereum } from "@thirdweb-dev/chain-icons";
 export default function ProfileFunds({ address }: { address: string }) {
   const [ethPrice, setEthPrice] = useState(null);
   const [wEthPrice, setWEthPrice] = useState(null);
-  const [bdcPrice, setBdcPrice] = useState(null);
+  const [bdcPrice, setBdcPrice] = useState(1);
   async function getEthereumPrice() {
     const ethResponse = await fetch(
       "https://api.coingecko.com/api/v3/simple/price?ids=weth,ethereum&vs_currencies=usd"

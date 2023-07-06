@@ -98,7 +98,7 @@ export default function ProfileSheet() {
             </div>
           </div> */}
         </SheetHeader>
-        <div className="flex flex-grow flex-col justify-evenly h-3/4 mt-4">
+        <div className="flex flex-grow flex-col justify-evenly mt-4">
           <ProfileLinkSection />
           <ProfileFunds address={address} />
         </div>

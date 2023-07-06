@@ -4,11 +4,13 @@ import Image from "next/image";
 import React from "react";
 import { Button } from "@/components/shadcn/button";
 import { Ethereum } from "@thirdweb-dev/chain-icons";
+import { useTheme } from "next-themes";
 
 export default function ProfileFunds({ address }: { address: string }) {
   const [ethPrice, setEthPrice] = useState(null);
   const [wEthPrice, setWEthPrice] = useState(null);
   const [bdcPrice, setBdcPrice] = useState(1);
+  const { theme } = useTheme();
   async function getEthereumPrice() {
     const ethResponse = await fetch(
       "https://api.coingecko.com/api/v3/simple/price?ids=weth,ethereum&vs_currencies=usd"
@@ -33,10 +35,12 @@ export default function ProfileFunds({ address }: { address: string }) {
           <div className="mb-2 border-b-[1px] border-gray-100 ">
             <div className="flex flex-row items-start p-2 hover:bg-accent hover:cursor-pointer rounded-lg">
               <div className="flex-grow flex-row inline-flex gap-2">
-                <div className="rounded-full h-8 w-8 bg-gray-100 flex justify-center items-center self-center">
+                <div className="rounded-full h-8 w-8 bg-accent-lighter flex justify-center items-center self-center">
                   <div className="h-4 w-4 -translate-y-1">
                     <Image
-                      src="/images/bdco-skull-dark-28x40.svg"
+                      src={`/images/bdco-skull-${
+                        theme == "dark" ? "white" : "dark"
+                      }-28x40.svg`}
                       width="32"
                       height="32"
                       alt="logo"

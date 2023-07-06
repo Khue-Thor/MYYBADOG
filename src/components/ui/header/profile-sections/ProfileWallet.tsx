@@ -8,11 +8,13 @@ import { useToast } from "@/components/shadcn/use-toast";
 import { signOut, useSession } from "next-auth/react";
 import { useDisconnect } from "@thirdweb-dev/react";
 import { SheetClose } from "@/components/shadcn/sheet";
+import { useTheme } from "next-themes";
 
 export default function ProfileWallet({ address }: { address: string }) {
   const { toast } = useToast();
   const disconnect = useDisconnect();
   const { data: session } = useSession();
+  const { systemTheme, theme, setTheme } = useTheme();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(address);
@@ -40,7 +42,9 @@ export default function ProfileWallet({ address }: { address: string }) {
       <div className="flex justify-between mr-5 pt-4">
         <RandomImage contract={address} size={70} />
         <Image
-          src="/images/bdco-skull-white-28x40.svg"
+          src={`/images/bdco-skull-${
+            theme == "dark" ? "white" : "dark"
+          }-28x40.svg`}
           width="36"
           height="52"
           alt="logo"
@@ -49,6 +53,7 @@ export default function ProfileWallet({ address }: { address: string }) {
       <div className="font-display text-jacarta-700 text-md dark:text-white text-left">
         {walletShortener(address, 2, 4)}
       </div>
+
       <div className="flex justify-between">
         <div>
           <div className="flex border border-jacarta-600  rounded-md pr-2">

@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { getCookie } from "cookies-next";
 import ProfileLinkSection from "./profile-sections/ProfileLinkSection";
-import {
-  ConnectWallet,
-  useDisconnect,
-} from "@thirdweb-dev/react";
+import { ConnectWallet, useDisconnect } from "@thirdweb-dev/react";
 import {
   Sheet,
   SheetClose,
@@ -15,15 +12,15 @@ import {
   SheetTrigger,
 } from "@/components/shadcn/sheet";
 import { useToast } from "@/components/shadcn/use-toast";
-import { RandomImage } from '@/components/random-image';
-import ProfileWallet from './profile-sections/ProfileWallet';
+import { RandomImage } from "@/components/random-image";
+import ProfileWallet from "./profile-sections/ProfileWallet";
+import ProfileFunds from "./profile-sections/ProfileFunds";
 export default function ProfileSheet() {
   const address = getCookie("wallet-address") as string;
   const [walletAddr, setWalletAddr] = useState(address || "");
   const disconnect = useDisconnect();
   const { data: session } = useSession();
   const { toast } = useToast();
-
 
   const logOutAll = () => {
     if (session) {
@@ -103,12 +100,10 @@ export default function ProfileSheet() {
         </SheetHeader>
         <div className="flex flex-grow flex-col justify-evenly h-3/4 mt-4">
           <ProfileLinkSection />
-          {/* placeholder sections */}
-          <ProfileLinkSection />
-          <ProfileLinkSection />
+          <ProfileFunds address={address} />
         </div>
         <SheetFooter>
-          <SheetClose asChild>
+          {/* <SheetClose asChild>
             <button
               onClick={() => logOutAll()}
               className="dark:hover:bg-jacarta-600 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center space-x-2 rounded-xl px-5 py-2 mt-2 transition-colors"
@@ -117,9 +112,9 @@ export default function ProfileSheet() {
                 Disconnect
               </span>
             </button>
-          </SheetClose>
+          </SheetClose> */}
         </SheetFooter>
       </SheetContent>
-    </Sheet >
+    </Sheet>
   );
 }

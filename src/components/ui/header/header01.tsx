@@ -356,7 +356,7 @@ export default function Header01() {
       {
         id: uuidv4(),
         name: "Terms of Service",
-        path: "/tarms",
+        path: "/terms",
       },
     ],
   };
@@ -719,7 +719,7 @@ export default function Header01() {
                       </svg>
                     </i>
                   </button>
-                  <ul className="dropdown-menu left-0 top-[85%] z-10 hidden grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative">
+                  <ul className="dropdown-menu left-[-320px] top-[85%] z-10 hidden grid-flow-row grid-cols-[repeat(2,_1fr)] gap-x-4 whitespace-nowrap rounded-xl bg-white transition-all will-change-transform group-hover:visible group-hover:opacity-100 dark:bg-jacarta-800 lg:invisible lg:absolute lg:!grid lg:translate-y-4 mr-8 lg:py-8 lg:px-2 lg:opacity-0 lg:shadow-2xl lg:group-hover:translate-y-2 relative">
                     {page?.pages?.map((page) => (
                       <li key={page.id}>
                         <Link
@@ -799,7 +799,7 @@ export default function Header01() {
                 </li> */}
 
                 {/* create */}
-                <li className="group">
+                <li className="group mr-4">
                   <Link href="/create" prefetch={false}>
                     <button className="text-jacarta-700 font-display hover:text-accent focus:text-accent dark:hover:text-accent dark:focus:text-accent flex items-center justify-between py-3.5 text-base dark:text-white lg:px-5">
                       <span

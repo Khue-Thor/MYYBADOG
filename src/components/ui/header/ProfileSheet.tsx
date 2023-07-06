@@ -1,43 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { signIn, signOut, useSession } from "next-auth/react";
+import React, { useState } from "react";
+import { signOut, useSession } from "next-auth/react";
 import { getCookie } from "cookies-next";
 import ProfileLinkSection from "./profile-sections/ProfileLinkSection";
-import { AiOutlineCopy } from 'react-icons/ai';
 import {
   ConnectWallet,
-  useAddress,
-  useAuth,
   useDisconnect,
-  useConnect,
-  useConnectionStatus,
 } from "@thirdweb-dev/react";
 import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/shadcn/sheet";
-import Link from "next/link";
 import { useToast } from "@/components/shadcn/use-toast";
 import { RandomImage } from '@/components/random-image';
-
-import Image from 'next/image';
-import walletShortener from '@/utils/walletShortener';
-import { BiLinkExternal } from 'react-icons/bi';
 import ProfileWallet from './profile-sections/ProfileWallet';
 export default function ProfileSheet() {
   const address = getCookie("wallet-address") as string;
   const [walletAddr, setWalletAddr] = useState(address || "");
-  // const shortenedAddress = address.substring(0, 17).concat("...");
   const disconnect = useDisconnect();
   const { data: session } = useSession();
   const { toast } = useToast();
-  //cannot use useAddress() because it loses state on refresh
-  // const address = useAddress() || "";
+
 
   const logOutAll = () => {
     if (session) {
@@ -48,21 +34,12 @@ export default function ProfileSheet() {
       title: "Signed Out",
     });
   };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(address);
-    toast({
-      title: "Copied to clipboard",
-    });
-  }
-  const handleRedirect = () => {
-    window.open(`https://etherscan.io/address/${address}`, "_blank");
-  }
-
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <RandomImage contract={address} size={35} />
+        <button>
+          <RandomImage contract={address} size={35} />
+        </button>
         {/* <button className=" border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]">
           <svg
             xmlns="http://www.w3.org/2000/svg"

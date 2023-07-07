@@ -10,9 +10,9 @@ import { cookies } from "next/headers";
 import { getCollectionData } from "@/api/nftscan";
 import formatNumber from "@/utils/formatNumber";
 import { prisma } from "@/components/lib/prisma";
-import { RandomLogoImage } from "@/components/profile-random-image";
 import { HiBadgeCheck } from "react-icons/hi";
 import { notFound } from 'next/navigation';
+import { RandomImage } from '@/components/random-image';
 
 interface Collection {
   id: number;
@@ -348,7 +348,7 @@ const Collection = async ({ params }: params) => {
                       className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
                     />
                   ) : (
-                    <RandomLogoImage contract={contractAddress} />
+                    <RandomImage contract={contractAddress} size={160} />
                   )}
                 </figure>
               </div>

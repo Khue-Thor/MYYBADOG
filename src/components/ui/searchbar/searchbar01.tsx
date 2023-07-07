@@ -142,7 +142,7 @@ const SearchBar01 = () => {
         value={enteredWord}
       />
       {isLoading ? (
-        <div className="bg-jacarta-700  text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
+        <div className="dark:bg-jacarta-700 bg-white text-black absolute z-10 drop-shadow-lg left-[0px] top-[55px] pt-3 w-full pb-[20px] rounded-2xl flex flex-col gap-1 pr-[10px] pl-[10px]">
           <LoadingSkeleton />
         </div>
       ) : (

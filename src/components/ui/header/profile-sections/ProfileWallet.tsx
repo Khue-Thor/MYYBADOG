@@ -54,7 +54,7 @@ export default function ProfileWallet({ address }: { address: string }) {
         </div>
         <button
           onClick={() => logOutAll()}
-          className="w-[100px] font-display text-jacarta-700 text-sm dark:text-white text-center dark:hover:bg-jacarta-600 border border-gray-300 hover:text-accent focus:text-accent hover:bg-jacarta-50 flex items-center justify-center rounded-md transition-colors"
+          className="w-[100px] font-display text-sm text-white text-center dark:hover:bg-jacarta-600 border border-gray-300 hover:bg-jacarta-50 flex items-center justify-center rounded-md"
         >
           Disconnect
         </button>

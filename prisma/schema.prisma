@@ -14,105 +14,119 @@ model User {
   address              String         @unique
   created_at           DateTime?      @default(now()) @db.Timestamptz(6)
   last_logged_in       DateTime?      @default(now()) @db.Timestamptz(6)
-  updated_at           DateTime       @updatedAt
   username             String?        @unique
   badges               Json[]         @db.Json
   level                BigInt?        @default(0)
   quests               Json[]         @db.Json
-  friendships          Friendship[]   @relation("user")
-  friendships_accepted Friendship[]   @relation("friend")
   inventory            Json[]         @db.Json
-  rewards_earned       RewardEarned[]
   nonce                String?
   profile_picture      String?
-  nfts                 NFT[]
-  created_raffles      Raffle[]
-  user_raffles         UserRaffle[]
   role                 UserRole       @default(USER)
+  updated_at           DateTime       @updatedAt
+  friendships_accepted Friendship[]   @relation("friend")
+  friendships          Friendship[]   @relation("user")
+  created_listings     Listing[]
+  nfts                 NFT[]
   offers_made          Offer[]        @relation("offerFrom")
   offers_received      Offer[]        @relation("offerTo")
-  created_listings     Listing[]
   purchases            Purchase[]
+  created_raffles      Raffle[]
+  rewards_earned       RewardEarned[]
+  user_raffles         UserRaffle[]
 
   @@index([address])
 }
 
-//Friend request made through client-side
+model UsernameDirectory {
+  id                 String    @id @default(uuid())
+  address            String    @unique
+  opensea_username   String?
+  looksrare_username String?
+  blur_username      String?
+  twitter_username   String?
+  discord_username   String?
+  threads_username   String?
+  facebook_username  String?
+  instagram_username String?
+  snapchat_username  String?
+  linkedin_username  String?
+  pinterest_username String?
+  telegram_username  String?
+  whatsapp_username  String?
+  wechat_username    String?
+  twitch_username    String?
+  reddit_username    String?
+  meetup_username    String?
+  tiktok_username    String?
+  weibo_username     String?
+  youtube_username   String?
+  ens_username       String?
+  created_at         DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime  @updatedAt
+
+  @@index([address])
+  @@index([ens_username])
+}
+
 model Friendship {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
   user_id    String
-  user       User     @relation("user", fields: [user_id], references: [id])
   friend_id  String
+  updated_at DateTime @updatedAt
   friend     User     @relation("friend", fields: [friend_id], references: [id])
+  user       User     @relation("user", fields: [user_id], references: [id])
 }
 
-//this is used to connect the User and raffles table in a many-to-many relationship
 model UserRaffle {
   id        String @id @default(uuid())
   user_id   String
-  user      User   @relation(fields: [user_id], references: [id])
   raffle_id String
   raffle    Raffle @relation(fields: [raffle_id], references: [id])
-}
-
-enum UserRole {
-  ADMIN
-  USER
-  MODERATOR
-  BOT
-  AI
+  user      User   @relation(fields: [user_id], references: [id])
 }
 
 model Purchase {
   id         String   @id @default(uuid())
-  listing    Listing  @relation(fields: [listing_id], references: [id])
   listing_id String
-  buyer      User     @relation(fields: [buyer_id], references: [id])
   buyer_id   String
   amount     Float
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  buyer      User     @relation(fields: [buyer_id], references: [id])
+  listing    Listing  @relation(fields: [listing_id], references: [id])
 
   @@index([id])
 }
 
 model Listing {
   id         String     @id @default(uuid())
-  nft        NFT        @relation(fields: [nft_id], references: [id])
   nft_id     String
   price      Float
   currency   String
-  creator    User       @relation(fields: [creator_id], references: [id])
   creator_id String
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
+  creator    User       @relation(fields: [creator_id], references: [id])
+  nft        NFT        @relation(fields: [nft_id], references: [id])
   purchase   Purchase[]
 
   @@index([id])
 }
 
-enum EnumOfferStatus {
-  PENDING
-  ACCEPTED
-  DECLINED
-  EXPIRED
-}
-
 model Offer {
   id         String          @id @default(uuid())
-  from       User            @relation(name: "offerFrom", fields: [from_id], references: [id])
   from_id    String
-  to         User            @relation(name: "offerTo", fields: [to_id], references: [id])
   to_id      String
-  nft        NFT             @relation(fields: [nft_id], references: [id])
   nft_id     String
   amount     Float
   message    String?
   status     EnumOfferStatus
   created_at DateTime        @default(now())
   updated_at DateTime        @updatedAt
+  from       User            @relation("offerFrom", fields: [from_id], references: [id])
+  nft        NFT             @relation(fields: [nft_id], references: [id])
+  to         User            @relation("offerTo", fields: [to_id], references: [id])
 
   @@index([id])
 }
@@ -131,12 +145,12 @@ model Raffle {
   max_tickets      Int?
   sold_tickets     Int?
   created_by       String?      @db.VarChar
-  participant_list UserRaffle[]
   transaction_list Json[]       @db.Json
   favourite_count  Int?
   nft_image        String?      @db.VarChar
-  raffler          User?        @relation(fields: [raffler_id], references: [id])
   raffler_id       String?
+  raffler          User?        @relation(fields: [raffler_id], references: [id])
+  participant_list UserRaffle[]
 
   @@index([id])
 }
@@ -147,17 +161,17 @@ model NFT {
   name                String
   description         String
   image               String
-  collection_contract Collection? @relation(fields: [collection_id], references: [id])
   collection_id       BigInt?
-  owner               User?       @relation(fields: [owner_id], references: [id])
   owner_id            String?
   created_at          DateTime    @default(now())
   updated_at          DateTime    @updatedAt
   listed_at           DateTime?
-  category            Category?   @relation(fields: [category_id], references: [id])
   category_id         Int?
-  offers              Offer[]
   listings            Listing[]
+  category            Category?   @relation(fields: [category_id], references: [id])
+  collection_contract Collection? @relation(fields: [collection_id], references: [id])
+  owner               User?       @relation(fields: [owner_id], references: [id])
+  offers              Offer[]
 
   @@index([owner_id])
 }
@@ -175,18 +189,18 @@ model Category {
 model Reward {
   id         Int      @id @default(autoincrement())
   dispensed  BigInt   @default(0)
+  name       String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  name       String
 }
 
 model RewardEarned {
   id         BigInt   @id @default(autoincrement())
   name       String
-  User       User     @relation(fields: [user_id], references: [id])
   user_id    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  User       User     @relation(fields: [user_id], references: [id])
 
   @@index([id])
 }
@@ -247,8 +261,6 @@ model Collection {
   average_price_change_1d    String?
   average_price_change_7d    String?
   average_price_change_30d   String?
-  ingested_at                DateTime?
-  updated_at                 DateTime  @updatedAt
   created_at                 DateTime  @default(now())
   asset_contract_type        String?
   blur_floor_price           Float?
@@ -261,8 +273,25 @@ model Collection {
   looksrare_floor_price      Float?
   slug                       String?
   version                    Float?
+  ingested_at                DateTime?
+  updated_at                 DateTime  @updatedAt
   NFT                        NFT[]
 
   @@index([contract_address])
   @@index([contract_deployer])
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  MODERATOR
+  BOT
+  AI
+}
+
+enum EnumOfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
 }

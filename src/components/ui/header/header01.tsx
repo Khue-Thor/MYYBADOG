@@ -29,6 +29,7 @@ import AuthenticationButton from "./AuthenticationButton";
 import ProfileSheet from "./ProfileSheet";
 import { useToast } from "@/components/shadcn/use-toast";
 import { createWalletAddressCookie, deleteCookie } from "./addressCookie";
+import { error } from "console";
 
 export default function Header01() {
   const [toggle, setToggle] = useState(false);
@@ -62,27 +63,34 @@ export default function Header01() {
         });
       }
     };
-    if (window.ethereum) {
-      window.ethereum.on("accountsChanged", accountWasChanged);
+    try {
+      if (window.ethereum) {
+        window.ethereum.on("accountsChanged", accountWasChanged);
+        window.ethereum.on("error", (tx: any) => {
+          toast({
+            variant: "error",
+            title: "Something went wrong",
+          });
+        });
+      } else {
+        console.log("window.ethereum does not exist.");
+        throw Error("window.ethereum Listener does not exist.");
+      }
+
+      // const handleConnect = () =>{
+      //   console.log("connected")
+      // }
+      // window.addEventListener("CloseEvent",)
+    } catch (err) {
+      console.log(err);
     }
 
-    // const handleConnect = () =>{
-    //   console.log("connected")
-    // }
-    // window.addEventListener("CloseEvent",)
-    window.ethereum.on("error", (tx: any) => {
-      toast({
-        variant: "error",
-        title: "Something went wrong",
-      });
-    });
     // Cleanup function to remove the event listener
     return () => {
       if (window.ethereum) {
         window.ethereum.removeListener("accountsChanged", accountWasChanged);
       }
     };
-    // window.ethereum.on("connect",handleConnect)
   }, [currentAccount]);
 
   useEffect(() => {

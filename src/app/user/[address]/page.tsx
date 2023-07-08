@@ -35,6 +35,7 @@ const User = async ({ params }: params) => {
 
   const parsedUser = [await fixBigInt(user)];
   console.log('user', parsedUser);
+  console.log('user', parsedUser[0].created_at);
 
   const nextCookies = cookies(); // Get cookies object
   const themeValue = nextCookies.get("theme")?.value || "dark"; // Find cookie
@@ -115,7 +116,11 @@ const User = async ({ params }: params) => {
                       {text}
                     </p>
                     <span className="text-jacarta-400">
-                      Joined December {joinYear}
+                      Joined {new Date(parsedUser[0].created_at).toLocaleDateString('en-US', {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: 'numeric',
+                      })}
                     </span>
 
                     <div className="mt-6 flex items-center justify-center space-x-2.5 relative">

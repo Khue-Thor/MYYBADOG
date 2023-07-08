@@ -382,6 +382,11 @@ export default function Header01() {
         name: "Terms of Service",
         path: "/terms",
       },
+      {
+        id: uuidv4(),
+        name: "Request Page",
+        path: "/request",
+      }
     ],
   };
 

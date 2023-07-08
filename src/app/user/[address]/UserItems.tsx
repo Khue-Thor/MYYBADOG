@@ -2,9 +2,9 @@
 import React, { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import Image from "next/image";
-import ActivityItem from "@/app/user/[userId]/ActivityItem";
-import TrendingCategoriesItems from "@/app/user/[userId]/TrendingCategoriesItems";
-import ExploreCollectionItem from "@/app/user/[userId]/ExploreCollectionItem";
+import ActivityItem from "@/app/user/[address]/ActivityItem";
+import TrendingCategoriesItems from "@/app/user/[address]/TrendingCategoriesItems";
+import ExploreCollectionItem from "@/app/user/[address]/ExploreCollectionItem";
 
 const UserItems = () => {
   const [itemActive, setItemActive] = useState(1);

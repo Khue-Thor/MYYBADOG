@@ -14,7 +14,7 @@ export default function ProfileWallet({ address }: { address: string }) {
   const { toast } = useToast();
   const disconnect = useDisconnect();
   const { data: session } = useSession();
-  const { systemTheme, theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(address);
@@ -40,7 +40,7 @@ export default function ProfileWallet({ address }: { address: string }) {
   return (
     <>
       <div className="flex justify-between mr-5 pt-4">
-        <RandomImage contract={address} size={70} />
+        <RandomImage contract={address} size={70} border={false} />
         <Image
           src={`/images/bdco-skull-${theme == "dark" ? "white" : "dark"
             }-28x40.svg`}

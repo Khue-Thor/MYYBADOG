@@ -127,6 +127,15 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
     setIsLoading(false);
   };
 
+  const closeSearchBar = () => {
+    setCollectionsData([]);
+    setEnteredWord("");
+    setShowSearch(false);
+    setFailedSearch(false);
+    setIsLoading(false);
+    handleCloseSearchBar(false)
+  };
+
   return (
     <form
       action="search"
@@ -158,7 +167,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                     key={value.address}
                     href={`/collection/eth-mainnet/${value.address}`}
                     prefetch={false}
-                    onClick={clearInput}
+                    onClick={closeSearchBar}
                   >
                     <div className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
@@ -177,28 +186,28 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                             <span className="font-bold dark:text-white text-base">
                               {value.openSeaMetadata.collectionName.length > 20
                                 ? value.openSeaMetadata.collectionName.slice(
-                                    0,
-                                    20
-                                  ) + "..."
+                                  0,
+                                  20
+                                ) + "..."
                                 : value.openSeaMetadata.collectionName}
                             </span>
                             {(value.openSeaMetadata.safelistRequestStatus ||
                               value.openSeaMetadata.baddogs_verified) && (
-                              <div
-                                className="flex items-center justify-center rounded-full"
-                                data-tippy-content="Verified Collection"
-                              >
-                                <svg
-                                  className="h-6 w-6"
-                                  style={{ color: "#1DA1F2" }}
-                                  fill="none"
-                                  viewBox="0 0 19 19"
-                                  stroke="currentColor"
+                                <div
+                                  className="flex items-center justify-center rounded-full"
+                                  data-tippy-content="Verified Collection"
                                 >
-                                  <HiBadgeCheck />
-                                </svg>
-                              </div>
-                            )}
+                                  <svg
+                                    className="h-6 w-6"
+                                    style={{ color: "#1DA1F2" }}
+                                    fill="none"
+                                    viewBox="0 0 19 19"
+                                    stroke="currentColor"
+                                  >
+                                    <HiBadgeCheck />
+                                  </svg>
+                                </div>
+                              )}
                           </div>
                           <span className="font-medium text-xs text-gray-700">
                             {value.totalSupply} items
@@ -226,7 +235,7 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                     key={value.address}
                     href={`/collection/eth-mainnet/${value.address}`}
                     prefetch={false}
-                    onClick={clearInput}
+                    onClick={closeSearchBar}
                   >
                     <div className="p-1 dark:hover:bg-jacarta-600 hover:bg-gray-400 hover:rounded-xl flex justify-between pr-3 pl-3 pt-2 pb-2 cursor-pointer">
                       <div className="flex gap-3 items-top">
@@ -245,33 +254,33 @@ const SearchBar02 = ({ handleCloseSearchBar }: any) => {
                             <span className="font-bold dark:text-white text-base">
                               {window.innerWidth < 420
                                 ? value.openSeaMetadata.collectionName.slice(
-                                    0,
-                                    15
-                                  ) + "..."
+                                  0,
+                                  15
+                                ) + "..."
                                 : window.innerWidth < 600
-                                ? value.openSeaMetadata.collectionName.slice(
+                                  ? value.openSeaMetadata.collectionName.slice(
                                     0,
                                     20
                                   ) + "..."
-                                : value.openSeaMetadata.collectionName}
+                                  : value.openSeaMetadata.collectionName}
                             </span>
                             {(value.openSeaMetadata.safelistRequestStatus ||
                               value.openSeaMetadata.baddogs_verified) && (
-                              <div
-                                className="flex items-center justify-center rounded-full"
-                                data-tippy-content="Verified Collection"
-                              >
-                                <svg
-                                  className="h-6 w-6"
-                                  style={{ color: "#1DA1F2" }}
-                                  fill="none"
-                                  viewBox="0 0 19 19"
-                                  stroke="currentColor"
+                                <div
+                                  className="flex items-center justify-center rounded-full"
+                                  data-tippy-content="Verified Collection"
                                 >
-                                  <HiBadgeCheck />
-                                </svg>
-                              </div>
-                            )}
+                                  <svg
+                                    className="h-6 w-6"
+                                    style={{ color: "#1DA1F2" }}
+                                    fill="none"
+                                    viewBox="0 0 19 19"
+                                    stroke="currentColor"
+                                  >
+                                    <HiBadgeCheck />
+                                  </svg>
+                                </div>
+                              )}
                           </div>
                           <span className="font-medium text-xs text-gray-700">
                             {value.totalSupply} items

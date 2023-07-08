@@ -4,8 +4,8 @@ import {
   trendingCategoryData,
 } from "@/data/categories_data";
 import { updateTrendingCategoryItemData } from "../../../redux/counterSlice";
-import CategoryItem from "@/app/user/[userId]/CategoryItem";
-import RecentlyAddedDropdown from "@/app/user/[userId]/RecentlyAddedDropdown";
+import CategoryItem from "@/app/user/[address]/CategoryItem";
+import RecentlyAddedDropdown from "@/app/user/[address]/RecentlyAddedDropdown";
 import { useAppDispatch } from "@/hooks/useAppDispatch";
 
 const TrendingCategoriesItems = () => {

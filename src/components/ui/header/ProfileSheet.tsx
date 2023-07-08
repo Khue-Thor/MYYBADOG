@@ -31,11 +31,12 @@ export default function ProfileSheet() {
       title: "Signed Out",
     });
   };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
         <button>
-          <RandomImage contract={address} size={35} />
+          <RandomImage contract={address} size={40} border={false} />
         </button>
         {/* <button className=" border-jacarta-100 hover:bg-accent focus:bg-accent group dark:hover:bg-accent ml-2 flex h-10 w-10 items-center justify-center rounded border bg-white transition-colors hover:border-transparent focus:border-transparent dark:border-transparent dark:bg-white/[.15]">
           <svg

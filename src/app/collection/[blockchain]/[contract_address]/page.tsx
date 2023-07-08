@@ -348,7 +348,7 @@ const Collection = async ({ params }: params) => {
                       className="dark:border-jacarta-600 rounded-xl border-[5px] border-white"
                     />
                   ) : (
-                    <RandomImage contract={contractAddress} size={160} />
+                    <RandomImage contract={contractAddress} size={160} border={true} />
                   )}
                 </figure>
               </div>

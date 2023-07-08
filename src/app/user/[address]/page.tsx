@@ -4,33 +4,57 @@ import Social_dropdown from "@/components/dropdown/Social_dropdown";
 import user_data from "@/data/user_data";
 import Meta from "@/components/meta";
 import Tippy from "@/components/Tippy";
-import UserItems from "@/app/user/[userId]/UserItems";
-import UserId from "@/app/user/[userId]/UserId";
+import UserItems from "@/app/user/[address]/UserItems";
+import UserId from "@/app/user/[address]/UserId";
 import AuctionsDropdown from "@/components/dropdown/AuctionsDropdown";
-import LikeButton from "@/app/user/[userId]/LikeButton";
+import LikeButton from "@/app/user/[address]/LikeButton";
+import { notFound } from 'next/navigation';
+import { User } from '@prisma/client';
+import { prisma } from '@/components/lib/prisma';
+import { fixBigInt } from '@/utils/bigIntFixer';
+import { RandomImage } from '@/components/random-image';
+import { cookies } from 'next/headers';
 
-type Props = {
-  params: { userId: string };
-};
+interface params {
+  params: {
+    address: string;
+  };
+}
 
-export default async function User({ params }: Props) {
-  const { userId } = params;
+
+const User = async ({ params }: params) => {
+  const { address } = params;
+
+  const user: User | null = await prisma.user.findUnique({
+    where: { address: address as string },
+  });
+
+  if (!user) {
+    return notFound()
+  }
+
+  const parsedUser = [await fixBigInt(user)];
+  console.log('user', parsedUser);
+
+  const nextCookies = cookies(); // Get cookies object
+  const themeValue = nextCookies.get("theme")?.value || "dark"; // Find cookie
+  const missingBannerUrl =
+    themeValue === "dark" ? "/images/blackbg.png" : "/images/whitebg.png";
 
   return (
     <>
       <Meta title="User || Xhibiter | NFT Marketplace Next.js Template" />
       {/* <!-- Profile --> */}
       {user_data
-        .filter((item) => item.id === userId)
-        .map((item) => {
-          const { id, image, title, userId, text, joinYear, icon, coverPhoto } =
+        .map((item: any) => {
+          const { id, userId, text, joinYear, icon } =
             item;
           return (
             <div className="pt-[5.5rem] lg:pt-24" key={id}>
               {/* <!-- Banner --> */}
               <div className="relative h-[18.75rem]">
                 <Image
-                  src={coverPhoto}
+                  src={parsedUser[0].bannerUrl || missingBannerUrl}
                   alt="banner"
                   fill
                   sizes={"100vw"}
@@ -41,14 +65,18 @@ export default async function User({ params }: Props) {
               <section className="dark:bg-jacarta-800 bg-light-base relative pb-12 pt-28">
                 {/* <!-- Avatar --> */}
                 <div className="absolute left-1/2 top-0 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
-                  <figure className="relative h-40 w-40 dark:border-jacarta-600 rounded-xl border-[5px] border-white">
-                    <Image
-                      src={image}
-                      alt={title}
-                      fill
-                      sizes={"150px"}
-                      className="dark:border-jacarta-600 rounded-xl border-[5px] border-white object-contain"
-                    />
+                  <figure className="relative h-40 w-40">
+                    {parsedUser[0].bannerUrl ? (
+                      <div className="relative h-[18.75rem]">
+                        <Image
+                          src={parsedUser[0].bannerUrl}
+                          alt={parsedUser[0].username}
+                          fill
+                          sizes={"150px"}
+                          className="dark:border-jacarta-600 rounded-xl border-[5px] border-white object-contain"
+                        />
+                      </div>
+                    ) : <RandomImage contract={address} size={160} border={true} />}
                     <div
                       className="dark:border-jacarta-600 bg-green absolute -right-3 bottom-0 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white"
                       data-tippy-content="Verified Collection"
@@ -72,7 +100,7 @@ export default async function User({ params }: Props) {
                 <div className="container">
                   <div className="text-center">
                     <h2 className="font-display text-jacarta-700 mb-2 text-4xl font-medium dark:text-white">
-                      {title}
+                      {parsedUser[0].username}
                     </h2>
                     <div className="dark:bg-jacarta-700 dark:border-jacarta-600 border-jacarta-100 mb-8 inline-flex items-center justify-center rounded-full border bg-white py-1.5 px-4">
                       <Tippy content="ETH">
@@ -112,3 +140,5 @@ export default async function User({ params }: Props) {
     </>
   );
 }
+
+export default User

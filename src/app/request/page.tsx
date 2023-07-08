@@ -1,11 +1,18 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react'
 import BdcoSkull from '@/components/ui/logo/bdco-skull';
 import BdcoWhiteSkull from '@/components/ui/logo/bdco-white-skull';
+import MostVotedModal from '@/components/ui/request/most-voted-modal';
 
 const page = () => {
+  const [MostVotedModalOpen, setMostVotedModalOpen] = useState(false);
+
+  const handleToggleMostVotedModal = () => {
+    setMostVotedModalOpen((prevOpen) => !prevOpen);
+  };
   return (
     <div className='flex justify-center pt-20'>
-      <div className='w-[600px] bg-accent rounded-sm'>
+      <div className='w-[600px] bg-accent-light rounded-md'>
         <div className='flex flex-col gap-2 m-10'>
           <div className='inline-block dark:hidden'>
             <BdcoSkull />
@@ -18,8 +25,25 @@ const page = () => {
             Let us know how we can help you get the most value<br /> from BadDogs. Vote on existing ideas or suggest<br /> new ones.
           </p>
         </div>
-        <div className='bg-accent-dark'>
-          asd
+        <div className='bg-accent-dark pt-4 pb-4 pl-10 pr-10 flex justify-between border-jacarta-400 border-t-[1px] border-b-[1px]'>
+          <div className='flex gap-5'>
+            <div className='hover:bg-gray-700 w-fit p-1 rounded-sm relative'>
+              <button className='text-sm' onClick={handleToggleMostVotedModal}>Most voted</button>
+              {MostVotedModalOpen && (
+                <MostVotedModal/>
+              )}
+            </div>
+
+            <div className='hover:bg-gray-700 w-fit p-1 rounded-sm'>
+              <button className='text-sm'>Search</button>
+            </div>
+          </div>
+          <button className='bg-green text-black text-sm pt-1 pb-1 pr-2 pl-2 rounded-sm'>
+            Request a Feature
+          </button>
+        </div>
+        <div className='p-10 bg-accent'>
+
         </div>
       </div>
     </div>

@@ -3,16 +3,18 @@ import React, { useState } from 'react'
 import BdcoSkull from '@/components/ui/logo/bdco-skull';
 import BdcoWhiteSkull from '@/components/ui/logo/bdco-white-skull';
 import MostVotedModal from '@/components/ui/request/most-voted-modal';
+import RequestModal from '@/components/ui/request/request-modal';
 
 const page = () => {
-  const [MostVotedModalOpen, setMostVotedModalOpen] = useState(false);
+  const [mostVotedModalOpen, setMostVotedModalOpen] = useState(false);
+  const [requestModalOpen, setRequestModalOpen] = useState(false);
 
   const handleToggleMostVotedModal = () => {
     setMostVotedModalOpen((prevOpen) => !prevOpen);
   };
   return (
     <div className='flex justify-center pt-20'>
-      <div className='w-[600px] bg-accent-light rounded-md'>
+      <div className='w-[660px] bg-accent-light rounded-md'>
         <div className='flex flex-col gap-2 m-10'>
           <div className='inline-block dark:hidden'>
             <BdcoSkull />
@@ -29,8 +31,8 @@ const page = () => {
           <div className='flex gap-5'>
             <div className='hover:bg-gray-700 w-fit p-1 rounded-sm relative'>
               <button className='text-sm' onClick={handleToggleMostVotedModal}>Most voted</button>
-              {MostVotedModalOpen && (
-                <MostVotedModal/>
+              {mostVotedModalOpen && (
+                <MostVotedModal />
               )}
             </div>
 
@@ -38,7 +40,7 @@ const page = () => {
               <button className='text-sm'>Search</button>
             </div>
           </div>
-          <button className='bg-green text-black text-sm pt-1 pb-1 pr-2 pl-2 rounded-sm'>
+          <button className='bg-green text-black text-sm pt-1 pb-1 pr-2 pl-2 rounded-sm' onClick={() => setRequestModalOpen(true)}>
             Request a Feature
           </button>
         </div>
@@ -46,6 +48,9 @@ const page = () => {
 
         </div>
       </div>
+      {requestModalOpen && (
+        <RequestModal handleClose={() => setRequestModalOpen(false)}/>
+      )}
     </div>
   )
 }

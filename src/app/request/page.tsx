@@ -4,6 +4,7 @@ import BdcoSkull from '@/components/ui/logo/bdco-skull';
 import BdcoWhiteSkull from '@/components/ui/logo/bdco-white-skull';
 import MostVotedModal from '@/components/ui/request/most-voted-modal';
 import RequestModal from '@/components/ui/request/request-modal';
+import UserRequest from '@/components/ui/request/user-request';
 
 const page = () => {
   const [mostVotedModalOpen, setMostVotedModalOpen] = useState(false);
@@ -44,12 +45,12 @@ const page = () => {
             Request a Feature
           </button>
         </div>
-        <div className='p-10 bg-accent'>
-
+        <div className='p-10 bg-accent flex flex-col gap-10'>
+          <UserRequest title={"Additional sorting and searching functionality for historical "} details={"Add additional search and sort functionality to highlight information line mint / creation date on NFTs for the purposes of highlighting elements valued for the historical NFT community"} />
         </div>
       </div>
       {requestModalOpen && (
-        <RequestModal handleClose={() => setRequestModalOpen(false)}/>
+        <RequestModal handleClose={() => setRequestModalOpen(false)} />
       )}
     </div>
   )

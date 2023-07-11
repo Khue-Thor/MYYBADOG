@@ -5,7 +5,7 @@ const UserRequest = ({ title, details }) => {
   const [dislikeVotes, setDislikeVotes] = useState(0)
   const [userVoted, setUserVoted] = useState(false);
   const [userLikeVoted, setUserLikeVoted] = useState(false);
-  const [useDisLikeVoted, setUserDisLikeVoted] = useState(false)
+  const [userDisLikeVoted, setUserDisLikeVoted] = useState(false)
 
   const handleLikeClick = () => {
     if (userVoted) {
@@ -76,7 +76,7 @@ const UserRequest = ({ title, details }) => {
           <span className="text-xs">{likeVotes}</span>
         </div>
         <div className='pt-1 pb-1 pl-3 pr-3 cursor-pointer flex flex-row gap-2 items-center' onClick={handleDisLikeClick}>
-            {useDisLikeVoted ? (
+            {userDisLikeVoted ? (
             <span className='w-[20px] h-[20px] mt-2'>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@ const UserRequest = ({ title, details }) => {
                 className="fill-jacarta-500 h-[20px] w-[20px] dark:fill-jacarta-600 cursor-pointer"
               >
                 <path fill="none" d="M0 0h24v24H0z" />
-                <path d="M10 6l5 5H5l5-5z" />
+                <path d="M5 10l5 5 5-5H5z" />
               </svg>
             </span>
           )}

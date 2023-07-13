@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const RequestModal = ({ handleClose }) => {
   useEffect(() => {
@@ -10,6 +10,18 @@ const RequestModal = ({ handleClose }) => {
       document.body.classList.remove('overflow-hidden');
     };
   }, []);
+
+  const [titleValue, setTitleValue] = useState("");
+  const [detialValue, setDetialValue] = useState("");
+
+  const handleTitleValue = (e) => {
+    setTitleValue(e.target.value);
+  }
+
+  const handleDetailValue = (e) => {
+    setDetialValue(e.target.value);
+  }
+
   return (
     <div className='fixed w-full top-0 left-0 bg-black bg-opacity-70 h-full flex justify-center items-center z-40'>
       <div className='relative'>
@@ -33,11 +45,11 @@ const RequestModal = ({ handleClose }) => {
           <div className='p-10 flex flex-col gap-10'>
             <div>
               <h2>Title</h2>
-              <input className='w-full dark:bg-jacarta-600 rounded-md pt-2 pb-2 text-jacarta-200 pr-4 pl-4 font-normal text-sm' placeholder='A short, description title' />
+              <input className='w-full dark:bg-jacarta-600 rounded-md pt-2 pb-2 text-jacarta-200 pr-4 pl-4 font-normal text-sm' placeholder='A short, description title' value={titleValue} onChange={handleTitleValue} />
             </div>
             <div>
               <h2>Detials</h2>
-              <textarea className='w-full dark:bg-jacarta-600 h-[150px] rounded-md text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' />
+              <textarea className='w-full dark:bg-jacarta-600 h-[150px] rounded-md text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' value={detialValue} onChange={handleDetailValue}/>
 
             </div>
             <div>

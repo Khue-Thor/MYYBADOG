@@ -5,10 +5,13 @@ import BdcoWhiteSkull from '@/components/ui/logo/bdco-white-skull';
 import MostVotedModal from '@/components/ui/request/most-voted-modal';
 import RequestModal from '@/components/ui/request/create-request-modal';
 import UserRequest from '@/components/ui/request/user-request';
+import UserRequestSearch from '@/components/ui/request/user-request-search';
 
 const page = () => {
   const [mostVotedModalOpen, setMostVotedModalOpen] = useState(false);
   const [requestModalOpen, setRequestModalOpen] = useState(false);
+  const [requestSearchOpen, setRequestSearchOpen] = useState(false);
+  const [buttonText, setButtonText] = useState('Most voted');
 
   // const handleToggleMostVotedModal = () => {
   //   setMostVotedModalOpen((prevOpen) => !prevOpen);
@@ -17,6 +20,14 @@ const page = () => {
   const handleToggleMostVotedModal = () => {
     setMostVotedModalOpen(!mostVotedModalOpen);
   };
+
+  const handleOptionSelect = (option: any) => {
+    setButtonText(option);
+  };
+
+  const handleRequestSearchOpen = () => {
+    setRequestSearchOpen(true);
+  }
   return (
     <div className='flex justify-center pt-20'>
       <div className='w-[660px] bg-accent-light rounded-md'>
@@ -24,7 +35,7 @@ const page = () => {
           <div className='inline-block dark:hidden'>
             <BdcoSkull />
           </div>
-          <div className='inline-block dark:block'>
+          <div className='hidden inline-block dark:block'>
             <BdcoWhiteSkull />
           </div>
 
@@ -49,13 +60,13 @@ const page = () => {
                 </svg>
               </span>
               <button className='text-sm'>
-                Most voted
+                {buttonText}
               </button>
 
-              {mostVotedModalOpen && <MostVotedModal />}
+              {mostVotedModalOpen && <MostVotedModal onOptionSelect={handleOptionSelect} />}
             </div>
 
-            <div className='hover:bg-gray-700 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm flex flex-row gap-2 items-center'>
+            <div className='hover:bg-gray-700 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm flex flex-row gap-2 items-center' onClick={handleRequestSearchOpen}>
               <span
               >
                 <svg
@@ -82,6 +93,9 @@ const page = () => {
       </div>
       {requestModalOpen && (
         <RequestModal handleClose={() => setRequestModalOpen(false)} />
+      )}
+      {requestSearchOpen && (
+        <UserRequestSearch handleClose={() => setRequestSearchOpen(false)} />
       )}
     </div>
   )

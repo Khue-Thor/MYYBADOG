@@ -42,7 +42,7 @@ const UserRequest = ({ title, details }) => {
       </div>
       <div className='flex flex-col gap-2'>
         <div
-          className={`dark:bg-gray-700 dark:hover:bg-gray-600 pt-1 pb-1 pl-3 pr-3 flex items-center gap-2 rounded-md cursor-pointer ${userVoted ? 'bg-blue-500' : ''
+          className={`dark:bg-gray-700 dark:hover:bg-gray-600 pl-3 pr-3 flex items-center gap-2 rounded-md cursor-pointer ${userVoted ? 'bg-blue-500' : ''
             }`}
           onClick={handleLikeClick}
         >
@@ -75,8 +75,8 @@ const UserRequest = ({ title, details }) => {
           )}
           <span className="text-xs">{likeVotes}</span>
         </div>
-        <div className='pt-1 pb-1 pl-3 pr-3 cursor-pointer flex flex-row gap-2 items-center' onClick={handleDisLikeClick}>
-            {userDisLikeVoted ? (
+        <div className='pl-3 pr-3 cursor-pointer flex flex-row gap-2 items-center' onClick={handleDisLikeClick}>
+          {userDisLikeVoted ? (
             <span className='w-[20px] h-[20px] mt-2'>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

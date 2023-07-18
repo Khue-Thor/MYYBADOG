@@ -23,10 +23,10 @@ const RequestModal = ({ handleClose }) => {
   }
 
   return (
-    <div className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 flex ${window.innerWidth < 768 ? '' : 'flex justify-center items-center'} z-40`}>
-      <div className={`relative ${window.innerWidth < 768 ? 'w-full h-full' : 'w-[760px]'}`}>
+    <div className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 md:flex md:justify-center md:items-center z-40`}>
+      <div className={`relative h-full md:h-fit`}>
         <span
-          className="md:absolute right-[-50px] top-[-50px] md:flex hidden backdrop:items-center justify-center rounded-2xl"
+          className="absolute right-[-50px] top-[-50px] md:flex hidden backdrop:items-center justify-center rounded-2xl"
           onClick={handleClose}
         >
           <svg
@@ -34,13 +34,13 @@ const RequestModal = ({ handleClose }) => {
             viewBox="0 0 20 20"
             width={26}
             height={26}
-            className="fill-jacarta-500 h-[50px] w-[50px] dark:fill-jacarta-400 hover:dark:fill-white cursor-pointer"
+            className="fill-jacarta-500 xl:h-[40px] xl:w-[40px] lg:h-[35px] lg:w-[35px] md:w-[30px]  md:h-[30px] dark:fill-jacarta-400 hover:dark:fill-white cursor-pointer"
           >
             <path fill="none" d="M0 0h24v24H0z" />
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
           </svg>
         </span>
-        <div className='md:w-[660px] md:h-[530px] w-full h-full bg-white dark:bg-jacarta-800 rounded-md relative'>
+        <div className='md:w-[660px] md:h-[530px] h-full w-full bg-white dark:bg-jacarta-800 rounded-md relative'>
           <h1 className='border-b-[1px] p-5 text-center border-jacarta-500'>Request a Feature</h1>
           <form className='p-10 flex flex-col gap-10'>
             <fieldset>

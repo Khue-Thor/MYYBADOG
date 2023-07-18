@@ -14,12 +14,17 @@ const RequestModal = ({ handleClose }) => {
   const [titleValue, setTitleValue] = useState("");
   const [detialValue, setDetialValue] = useState("");
 
-  const handleTitleValue = (e) => {
+  const handleTitleValue = (e: any) => {
     setTitleValue(e.target.value);
   }
 
-  const handleDetailValue = (e) => {
+  const handleDetailValue = (e: any) => {
     setDetialValue(e.target.value);
+  }
+
+  const handleRequestSubmit = (e: any) => {
+    e.preventDefault();
+    handleClose()
   }
 
   return (
@@ -41,7 +46,24 @@ const RequestModal = ({ handleClose }) => {
           </svg>
         </span>
         <div className='md:w-[660px] md:h-[530px] h-full w-full bg-white dark:bg-jacarta-800 rounded-md relative'>
-          <h1 className='border-b-[1px] p-5 text-center border-jacarta-500'>Request a Feature</h1>
+          <div className='relative'>
+            <span
+              className="md:hidden absolute left-5 top-6 flex backdrop:items-center justify-center rounded-2xl"
+              onClick={handleClose}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                width={26}
+                height={26}
+                className="fill-jacarta-500 h-[15px] w-[15px] dark:fill-jacarta-400 hover:dark:fill-white cursor-pointer"
+              >
+                <path fill="none" d="M0 0h24v24H0z" />
+                <path d="M19 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H19z" />
+              </svg>
+            </span>
+            <h1 className='border-b-[1px] p-5 text-center border-jacarta-500'>Request a Feature</h1>
+          </div>
           <form className='p-10 flex flex-col gap-10'>
             <fieldset>
               <h2 className='mb-2'>Title</h2>
@@ -52,7 +74,7 @@ const RequestModal = ({ handleClose }) => {
               <textarea className='w-full dark:bg-jacarta-600 h-[170px] rounded-md text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' value={detialValue} onChange={handleDetailValue} />
             </fieldset>
             <div>
-              <button className='bg-green w-fit pt-1 pb-2 pr-3 pl-3 text-sm rounded-md text-black'>Create post</button>
+              <button className='bg-green w-fit pt-1 pb-2 pr-3 pl-3 text-sm rounded-md text-black' onClick={handleRequestSubmit}>Create post</button>
             </div>
           </form>
         </div>

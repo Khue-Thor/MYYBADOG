@@ -29,13 +29,13 @@ const page = () => {
     setRequestSearchOpen(true);
   }
   return (
-    <div className='flex justify-center pt-20'>
-      <div className='w-[660px] bg-accent-light rounded-md'>
+    <div className='flex justify-center md:pt-20 overflow-auto'>
+      <div className='md:w-[660px] md:h-fit h-full w-full bg-accent-light md:rounded-md overflow-auto'>
         <div className='flex flex-col gap-2 m-10'>
           <div className='inline-block dark:hidden'>
             <BdcoSkull />
           </div>
-          <div className='hidden inline-block dark:block'>
+          <div className='hidden dark:block'>
             <BdcoWhiteSkull />
           </div>
 
@@ -43,7 +43,7 @@ const page = () => {
             Let us know how we can help you get the most value<br /> from BadDogs. Vote on existing ideas or suggest<br /> new ones.
           </p>
         </div>
-        <div className='bg-accent-dark pt-4 pb-4 pl-10 pr-10 flex justify-between border-jacarta-400 border-t-[1px] border-b-[1px]'>
+        <div className='bg-accent-dark pt-4 pb-4 pl-10 pr-10 md:flex md:justify-between border-jacarta-400 border-t-[1px] border-b-[1px]'>
           <div className='flex gap-2'>
             <div className='hover:bg-gray-700 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm relative flex flex-row items-center gap-2' onClick={handleToggleMostVotedModal}>
               <span>
@@ -83,11 +83,15 @@ const page = () => {
               <button className='text-sm'>Search</button>
             </div>
           </div>
-          <button className='bg-green text-black text-sm pt-1 pb-1 pr-2 pl-2 rounded-sm' onClick={() => setRequestModalOpen(true)}>
+          <button className='bg-green text-black text-sm md:pt-1 md:pb-1 md:pr-2 md:pl-2 md:relative md:right-0 md:mr-10 md:top-0 md:w-fit fixed bottom-[80px] left-10 w-[85%] pb-3 pt-3 rounded-sm' onClick={() => setRequestModalOpen(true)}>
             Request a Feature
           </button>
         </div>
         <div className='p-10 bg-accent flex flex-col gap-10'>
+          <UserRequest title={"Additional sorting and searching functionality for historical "} details={"Add additional search and sort functionality to highlight information line mint / creation date on NFTs for the purposes of highlighting elements valued for the historical NFT community"} />
+          <UserRequest title={"Additional sorting and searching functionality for historical "} details={"Add additional search and sort functionality to highlight information line mint / creation date on NFTs for the purposes of highlighting elements valued for the historical NFT community"} />
+          <UserRequest title={"Additional sorting and searching functionality for historical "} details={"Add additional search and sort functionality to highlight information line mint / creation date on NFTs for the purposes of highlighting elements valued for the historical NFT community"} />
+          <UserRequest title={"Additional sorting and searching functionality for historical "} details={"Add additional search and sort functionality to highlight information line mint / creation date on NFTs for the purposes of highlighting elements valued for the historical NFT community"} />
           <UserRequest title={"Additional sorting and searching functionality for historical "} details={"Add additional search and sort functionality to highlight information line mint / creation date on NFTs for the purposes of highlighting elements valued for the historical NFT community"} />
         </div>
       </div>

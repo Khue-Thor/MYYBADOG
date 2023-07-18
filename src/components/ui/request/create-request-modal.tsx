@@ -23,10 +23,10 @@ const RequestModal = ({ handleClose }) => {
   }
 
   return (
-    <div className='fixed w-full top-0 left-0 bg-black bg-opacity-70 h-full flex justify-center items-center z-40'>
-      <div className='relative'>
+    <div className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 flex ${window.innerWidth < 768 ? '' : 'flex justify-center items-center'} z-40`}>
+      <div className={`relative ${window.innerWidth < 768 ? 'w-full h-full' : 'w-[760px]'}`}>
         <span
-          className="absolute right-[-50px] top-[-50px] flex backdrop:items-center justify-center rounded-2xl"
+          className="md:absolute right-[-50px] top-[-50px] md:flex hidden backdrop:items-center justify-center rounded-2xl"
           onClick={handleClose}
         >
           <svg
@@ -40,22 +40,21 @@ const RequestModal = ({ handleClose }) => {
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
           </svg>
         </span>
-        <div className='w-[660px] h-[500px] bg-white dark:bg-jacarta-800 rounded-md relative'>
+        <div className='md:w-[660px] md:h-[530px] w-full h-full bg-white dark:bg-jacarta-800 rounded-md relative'>
           <h1 className='border-b-[1px] p-5 text-center border-jacarta-500'>Request a Feature</h1>
-          <div className='p-10 flex flex-col gap-10'>
-            <div>
-              <h2>Title</h2>
-              <input className='w-full dark:bg-jacarta-600 rounded-md pt-2 pb-2 text-jacarta-200 pr-4 pl-4 font-normal text-sm' placeholder='A short, description title' value={titleValue} onChange={handleTitleValue} />
-            </div>
-            <div>
-              <h2>Detials</h2>
-              <textarea className='w-full dark:bg-jacarta-600 h-[150px] rounded-md text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' value={detialValue} onChange={handleDetailValue}/>
-
-            </div>
+          <form className='p-10 flex flex-col gap-10'>
+            <fieldset>
+              <h2 className='mb-2'>Title</h2>
+              <input className='w-full dark:bg-jacarta-600 rounded-md pt-3 pb-3 text-jacarta-200 pr-4 pl-4 font-normal text-sm' placeholder='A short, description title' value={titleValue} onChange={handleTitleValue} />
+            </fieldset>
+            <fieldset>
+              <h2 className='mb-2'>Details</h2>
+              <textarea className='w-full dark:bg-jacarta-600 h-[170px] rounded-md text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' value={detialValue} onChange={handleDetailValue} />
+            </fieldset>
             <div>
               <button className='bg-green w-fit pt-1 pb-2 pr-3 pl-3 text-sm rounded-md text-black'>Create post</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>

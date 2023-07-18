@@ -105,6 +105,7 @@ const UserRequest = ({ title, details }) => {
           )}
           <span className='text-xs'>{dislikeVotes}</span>
         </div>
+
       </div>
     </div>
   );

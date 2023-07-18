@@ -12,7 +12,7 @@
   "dependencies": {
     "@heroicons/react": "^2.0.18",
     "@mantine/hooks": "^6.0.13",
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^5.0.0",
     "@radix-ui/react-dialog": "^1.0.4",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.0.3",
@@ -70,6 +70,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
     "@types/react-copy-to-clipboard": "^5.0.4",
-    "encoding": "^0.1.13"
+    "encoding": "^0.1.13",
+    "prisma": "^5.0.0"
   }
 }

@@ -28,8 +28,8 @@ const RequestModal = ({ handleClose }) => {
   }
 
   return (
-    <div className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-70 md:flex md:justify-center md:items-center z-40`}>
-      <div className={`relative h-full md:h-fit`}>
+    <div className={`fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-80 md:flex md:justify-center md:items-center z-40`}>
+      <div className={`relative h-full md:h-fit border-[1px] rounded-md border-jacarta-500`}>
         <span
           className="absolute right-[-50px] top-[-50px] md:flex hidden backdrop:items-center justify-center rounded-2xl"
           onClick={handleClose}
@@ -66,12 +66,12 @@ const RequestModal = ({ handleClose }) => {
           </div>
           <form className='p-10 flex flex-col gap-10'>
             <fieldset>
-              <h2 className='mb-2'>Title</h2>
-              <input className='w-full dark:bg-jacarta-600 rounded-md pt-3 pb-3 text-jacarta-200 pr-4 pl-4 font-normal text-sm' placeholder='A short, description title' value={titleValue} onChange={handleTitleValue} />
+              <h2 className='mb-2 text-sm '>Title</h2>
+              <input className='w-full dark:bg-jacarta-600 border-[1px] rounded-md border-jacarta-500 pt-3 pb-3 text-jacarta-200 pr-4 pl-4 font-normal text-sm' placeholder='A short, description title' value={titleValue} onChange={handleTitleValue} />
             </fieldset>
             <fieldset>
-              <h2 className='mb-2'>Details</h2>
-              <textarea className='w-full dark:bg-jacarta-600 h-[170px] rounded-md text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' value={detialValue} onChange={handleDetailValue} />
+              <h2 className='mb-2 text-sm'>Details</h2>
+              <textarea className='w-full dark:bg-jacarta-600 h-[170px] border-[1px] rounded-md border-jacarta-500 text-jacarta-200 font-normal text-sm' placeholder='Please include only one suggestion per post' value={detialValue} onChange={handleDetailValue} />
             </fieldset>
             <div>
               <button className='bg-green w-fit pt-1 pb-2 pr-3 pl-3 text-sm rounded-md text-black' onClick={handleRequestSubmit}>Create post</button>

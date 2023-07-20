@@ -5,7 +5,7 @@ const MostVotedModal = ({ onOptionSelect }) => {
     onOptionSelect(option)
   }
   return (
-    <div className='absolute top-[40px] left-0 h-[230px] overflow-hidden bg-accent-dark flex flex-row justify-between  border-jacarta-500 border-[2px] rounded-md'>
+    <div className='absolute top-[40px] left-0 h-[230px] overflow-hidden bg-accent-dark flex flex-row justify-between  border-[1px] rounded-md border-jacarta-500'>
       <ul className='list-none flex flex-col border-r-[2px] border-jacarta-500 w-[200px]'>
         <li className='hover:dark:bg-green hover:text-black hover:cursor-pointer flex flex-row gap-3 items-center pt-3 pb-3 pl-5'>
           <p className='text-sm gap-2 w-[220px]'>Roadmap</p>

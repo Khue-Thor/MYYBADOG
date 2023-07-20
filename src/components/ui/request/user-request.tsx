@@ -33,7 +33,7 @@ const UserRequest = ({ title, details }) => {
 
   return (
     <div className='flex flex-row justify-between gap-7'>
-      <div className='w-[470px] overflow-hidden text-ellipsis flex flex-col gap-2 hover:cursor-pointer'>
+      <div className='md:w-[470px] overflow-hidden text-ellipsis flex flex-col gap-2 hover:cursor-pointer'>
         <p className='truncate'>{title}</p>
         <p className='text-sm text-gray-600 line-clamp-2 max-h-14 overflow-hidden text-ellipsis'>{details}</p>
         <div>

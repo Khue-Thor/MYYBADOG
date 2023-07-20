@@ -45,28 +45,48 @@ const page = () => {
         </div>
         <div className='bg-accent-dark pt-4 pb-4 pl-10 pr-10 md:flex md:justify-between border-jacarta-400 border-t-[1px] border-b-[1px]'>
           <div className='flex gap-2'>
-            <div className='hover:bg-gray-700 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm relative flex flex-row items-center gap-2' onClick={handleToggleMostVotedModal}>
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  width={26}
-                  height={26}
-                  className={`h-[20px] w-[20px] dark:fill-jacarta-600 cursor-pointer ${mostVotedModalOpen ? 'transform rotate-90 dark:fill-white' : ''
-                    }`}
-                >
-                  <path fill="none" d="M0 0h24v24H0z" />
-                  <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
-                </svg>
-              </span>
-              <button className='text-sm'>
-                {buttonText}
-              </button>
+            {mostVotedModalOpen ? (
+              <div className='hover:bg-jacarta-300 bg-jacarta-300 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm relative flex flex-row items-center gap-2' onClick={handleToggleMostVotedModal}>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    width={26}
+                    height={26}
+                    className={`h-[20px] w-[20px] dark:fill-jacarta-600 cursor-pointer ${mostVotedModalOpen ? 'transform rotate-90 dark:fill-white' : ''
+                      }`}
+                  >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
+                  </svg>
+                </span>
+                <button className='text-sm'>
+                  {buttonText}
+                </button>
 
-              {mostVotedModalOpen && <MostVotedModal onOptionSelect={handleOptionSelect} />}
-            </div>
-
-            <div className='hover:bg-gray-700 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm flex flex-row gap-2 items-center' onClick={handleRequestSearchOpen}>
+                {mostVotedModalOpen && <MostVotedModal onOptionSelect={handleOptionSelect} />}
+              </div>
+            ) : (
+              <div className='hover:bg-jacarta-300 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm relative flex flex-row items-center gap-2' onClick={handleToggleMostVotedModal}>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    width={26}
+                    height={26}
+                    className={`h-[20px] w-[20px] dark:fill-jacarta-600 cursor-pointer ${mostVotedModalOpen ? 'transform rotate-90 dark:fill-white' : ''
+                      }`}
+                  >
+                    <path fill="none" d="M0 0h24v24H0z" />
+                    <path d="M4.41 5.41L5.83 4 11.83 10 5.83 16 4.41 14.59 8.83 10 4.41 5.41z" />
+                  </svg>
+                </span>
+                <button className='text-sm'>
+                  {buttonText}
+                </button>
+              </div>
+            )}
+            <div className='hover:bg-jacarta-300 w-fit pt-1 pb-1 pl-4 pr-4 rounded-sm flex flex-row gap-2 items-center' onClick={handleRequestSearchOpen}>
               <span
               >
                 <svg
